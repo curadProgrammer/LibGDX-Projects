@@ -68,7 +68,7 @@ public class LoadingScreen implements Screen {
             handleLoadingAssets();
 
             if(currentLoadingStage > NUM_OF_STAGES && loadingtimer >= loadingDuration){
-                System.out.println("(LoadingScreen) Changing to MenuScreen");
+                if(BreakoutGame.DEBUG_MODE) System.out.println("(LoadingScreen) Changing to MenuScreen");
 
                 // change to menu screen
                 game.screenManager.changeScreen(ScreenManager.MENU);
@@ -102,15 +102,15 @@ public class LoadingScreen implements Screen {
     private void handleLoadingAssets(){
         switch(currentLoadingStage){
             case IMAGE:
-                System.out.println("(LoadingScreen) Loading Textures...");
+                if(BreakoutGame.DEBUG_MODE) System.out.println("(LoadingScreen) Loading Textures...");
                 game.assetManager.queueAddImages();
                 break;
             case SKIN:
-                System.out.println("(LoadingScreen) Loading Skin...");
+                if(BreakoutGame.DEBUG_MODE) System.out.println("(LoadingScreen) Loading Skin...");
                 game.assetManager.queueAddSkin();
                 break;
             case SOUND:
-                System.out.println("(LoadingScreen) Loading SoundFX...");
+                if(BreakoutGame.DEBUG_MODE) System.out.println("(LoadingScreen) Loading SoundFX...");
                 game.assetManager.queueAddSounds();
                 break;
             default:

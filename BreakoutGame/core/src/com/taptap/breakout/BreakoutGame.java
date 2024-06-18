@@ -6,6 +6,9 @@ import com.taptap.breakout.loader.B2dAssetManager;
 import com.taptap.breakout.screens.ScreenManager;
 
 public class BreakoutGame extends Game {
+	// change this to false to turn of debug mode
+	public static final boolean DEBUG_MODE = false;
+
 	public ScreenManager screenManager;
 	public B2dAssetManager assetManager;
 
@@ -42,7 +45,7 @@ public class BreakoutGame extends Game {
 	
 	@Override
 	public void dispose () {
-		System.out.println("(BreakoutGame.java) Calling dispose()");
+		if(BreakoutGame.DEBUG_MODE) System.out.println("(BreakoutGame.java) Calling dispose()");
 		backgroundMusic.dispose();
 		assetManager.manager.dispose();
 	}

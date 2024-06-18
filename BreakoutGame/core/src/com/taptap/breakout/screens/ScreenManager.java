@@ -42,7 +42,7 @@ public class ScreenManager {
                 break;
             case LOADING:
                 if(loadingScreen == null) loadingScreen = new LoadingScreen(game);
-                System.out.println("(ScreenManager.java) Changing to Loading Screen");
+                if(BreakoutGame.DEBUG_MODE) System.out.println("(ScreenManager.java) Changing to Loading Screen");
                 game.setScreen(loadingScreen);
                 break;
         }

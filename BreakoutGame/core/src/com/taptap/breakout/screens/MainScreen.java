@@ -14,6 +14,7 @@ import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.systems.PhysicsDebugSystem;
 import com.taptap.breakout.ecs.systems.PhysicsSystem;
+import com.taptap.breakout.ecs.systems.RenderingSystem;
 import com.taptap.breakout.level.LevelManager;
 
 public class MainScreen implements Screen {
@@ -25,6 +26,7 @@ public class MainScreen implements Screen {
     private World world;
     private LevelManager levelManager;
 
+
     public MainScreen(BreakoutGame game){
         this.game = game;
         sb = new SpriteBatch();
@@ -35,7 +37,6 @@ public class MainScreen implements Screen {
         cam.position.set(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2, 0);
 
         world = new World(new Vector2(0, 0), true);
-
         levelManager = new LevelManager(this, cam);
 
         // load first level
@@ -43,6 +44,7 @@ public class MainScreen implements Screen {
 
         engine = new PooledEngine();
         engine.addSystem(new PhysicsSystem(world, engine));
+        engine.addSystem(new RenderingSystem(sb, cam));
         engine.addSystem(new PhysicsDebugSystem(world, cam));
     }
 
