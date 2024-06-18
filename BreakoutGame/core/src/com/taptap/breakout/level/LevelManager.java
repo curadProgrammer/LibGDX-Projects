@@ -1,8 +1,6 @@
 package com.taptap.breakout.level;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.sun.org.apache.xpath.internal.operations.Or;
-import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.screens.MainScreen;
 
 import java.util.HashMap;

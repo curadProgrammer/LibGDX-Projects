@@ -1,5 +1,6 @@
 package com.taptap.breakout.screens;
 
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,6 +12,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.Utilities;
+import com.taptap.breakout.ecs.systems.PhysicsDebugSystem;
+import com.taptap.breakout.ecs.systems.PhysicsSystem;
 import com.taptap.breakout.level.LevelManager;
 
 public class MainScreen implements Screen {
@@ -18,6 +21,7 @@ public class MainScreen implements Screen {
     private BreakoutGame game;
     private OrthographicCamera cam;
     private Viewport viewport;
+    private PooledEngine engine;
     private World world;
     private LevelManager levelManager;
 
@@ -33,13 +37,18 @@ public class MainScreen implements Screen {
         world = new World(new Vector2(0, 0), true);
 
         levelManager = new LevelManager(this, cam);
+
         // load first level
         levelManager.loadLevel(LevelManager.Level.TEST);
+
+        engine = new PooledEngine();
+        engine.addSystem(new PhysicsSystem(world, engine));
+        engine.addSystem(new PhysicsDebugSystem(world, cam));
     }
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(null);
     }
 
     @Override
@@ -49,6 +58,9 @@ public class MainScreen implements Screen {
 
         // load level
         levelManager.renderLevel();
+
+        // update engine
+        engine.update(delta);
     }
 
     @Override

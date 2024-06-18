@@ -30,6 +30,11 @@ public class PhysicsSystem extends IteratingSystem {
     }
 
     @Override
+    public void update(float deltaTime) {
+        super.update(deltaTime);
+    }
+
+    @Override
     protected void processEntity(Entity entity, float v) {
 
     }
