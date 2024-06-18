@@ -1,0 +1,9 @@
+platform-shooter.png
+size:512,256
+repeat:none
+boss
+bounds:2,80,462,125
+enemy
+bounds:2,38,320,40
+player
+bounds:2,2,137,34

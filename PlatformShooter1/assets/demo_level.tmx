@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="50" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="51">
+ <tileset firstgid="1" source="Game Boy Advance - Metroid Fusion - Sector 1 Tile Map.tsx"/>
+ <layer id="1" name="Background" width="50" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztwzENAAAMA6DOSP3LrIw9kNBLqqqqqr4eQOV5GQ==
+  </data>
+ </layer>
+ <layer id="3" name="Graphics" width="50" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztz7EJgEAUBNE5sSfT6b8MKzkMzA9M1mMHNv38N4CxweT/SR1JSR1JSR1JSR1JSR1JSR1JSR1JSR1JyV6O61zbfXzb6s3Vf949hgkRkiKg
+  </data>
+ </layer>
+ <objectgroup id="4" name="Ground">
+  <object id="1" x="33" y="623" width="1534.83" height="16.5"/>
+  <object id="44" x="0.666667" y="0" width="30.6667" height="639.333"/>
+  <object id="50" x="1570" y="-0.333167" width="30.6667" height="639.333"/>
+ </objectgroup>
+ <objectgroup id="5" name="Enemy">
+  <object id="41" x="799.334" y="564.5" width="28" height="31"/>
+  <object id="47" x="861.333" y="563.833" width="28" height="31"/>
+ </objectgroup>
+ <objectgroup id="6" name="Boss">
+  <object id="15" x="1487" y="561.333" width="49" height="30"/>
+ </objectgroup>
+ <objectgroup id="7" name="Sensors">
+  <object id="30" x="34.6667" y="586.709" width="7.79167" height="6.7083"/>
+  <object id="36" x="1561.77" y="575.479" width="7.79167" height="6.7083"/>
+ </objectgroup>
+</map>

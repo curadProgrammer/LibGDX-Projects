@@ -1,0 +1,55 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "level1.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "Game Boy Advance - Metroid Fusion - Sector 1 Tile Map.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "demo_level.tmx": {
+            "expandedObjectLayers": [
+                4,
+                6
+            ],
+            "scale": 1.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 1354,
+                "y": 442.6666666666667
+            }
+        },
+        "level1.tmx": {
+            "expandedObjectLayers": [
+                6
+            ],
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 826.6666666666665,
+                "y": 208
+            }
+        }
+    },
+    "last.imagePath": "D:/Programming/Java Projects/LibGdx Projects/PlatformerShooter1/assets",
+    "map.fixedSize": false,
+    "map.height": 20,
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": null,
+    "map.width": 50,
+    "openFiles": [
+        "demo_level.tmx",
+        "level1.tmx"
+    ],
+    "project": "level1.tiled-project",
+    "recentFiles": [
+        "demo_level.tmx",
+        "level1.tmx",
+        "Game Boy Advance - Metroid Fusion - Sector 1 Tile Map.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}
