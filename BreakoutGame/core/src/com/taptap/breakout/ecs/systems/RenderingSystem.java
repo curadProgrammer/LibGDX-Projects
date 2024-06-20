@@ -8,9 +8,6 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.components.TextureComponent;
 import com.taptap.breakout.ecs.components.TransformComponent;
 

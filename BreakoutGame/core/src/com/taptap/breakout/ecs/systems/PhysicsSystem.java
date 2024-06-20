@@ -32,6 +32,7 @@ public class PhysicsSystem extends IteratingSystem {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+        world.step(1/60f, 6, 2);
     }
 
     @Override

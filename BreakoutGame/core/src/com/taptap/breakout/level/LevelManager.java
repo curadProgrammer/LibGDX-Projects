@@ -24,7 +24,7 @@ public class LevelManager {
     }
 
     public void loadLevel(Level level){
-        currentLevel = new LevelLoader(levels.get(level));
+        currentLevel = new LevelLoader(world, levels.get(level));
         currentLevel.getMapRenderer().setView(cam);
     }
 
