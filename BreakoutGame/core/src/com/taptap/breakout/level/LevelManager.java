@@ -1,6 +1,7 @@
 package com.taptap.breakout.level;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.physics.box2d.World;
 import com.taptap.breakout.screens.MainScreen;
 
 import java.util.HashMap;
@@ -8,13 +9,13 @@ import java.util.HashMap;
 public class LevelManager {
     public enum Level{TEST, LEVEL1, LEVEL2}
 
-    private MainScreen screen;
+    private World world;
     private OrthographicCamera cam;
     private HashMap<Level, String> levels;
     private LevelLoader currentLevel;
 
-    public LevelManager(MainScreen screen, OrthographicCamera cam){
-        this.screen = screen;
+    public LevelManager(World world, OrthographicCamera cam){
+        this.world = world;
         this.cam = cam;
 
         // store level paths
