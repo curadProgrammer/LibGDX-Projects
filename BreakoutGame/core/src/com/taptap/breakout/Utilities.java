@@ -12,4 +12,6 @@ public class Utilities {
     public static float getPPMHeight(){
         return VIRTUAL_HEIGHT / PPM;
     }
+
+    public static float convertToPPM(float num){return num / PPM;}
 }

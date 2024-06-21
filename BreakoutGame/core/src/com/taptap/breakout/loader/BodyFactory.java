@@ -6,8 +6,8 @@ public class BodyFactory {
     // ONE_HIT - Takes one hit to get destroyed
     // TWO_HIT - Takes two hits to get destroyed
     // UNBREAKABLE - Block is unbreakable
-    // PASS - Ball is able to break the block and pass through instead of bouncing back from it
-    public enum BlockType {ONE_HIT, TWO_HIT, UNBREAKABLE, PASS}
+    // PASSTHROUGH - Ball is able to break the block and pass through instead of bouncing back from it
+    public enum BlockType {ONE_HIT, TWO_HIT, UNBREAKABLE, PASSTHROUGH}
 
     // singleton
     private static BodyFactory thisInstance;
@@ -34,10 +34,11 @@ public class BodyFactory {
                 fixtureDef.friction = 0.3f;
                 fixtureDef.restitution = 0.1f;
                 break;
-            case PASS:
+            case PASSTHROUGH:
                 fixtureDef.density = 1f;
                 fixtureDef.friction = 0f;
                 fixtureDef.restitution = 0.01f;
+                break;
         }
         return fixtureDef;
     }
@@ -48,14 +49,14 @@ public class BodyFactory {
         // create a definition
         BodyDef boxBodyDef = new BodyDef();
         boxBodyDef.type = bodyType;
-        boxBodyDef.position.x = posx;
-        boxBodyDef.position.y = posy;
+        boxBodyDef.position.x = posx + (width / 2);
+        boxBodyDef.position.y = posy + (height / 2);
         boxBodyDef.fixedRotation = fixedRotation;
 
         //create the body to attach said definition
         Body boxBody = world.createBody(boxBodyDef);
         PolygonShape poly = new PolygonShape();
-        poly.setAsBox(width/2, height/2);
+        poly.setAsBox(width / 2, height / 2);
         boxBody.createFixture(makeFixture(blockType,poly));
         poly.dispose();
 
