@@ -37,15 +37,15 @@ public class MainScreen implements Screen {
         cam.position.set(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2, 0);
 
         world = new World(new Vector2(0, 0), true);
-        levelManager = new LevelManager(world, cam);
-
-        // load first level
-        levelManager.loadLevel(LevelManager.Level.TEST);
 
         engine = new PooledEngine();
         engine.addSystem(new PhysicsSystem(world, engine));
         engine.addSystem(new RenderingSystem(sb, cam));
         engine.addSystem(new PhysicsDebugSystem(world, cam));
+
+        levelManager = new LevelManager(world, engine, cam);
+        // load first level
+        levelManager.loadLevel(LevelManager.Level.TEST);
     }
 
     @Override

@@ -62,4 +62,23 @@ public class BodyFactory {
 
         return boxBody;
     }
+
+    public Body makeBoxPolyBody(float posx, float posy, float width, float height,
+                                BodyDef.BodyType bodyType, boolean fixedRotation){
+        // create a definition
+        BodyDef boxBodyDef = new BodyDef();
+        boxBodyDef.type = bodyType;
+        boxBodyDef.position.x = posx + (width / 2);
+        boxBodyDef.position.y = posy + (height / 2);
+        boxBodyDef.fixedRotation = fixedRotation;
+
+        //create the body to attach said definition
+        Body boxBody = world.createBody(boxBodyDef);
+        PolygonShape poly = new PolygonShape();
+        poly.setAsBox(width / 2, height / 2);
+        boxBody.createFixture(makeFixture(blockType,poly));
+        poly.dispose();
+
+        return boxBody;
+    }
 }
