@@ -7,15 +7,16 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.components.*;
 import com.taptap.breakout.loader.BodyFactory;
 
 import javax.rmi.CORBA.Util;
-import java.lang.reflect.Type;
 
 public class LevelLoader {
     private BodyFactory bodyFactory;
@@ -45,6 +46,7 @@ public class LevelLoader {
     }
 
     private void renderPlayer(){
+        if(BreakoutGame.DEBUG_MODE) System.out.println("(LevelLoader) Rendering Player");
         Entity playerEntity = en.createEntity();
         PlayerComponent pc = en.createComponent(PlayerComponent.class);
         TextureComponent tc = en.createComponent(TextureComponent.class);
@@ -55,11 +57,12 @@ public class LevelLoader {
 
         // create box2d body
         b2bodyC.body = bodyFactory.makeBoxPolyBody(
-                Utilities.getPPMWidth() / 2,
-                Utilities.getPPMHeight(),
-                Utilities.convertToPPM(PADDLE_WIDTH),
-                Utilities.convertToPPM(PADDLE_HEIGHT),
-                BodyDef.BodyType.StaticBody,
+                Utilities.getPPMWidth() / 2 - (Utilities.convertToPPM(Utilities.PADDLE_WIDTH) / 2),
+                Utilities.convertToPPM(10),
+                Utilities.convertToPPM(Utilities.PADDLE_WIDTH),
+                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT),
+                null,
+                BodyDef.BodyType.KinematicBody,
                 true
         );
 
@@ -69,6 +72,10 @@ public class LevelLoader {
         playerEntity.add(cc);
         playerEntity.add(typeC);
         playerEntity.add(b2bodyC);
+        b2bodyC.body.setUserData(playerEntity);
+
+        en.addEntity(playerEntity);
+
     }
 
     private void renderBall(){
@@ -98,6 +105,7 @@ public class LevelLoader {
 
             type.type = TypeComponent.BLOCK;
             b2Body.body.setUserData(blockEntity);
+            en.addEntity(blockEntity);
         }
     }
 }

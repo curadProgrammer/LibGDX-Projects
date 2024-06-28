@@ -12,19 +12,25 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.Utilities;
+import com.taptap.breakout.controller.KeyboardController;
 import com.taptap.breakout.ecs.systems.PhysicsDebugSystem;
 import com.taptap.breakout.ecs.systems.PhysicsSystem;
+import com.taptap.breakout.ecs.systems.PlayerControlSystem;
 import com.taptap.breakout.ecs.systems.RenderingSystem;
 import com.taptap.breakout.level.LevelManager;
 
 public class MainScreen implements Screen {
-    private SpriteBatch sb;
     private BreakoutGame game;
     private OrthographicCamera cam;
     private Viewport viewport;
-    private PooledEngine engine;
+
     private World world;
     private LevelManager levelManager;
+
+    private SpriteBatch sb;
+    private PooledEngine engine;
+
+    private KeyboardController controller;
 
 
     public MainScreen(BreakoutGame game){
@@ -35,22 +41,24 @@ public class MainScreen implements Screen {
                 cam);
         cam.setToOrtho(false, viewport.getWorldWidth(), viewport.getWorldHeight());
         cam.position.set(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2, 0);
-
+        controller = new KeyboardController();
         world = new World(new Vector2(0, 0), true);
 
         engine = new PooledEngine();
+        levelManager = new LevelManager(world, engine, cam);
+
+        // load first level
+        levelManager.loadLevel(LevelManager.Level.TEST);
+
         engine.addSystem(new PhysicsSystem(world, engine));
         engine.addSystem(new RenderingSystem(sb, cam));
         engine.addSystem(new PhysicsDebugSystem(world, cam));
-
-        levelManager = new LevelManager(world, engine, cam);
-        // load first level
-        levelManager.loadLevel(LevelManager.Level.TEST);
+        engine.addSystem(new PlayerControlSystem(controller, levelManager));
     }
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(null);
+        Gdx.input.setInputProcessor(controller);
     }
 
     @Override

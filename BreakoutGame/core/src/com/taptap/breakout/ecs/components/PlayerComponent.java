@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Pool;
 public class PlayerComponent implements Component, Pool.Poolable {
     public OrthographicCamera cam;
 
-    // used to indicate what level the paddle is in
+    // used to indicate what level the paddle is in (small, medium, large)
     public enum Level{LEVEL1, LEVEL2, LEVEL3}
     public Level currentLevel;
 
