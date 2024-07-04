@@ -45,13 +45,15 @@ public class MainScreen implements Screen {
         world = new World(new Vector2(0, 0), true);
 
         engine = new PooledEngine();
-        levelManager = new LevelManager(world, engine, cam);
+        levelManager = new LevelManager(game, world, engine, cam);
 
         // load first level
         levelManager.loadLevel(LevelManager.Level.TEST);
 
-        engine.addSystem(new PhysicsSystem(world, engine));
+
+        sb.setProjectionMatrix(cam.combined);
         engine.addSystem(new RenderingSystem(sb, cam));
+        engine.addSystem(new PhysicsSystem(world, engine));
         engine.addSystem(new PhysicsDebugSystem(world, cam));
         engine.addSystem(new PlayerControlSystem(controller, levelManager));
     }

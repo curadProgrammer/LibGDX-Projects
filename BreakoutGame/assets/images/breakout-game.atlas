@@ -1,0 +1,11 @@
+breakout-game.png
+size:1024,256
+repeat:none
+ball-sheet-removebg-preview
+bounds:401,62,41,59
+blocks-sheet-removebg-preview
+bounds:2,37,397,199
+coin-sheet-removebg-preview
+bounds:2,2,389,33
+paddle-sheet-removebg-preview(1)
+bounds:401,123,137,113

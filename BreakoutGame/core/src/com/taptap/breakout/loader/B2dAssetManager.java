@@ -18,7 +18,7 @@ public class B2dAssetManager {
     public final AssetManager manager = new AssetManager();
 
     // textures
-    public final String gameImages = "images/blockbreaker-spritesheet.atlas";
+    public final String gameImages = "images/breakout-game.atlas";
 
     // soundfx
     public final String ding1Sound = "soundfx/ding_1.wav";

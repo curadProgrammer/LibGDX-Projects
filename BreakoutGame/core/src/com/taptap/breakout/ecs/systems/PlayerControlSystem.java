@@ -10,10 +10,8 @@ import com.taptap.breakout.Utilities;
 import com.taptap.breakout.controller.KeyboardController;
 import com.taptap.breakout.ecs.components.B2BodyComponent;
 import com.taptap.breakout.ecs.components.PlayerComponent;
+import com.taptap.breakout.ecs.components.TransformComponent;
 import com.taptap.breakout.level.LevelManager;
-
-import javax.rmi.CORBA.Util;
-
 /*
     System to handle player entity controls
  */
@@ -22,6 +20,8 @@ public class PlayerControlSystem extends IteratingSystem {
     private ComponentMapper<B2BodyComponent> b2dc = ComponentMapper.getFor(B2BodyComponent.class);
 
     private KeyboardController keyCon;
+
+    // N: figure out what to do with this
     private LevelManager lvlManager;
 
     public PlayerControlSystem(KeyboardController keyCon, LevelManager lvlManager){
@@ -39,7 +39,6 @@ public class PlayerControlSystem extends IteratingSystem {
         // get current width of paddle (note: we use 0 because there is only one fixture)
         // TODO fix this later
 //        float currentWidth = b2body.body.getFixtureList().get(0).getShape().getRadius() ;
-
         float width = Utilities.convertToPPM(Utilities.PADDLE_WIDTH);
 
         // can't move to one side if they reached the end of the screen

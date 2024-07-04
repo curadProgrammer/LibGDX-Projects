@@ -2,6 +2,8 @@ package com.taptap.breakout.level;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -23,18 +25,23 @@ public class LevelLoader {
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private World world;
+    private BreakoutGame game;
     private PooledEngine en;
     private OrthogonalTiledMapRenderer mapRenderer;
     public OrthogonalTiledMapRenderer getMapRenderer(){return mapRenderer;}
 
+    private TextureAtlas textures;
+
     // mapFilePath - pass in the path to the map file to be loaded
-    public LevelLoader(World world, PooledEngine en, String mapFilePath){
+    public LevelLoader(BreakoutGame game, World world, PooledEngine en, String mapFilePath){
         this.world = world;
         this.en = en;
+        this.game = game;
         bodyFactory = BodyFactory.getInstance(world);
         mapLoader = new TmxMapLoader();
         map = mapLoader.load(mapFilePath);
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1/ Utilities.PPM);
+        textures = game.assetManager.manager.get(game.assetManager.gameImages);
         loadWorld();
     }
 
@@ -65,6 +72,17 @@ public class LevelLoader {
                 BodyDef.BodyType.KinematicBody,
                 true
         );
+
+        typeC.type = TypeComponent.PLAYER;
+
+        // load texture
+        tc.region = new TextureRegion(
+                textures.findRegion("paddle-sheet-removebg-preview(1)"),
+                0, 0, 100, 30
+        );
+
+        // load transform
+        tranC.position.set(b2bodyC.body.getPosition().x, b2bodyC.body.getPosition().y, 0);
 
         playerEntity.add(pc);
         playerEntity.add(tc);

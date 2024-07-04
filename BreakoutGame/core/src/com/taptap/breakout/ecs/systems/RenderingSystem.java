@@ -8,6 +8,8 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.taptap.breakout.Utilities;
+import com.taptap.breakout.ecs.components.B2BodyComponent;
 import com.taptap.breakout.ecs.components.TextureComponent;
 import com.taptap.breakout.ecs.components.TransformComponent;
 
@@ -29,6 +31,7 @@ public class RenderingSystem extends IteratingSystem {
     // component mappers to get components from entities
     private ComponentMapper<TextureComponent> textureM = ComponentMapper.getFor(TextureComponent.class);
     private ComponentMapper<TransformComponent> transformM = ComponentMapper.getFor(TransformComponent.class);
+    private ComponentMapper<B2BodyComponent> b2bodyM = ComponentMapper.getFor(B2BodyComponent.class);
 
     public RenderingSystem(SpriteBatch batch, OrthographicCamera cam){
         super(Family.all(TransformComponent.class, TextureComponent.class).get());
@@ -44,6 +47,26 @@ public class RenderingSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float v) {
+        TextureComponent texture = textureM.get(entity);
+        TransformComponent transform = transformM.get(entity);
+        B2BodyComponent b2body = b2bodyM.get(entity);
 
+        // draw texture at transform
+        batch.begin();
+
+        // TODO update code so that it adjusts according to the b2body width and height not just paddle
+        //  height as that only applies to the player and not other textures
+        batch.draw(texture.region,
+                transform.position.x - Utilities.convertToPPM(Utilities.PADDLE_WIDTH) / 2,
+                transform.position.y - Utilities.convertToPPM(Utilities.PADDLE_HEIGHT) / 2,
+                Utilities.convertToPPM(Utilities.PADDLE_WIDTH),
+                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT));
+
+//        batch.draw(texture.region,
+//                transform.position.x - Utilities.convertToPPM(Utilities.PADDLE_WIDTH) / 2,
+//                transform.position.y - Utilities.convertToPPM(Utilities.PADDLE_HEIGHT) / 2,
+//                Utilities.convertToPPM(Utilities.PADDLE_WIDTH),
+//                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT));
+        batch.end();
     }
 }

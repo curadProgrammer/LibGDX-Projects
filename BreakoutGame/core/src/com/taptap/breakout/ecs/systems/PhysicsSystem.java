@@ -37,6 +37,10 @@ public class PhysicsSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float v) {
+        B2BodyComponent b2body = bm.get(entity);
+        TransformComponent transform = tm.get(entity);
 
+        // update transform with body
+        transform.position.set(b2body.body.getPosition().x, b2body.body.getPosition().y, 0);
     }
 }
