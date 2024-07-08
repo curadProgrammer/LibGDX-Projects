@@ -109,8 +109,8 @@ public class LevelLoader {
         typeC.type = TypeComponent.BALL;
 
         // todo fix the velocity values
-        ballC.xVel = 0f;
-        ballC.yVel = 1.5f;
+        ballC.xVel = -2f;
+//        ballC.yVel = 1.5f;
 
 
         // load texture
