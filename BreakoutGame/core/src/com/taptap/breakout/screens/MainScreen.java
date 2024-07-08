@@ -13,10 +13,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.controller.KeyboardController;
-import com.taptap.breakout.ecs.systems.PhysicsDebugSystem;
-import com.taptap.breakout.ecs.systems.PhysicsSystem;
-import com.taptap.breakout.ecs.systems.PlayerControlSystem;
-import com.taptap.breakout.ecs.systems.RenderingSystem;
+import com.taptap.breakout.ecs.systems.*;
 import com.taptap.breakout.level.LevelManager;
 
 public class MainScreen implements Screen {
@@ -55,6 +52,7 @@ public class MainScreen implements Screen {
         engine.addSystem(new RenderingSystem(sb, cam));
         engine.addSystem(new PhysicsSystem(world, engine));
         engine.addSystem(new PhysicsDebugSystem(world, cam));
+        engine.addSystem(new BallSystem());
         engine.addSystem(new PlayerControlSystem(controller, levelManager));
     }
 

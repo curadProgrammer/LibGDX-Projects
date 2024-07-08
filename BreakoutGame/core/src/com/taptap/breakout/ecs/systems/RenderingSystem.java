@@ -30,7 +30,6 @@ public class RenderingSystem extends IteratingSystem {
 
     // component mappers to get components from entities
     private ComponentMapper<TextureComponent> textureM = ComponentMapper.getFor(TextureComponent.class);
-    private ComponentMapper<TransformComponent> transformM = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<B2BodyComponent> b2bodyM = ComponentMapper.getFor(B2BodyComponent.class);
 
     public RenderingSystem(SpriteBatch batch, OrthographicCamera cam){
@@ -48,8 +47,13 @@ public class RenderingSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float v) {
         TextureComponent texture = textureM.get(entity);
-        TransformComponent transform = transformM.get(entity);
         B2BodyComponent b2body = b2bodyM.get(entity);
+
+        float width = Utilities.convertToPPM(texture.region.getRegionWidth());
+        float height = Utilities.convertToPPM(texture.region.getRegionHeight());
+        float originX = width * 0.5f;
+        float originY = height * 0.5f;
+
 
         // draw texture at transform
         batch.begin();
@@ -57,16 +61,9 @@ public class RenderingSystem extends IteratingSystem {
         // TODO update code so that it adjusts according to the b2body width and height not just paddle
         //  height as that only applies to the player and not other textures
         batch.draw(texture.region,
-                transform.position.x - Utilities.convertToPPM(Utilities.PADDLE_WIDTH) / 2,
-                transform.position.y - Utilities.convertToPPM(Utilities.PADDLE_HEIGHT) / 2,
-                Utilities.convertToPPM(Utilities.PADDLE_WIDTH),
-                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT));
-
-//        batch.draw(texture.region,
-//                transform.position.x - Utilities.convertToPPM(Utilities.PADDLE_WIDTH) / 2,
-//                transform.position.y - Utilities.convertToPPM(Utilities.PADDLE_HEIGHT) / 2,
-//                Utilities.convertToPPM(Utilities.PADDLE_WIDTH),
-//                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT));
+                b2body.body.getPosition().x - originX,
+                b2body.body.getPosition().y - originY,
+                width, height);
         batch.end();
     }
 }

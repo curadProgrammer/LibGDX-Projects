@@ -97,7 +97,53 @@ public class LevelLoader {
     }
 
     private void renderBall(){
+        if(BreakoutGame.DEBUG_MODE) System.out.println("(LevelLoader) Rendering Ball");
+        Entity ballEntity = en.createEntity();
+        TextureComponent tc = en.createComponent(TextureComponent.class);
+        TransformComponent tranC = en.createComponent(TransformComponent.class);
+        CollisionComponent cc = en.createComponent(CollisionComponent.class);
+        TypeComponent typeC = en.createComponent(TypeComponent.class);
+        B2BodyComponent b2bodyC = en.createComponent(B2BodyComponent.class);
+        BallComponent ballC = en.createComponent(BallComponent.class);
 
+        typeC.type = TypeComponent.BALL;
+
+        // todo fix the velocity values
+        ballC.xVel = 0f;
+        ballC.yVel = 1.5f;
+
+
+        // load texture
+        tc.region = new TextureRegion(
+                textures.findRegion("ball-sheet-removebg-preview"),
+                8, 31, 25, 25
+        );
+
+        // create box2d body
+        b2bodyC.body = bodyFactory.makeCirclePolyBody(
+                Utilities.getPPMWidth() / 2 - (Utilities.convertToPPM(tc.region.getRegionWidth()) / 2),
+                Utilities.convertToPPM(100),
+                Utilities.convertToPPM(tc.region.getRegionWidth()),
+                null,
+                BodyDef.BodyType.KinematicBody,
+                true
+        );
+
+        // apply velocity
+        b2bodyC.body.setLinearVelocity(ballC.xVel, ballC.yVel);
+
+        // load transform
+        tranC.position.set(b2bodyC.body.getPosition().x, b2bodyC.body.getPosition().y, 0);
+
+        ballEntity.add(tc);
+        ballEntity.add(tranC);
+        ballEntity.add(cc);
+        ballEntity.add(typeC);
+        ballEntity.add(b2bodyC);
+        ballEntity.add(ballC);
+        b2bodyC.body.setUserData(ballEntity);
+
+        en.addEntity(ballEntity);
     }
 
     private void renderBlocks(){
@@ -117,7 +163,7 @@ public class LevelLoader {
                     Utilities.convertToPPM(rect.y),
                     Utilities.convertToPPM(rect.width),
                     Utilities.convertToPPM(rect.height),
-                    BodyFactory.BlockType.ONE_HIT,
+                    BodyFactory.Material.PLASTIC,
                     BodyDef.BodyType.StaticBody,
                     true);
 
