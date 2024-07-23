@@ -14,6 +14,7 @@ import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.controller.KeyboardController;
 import com.taptap.breakout.ecs.systems.*;
+import com.taptap.breakout.level.B2dContactListener;
 import com.taptap.breakout.level.LevelManager;
 
 public class MainScreen implements Screen {
@@ -40,6 +41,7 @@ public class MainScreen implements Screen {
         cam.position.set(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2, 0);
         controller = new KeyboardController();
         world = new World(new Vector2(0, 0), true);
+        world.setContactListener(new B2dContactListener());
 
         engine = new PooledEngine();
         levelManager = new LevelManager(game, world, engine, cam);
@@ -51,8 +53,9 @@ public class MainScreen implements Screen {
         sb.setProjectionMatrix(cam.combined);
         engine.addSystem(new RenderingSystem(sb, cam));
         engine.addSystem(new PhysicsSystem(world, engine));
-        engine.addSystem(new PhysicsDebugSystem(world, cam));
+//        engine.addSystem(new PhysicsDebugSystem(world, cam));
         engine.addSystem(new BallSystem());
+        engine.addSystem(new CollisionSystem());
         engine.addSystem(new PlayerControlSystem(controller, levelManager));
     }
 

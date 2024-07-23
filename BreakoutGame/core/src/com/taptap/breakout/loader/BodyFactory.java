@@ -28,9 +28,12 @@ public class BodyFactory {
     }
 
     // material refers to how we want our fixture to behave
-    private static FixtureDef makeFixture(Material material, Shape shape){
+    private static FixtureDef makeFixture(Material material, Shape shape, boolean isSensor){
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
+
+        // make fixture a sensor
+        if(isSensor) fixtureDef.isSensor = true;
 
         if(material != null){
             switch(material){
@@ -54,7 +57,7 @@ public class BodyFactory {
 
     // make a box box2d body
     public Body makeBoxPolyBody(float posx, float posy, float width, float height, Material material,
-                                BodyDef.BodyType bodyType, boolean fixedRotation){
+                                BodyDef.BodyType bodyType, boolean fixedRotation, boolean isSensor){
         // create a definition
         BodyDef boxBodyDef = new BodyDef();
         boxBodyDef.type = bodyType;
@@ -66,14 +69,14 @@ public class BodyFactory {
         Body boxBody = world.createBody(boxBodyDef);
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width / 2, height / 2);
-        boxBody.createFixture(makeFixture(material,poly));
+        boxBody.createFixture(makeFixture(material,poly, isSensor));
         poly.dispose();
 
         return boxBody;
     }
 
     public Body makeCirclePolyBody(float posx, float posy, float radius, Material material,
-                                   BodyDef.BodyType bodyType, boolean fixedRotation){
+                                   BodyDef.BodyType bodyType, boolean fixedRotation, boolean isSensor){
         // create a definition
         BodyDef boxBodyDef = new BodyDef();
         boxBodyDef.type = bodyType;
@@ -85,7 +88,7 @@ public class BodyFactory {
         Body boxBody = world.createBody(boxBodyDef);
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(radius /2);
-        boxBody.createFixture(makeFixture(material,circleShape));
+        boxBody.createFixture(makeFixture(material,circleShape, isSensor));
         circleShape.dispose();
         return boxBody;
     }

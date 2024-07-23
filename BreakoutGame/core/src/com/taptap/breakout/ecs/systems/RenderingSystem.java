@@ -54,7 +54,6 @@ public class RenderingSystem extends IteratingSystem {
         float originX = width * 0.5f;
         float originY = height * 0.5f;
 
-
         // draw texture at transform
         batch.begin();
 

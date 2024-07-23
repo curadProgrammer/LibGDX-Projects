@@ -25,30 +25,20 @@ public class BallSystem extends IteratingSystem {
         Vector2 ballPosition = b2bodyC.body.getPosition();
         float ballRadius = b2bodyC.body.getFixtureList().get(0).getShape().getRadius();
 
-//        System.out.println(ballPosition.x - ballRadius);
-//        System.out.println(ballC.xVel);
-
-        System.out.println(ballPosition.x - ballRadius < 0);
-
-        // update position based on velocity
-        if(ballPosition.y + ballRadius > Utilities.getPPMHeight()){ // reverse y-vel
+        // hits sides of the window
+        if(ballPosition.y + ballRadius > Utilities.getPPMHeight()
+                || ballPosition.y - ballRadius < 0){ // reverse y-vel
             ballC.yVel *= -1;
+            ballC.canBounce = true;
         }else if(ballPosition.x + ballRadius > Utilities.getPPMWidth()
                 || ballPosition.x - ballRadius < 0){ // reverse x-vel
             ballC.xVel *= -1;
+            ballC.canBounce = true;
         }
 
         b2bodyC.body.setLinearVelocity(ballC.xVel, ballC.yVel);
     }
 }
-
-
-
-
-
-
-
-
 
 
 

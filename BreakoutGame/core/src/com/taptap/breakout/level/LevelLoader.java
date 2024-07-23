@@ -49,7 +49,7 @@ public class LevelLoader {
     public void loadWorld(){
         renderPlayer();
         renderBall();
-        renderBlocks();
+//        renderBlocks();
     }
 
     private void renderPlayer(){
@@ -70,9 +70,11 @@ public class LevelLoader {
                 Utilities.convertToPPM(Utilities.PADDLE_HEIGHT),
                 null,
                 BodyDef.BodyType.KinematicBody,
-                true
+                true,
+                false
         );
 
+        b2bodyC.body.setUserData(playerEntity);
         typeC.type = TypeComponent.PLAYER;
 
         // load texture
@@ -106,13 +108,6 @@ public class LevelLoader {
         B2BodyComponent b2bodyC = en.createComponent(B2BodyComponent.class);
         BallComponent ballC = en.createComponent(BallComponent.class);
 
-        typeC.type = TypeComponent.BALL;
-
-        // todo fix the velocity values
-        ballC.xVel = -2f;
-//        ballC.yVel = 1.5f;
-
-
         // load texture
         tc.region = new TextureRegion(
                 textures.findRegion("ball-sheet-removebg-preview"),
@@ -125,12 +120,18 @@ public class LevelLoader {
                 Utilities.convertToPPM(100),
                 Utilities.convertToPPM(tc.region.getRegionWidth()),
                 null,
-                BodyDef.BodyType.KinematicBody,
-                true
+                BodyDef.BodyType.DynamicBody,
+                true,
+                false
         );
 
-        // apply velocity
-        b2bodyC.body.setLinearVelocity(ballC.xVel, ballC.yVel);
+        b2bodyC.body.setUserData(ballEntity);
+
+        ballC.speed = 5f;
+        ballC.xVel = -2f;
+        ballC.yVel = 1.5f;
+
+        typeC.type = TypeComponent.BALL;
 
         // load transform
         tranC.position.set(b2bodyC.body.getPosition().x, b2bodyC.body.getPosition().y, 0);
@@ -165,10 +166,18 @@ public class LevelLoader {
                     Utilities.convertToPPM(rect.height),
                     BodyFactory.Material.PLASTIC,
                     BodyDef.BodyType.StaticBody,
-                    true);
+                    true,
+                    false);
+
+            b2Body.body.setUserData(blockEntity);
 
             type.type = TypeComponent.BLOCK;
             b2Body.body.setUserData(blockEntity);
+
+            blockEntity.add(b2Body);
+            blockEntity.add(texture);
+            blockEntity.add(collision);
+            blockEntity.add(type);
             en.addEntity(blockEntity);
         }
     }
