@@ -6,6 +6,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.taptap.breakout.ecs.components.B2BodyComponent;
 
 /*
     System to debug the physics system
@@ -30,7 +31,6 @@ public class PhysicsDebugSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float v) {
-
     }
 
 }

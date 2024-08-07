@@ -10,7 +10,7 @@ public class B2dContactListener implements ContactListener {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 
-        System.out.println(fa.getBody().getType()+" has hit "+ fb.getBody().getType());
+//        System.out.println(fa.getBody().getType()+" has hit "+ fb.getBody().getType());
         if(fa.getBody().getUserData() instanceof Entity){
             Entity ent = (Entity) fa.getBody().getUserData();
             entityCollision(ent, fb);
@@ -40,11 +40,9 @@ public class B2dContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-        // todo remove collision entities here when contact has ended
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 
-        System.out.println(fa.getBody().getType()+" has hit "+ fb.getBody().getType());
         if(fa.getBody().getUserData() instanceof Entity){
             Entity ent = (Entity) fa.getBody().getUserData();
             removeCollision(ent, fb);
@@ -64,6 +62,10 @@ public class B2dContactListener implements ContactListener {
 
             col.collisionEntity = null;
             colb.collisionEntity = null;
+
+            // reset can collide flags
+            col.canCollide = true;
+            colb.canCollide = true;
         }
     }
 

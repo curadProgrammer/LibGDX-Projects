@@ -54,6 +54,9 @@ public class PlayerControlSystem extends IteratingSystem {
                     MathUtils.lerp(b2body.body.getLinearVelocity().x, 5f, 0.2f),
                     b2body.body.getLinearVelocity().y
             );
+        }else if(keyCon.space){
+            // logic to let go of ball
+            System.out.println("pressed space");
         }else{
             if(BreakoutGame.DEBUG_MODE) System.out.println("Stop momentum");
             b2body.body.setLinearVelocity(0, 0);

@@ -10,9 +10,11 @@ import com.badlogic.gdx.utils.Pool;
 public class CollisionComponent implements Component, Pool.Poolable {
     // other entity
     public Entity collisionEntity;
+    public boolean canCollide = true;
 
     @Override
     public void reset() {
         collisionEntity = null;
+        canCollide = true;
     }
 }

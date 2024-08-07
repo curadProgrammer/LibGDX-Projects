@@ -8,10 +8,12 @@ import com.badlogic.gdx.utils.Pool;
 public class B2BodyComponent implements Component, Pool.Poolable {
     public Body body;
     public boolean isDead = false;
+    public boolean setToDestroy = false;
 
     @Override
     public void reset() {
         body = null;
         isDead = false;
+        setToDestroy = false;
     }
 }

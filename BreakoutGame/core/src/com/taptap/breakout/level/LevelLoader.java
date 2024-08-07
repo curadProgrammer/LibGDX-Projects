@@ -5,12 +5,14 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.taptap.breakout.BreakoutGame;
@@ -49,7 +51,7 @@ public class LevelLoader {
     public void loadWorld(){
         renderPlayer();
         renderBall();
-//        renderBlocks();
+        renderBlocks();
     }
 
     private void renderPlayer(){
@@ -116,8 +118,8 @@ public class LevelLoader {
 
         // create box2d body
         b2bodyC.body = bodyFactory.makeCirclePolyBody(
-                Utilities.getPPMWidth() / 2 - (Utilities.convertToPPM(tc.region.getRegionWidth()) / 2),
-                Utilities.convertToPPM(100),
+                Utilities.getPPMWidth() / 2,
+                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT + 10),
                 Utilities.convertToPPM(tc.region.getRegionWidth()),
                 null,
                 BodyDef.BodyType.DynamicBody,
@@ -127,9 +129,11 @@ public class LevelLoader {
 
         b2bodyC.body.setUserData(ballEntity);
 
+
+        // give ball an initial velocity
+        // todo will change this such that the ball will be on the paddle until the player presses spacebar to let go
         ballC.speed = 5f;
-        ballC.xVel = -2f;
-        ballC.yVel = 1.5f;
+//        b2bodyC.body.setLinearVelocity(new Vector2(1f, 1f).nor().scl(ballC.speed));
 
         typeC.type = TypeComponent.BALL;
 
@@ -151,12 +155,40 @@ public class LevelLoader {
         for(MapObject object : map.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)){
             Entity blockEntity = en.createEntity();
             B2BodyComponent b2Body = en.createComponent(B2BodyComponent.class);
-            TextureComponent texture = en.createComponent(TextureComponent.class);
+            TextureComponent tc = en.createComponent(TextureComponent.class);
             CollisionComponent collision = en.createComponent(CollisionComponent.class);
             TypeComponent type = en.createComponent(TypeComponent.class);
 
             // get the rectangle object from the map
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            MapProperties properties = object.getProperties();
+            String color = (String) properties.get("color");
+
+            switch(color){
+                case "red":
+                    // load red block texture
+                    tc.region = new TextureRegion(
+                            textures.findRegion("blocks-sheet-removebg-preview"),
+                            1, 2, 34, 32
+                    );
+                    break;
+                case "purple":
+                    // load purple block texture
+                    tc.region = new TextureRegion(
+                            textures.findRegion("blocks-sheet-removebg-preview"),
+                            41, 2, 34, 32
+                    );
+                    break;
+                case "yellow":
+                    // load yellow block texture
+                    tc.region = new TextureRegion(
+                            textures.findRegion("blocks-sheet-removebg-preview"),
+                            81, 2, 34, 32
+                    );
+                    break;
+            }
+
 
             // create body with bodyfactory
             b2Body.body = bodyFactory.makeBoxPolyBody(
@@ -169,13 +201,12 @@ public class LevelLoader {
                     true,
                     false);
 
-            b2Body.body.setUserData(blockEntity);
 
             type.type = TypeComponent.BLOCK;
             b2Body.body.setUserData(blockEntity);
 
             blockEntity.add(b2Body);
-            blockEntity.add(texture);
+            blockEntity.add(tc);
             blockEntity.add(collision);
             blockEntity.add(type);
             en.addEntity(blockEntity);

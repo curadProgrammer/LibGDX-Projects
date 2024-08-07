@@ -20,23 +20,23 @@ public class BallSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float v) {
         BallComponent ballC = ballMapper.get(entity);
-        B2BodyComponent b2bodyC = b2bodyMapper.get(entity);
+        B2BodyComponent ballB2body = b2bodyMapper.get(entity);
 
-        Vector2 ballPosition = b2bodyC.body.getPosition();
-        float ballRadius = b2bodyC.body.getFixtureList().get(0).getShape().getRadius();
+        Vector2 ballPosition = ballB2body.body.getPosition();
+        float ballRadius = ballB2body.body.getFixtureList().get(0).getShape().getRadius();
 
-        // hits sides of the window
-        if(ballPosition.y + ballRadius > Utilities.getPPMHeight()
-                || ballPosition.y - ballRadius < 0){ // reverse y-vel
-            ballC.yVel *= -1;
-            ballC.canBounce = true;
-        }else if(ballPosition.x + ballRadius > Utilities.getPPMWidth()
-                || ballPosition.x - ballRadius < 0){ // reverse x-vel
-            ballC.xVel *= -1;
+        // collision logic for when the ball hits the sides of the screens (top, down, left, right)
+        if(ballPosition.y + ballRadius >= Utilities.getPPMHeight()
+                || ballPosition.y - ballRadius <= 0){ // reverse y-direction
+            ballC.reverseY(ballB2body.body);
             ballC.canBounce = true;
         }
 
-        b2bodyC.body.setLinearVelocity(ballC.xVel, ballC.yVel);
+        if(ballPosition.x + ballRadius >= Utilities.getPPMWidth()
+                || ballPosition.x - ballRadius <= 0){ // reverse x-direction
+            ballC.reverseX(ballB2body.body);
+            ballC.canBounce = true;
+        }
     }
 }
 

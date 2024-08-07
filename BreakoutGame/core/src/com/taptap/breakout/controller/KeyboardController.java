@@ -9,6 +9,8 @@ public class KeyboardController implements InputProcessor{
     // paddle can only move left and right
     public boolean left, right;
 
+    public boolean space;
+
     // just in case the user wants to control with mouse
     public Vector2 mouseLocation;
 
@@ -32,6 +34,10 @@ public class KeyboardController implements InputProcessor{
                 right = true;
                 keyProcessed = true;
                 break;
+            case Input.Keys.SPACE:
+                space = true;
+                keyProcessed = true;
+                break;
         }
         return keyProcessed;
     }
@@ -50,6 +56,10 @@ public class KeyboardController implements InputProcessor{
             case Input.Keys.RIGHT:
                 if(BreakoutGame.DEBUG_MODE) System.out.println("(KeyboardController) Released D/Right");
                 right = false;
+                keyProcessed = true;
+                break;
+            case Input.Keys.SPACE:
+                space = false;
                 keyProcessed = true;
                 break;
         }

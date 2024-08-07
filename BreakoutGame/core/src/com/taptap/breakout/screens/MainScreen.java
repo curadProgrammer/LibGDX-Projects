@@ -53,7 +53,7 @@ public class MainScreen implements Screen {
         sb.setProjectionMatrix(cam.combined);
         engine.addSystem(new RenderingSystem(sb, cam));
         engine.addSystem(new PhysicsSystem(world, engine));
-//        engine.addSystem(new PhysicsDebugSystem(world, cam));
+        engine.addSystem(new PhysicsDebugSystem(world, cam));
         engine.addSystem(new BallSystem());
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new PlayerControlSystem(controller, levelManager));
