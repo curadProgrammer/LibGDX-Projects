@@ -29,6 +29,7 @@ public class CollisionSystem extends IteratingSystem {
         BallComponent ball = ballC.get(entity);
 
         Entity otherEntity = collision.collisionEntity;
+
         if(otherEntity == null) return;
 
         TypeComponent otherEntityType = otherEntity.getComponent(TypeComponent.class);

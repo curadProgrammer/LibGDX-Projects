@@ -10,17 +10,13 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.components.*;
 import com.taptap.breakout.loader.BodyFactory;
-
-import javax.rmi.CORBA.Util;
 
 public class LevelLoader {
     private BodyFactory bodyFactory;
@@ -49,9 +45,17 @@ public class LevelLoader {
 
 
     public void loadWorld(){
-        renderPlayer();
-        renderBall();
+        renderPlayerAndBall();
+//        renderPlayer();
+//        renderBall();
         renderBlocks();
+    }
+
+    private void renderPlayerAndBall(){
+        Entity playerEntity = en.createEntity();
+        Entity ballEntity = en.createEntity();
+        renderBall(ballEntity);
+        renderPlayer(playerEntity, ballEntity);
     }
 
     private void renderPlayer(){
@@ -120,6 +124,109 @@ public class LevelLoader {
         b2bodyC.body = bodyFactory.makeCirclePolyBody(
                 Utilities.getPPMWidth() / 2,
                 Utilities.convertToPPM(Utilities.PADDLE_HEIGHT + 10),
+                Utilities.convertToPPM(tc.region.getRegionWidth()),
+                null,
+                BodyDef.BodyType.DynamicBody,
+                true,
+                false
+        );
+
+        b2bodyC.body.setUserData(ballEntity);
+
+
+        // give ball an initial velocity
+        // todo will change this such that the ball will be on the paddle until the player presses spacebar to let go
+        ballC.speed = 5f;
+//        b2bodyC.body.setLinearVelocity(new Vector2(1f, 1f).nor().scl(ballC.speed));
+
+        typeC.type = TypeComponent.BALL;
+
+        // load transform
+        tranC.position.set(b2bodyC.body.getPosition().x, b2bodyC.body.getPosition().y, 0);
+
+        ballEntity.add(tc);
+        ballEntity.add(tranC);
+        ballEntity.add(cc);
+        ballEntity.add(typeC);
+        ballEntity.add(b2bodyC);
+        ballEntity.add(ballC);
+        b2bodyC.body.setUserData(ballEntity);
+
+        en.addEntity(ballEntity);
+    }
+
+    private void renderPlayer(Entity playerEntity, Entity ballEntity){
+        if(BreakoutGame.DEBUG_MODE) System.out.println("(LevelLoader) Rendering Player");
+        PlayerComponent pc = en.createComponent(PlayerComponent.class);
+        TextureComponent tc = en.createComponent(TextureComponent.class);
+        TransformComponent tranC = en.createComponent(TransformComponent.class);
+        CollisionComponent cc = en.createComponent(CollisionComponent.class);
+        TypeComponent typeC = en.createComponent(TypeComponent.class);
+        B2BodyComponent b2bodyC = en.createComponent(B2BodyComponent.class);
+        AttachComponent attachC = en.createComponent(AttachComponent.class);
+
+        // create box2d body
+        b2bodyC.body = bodyFactory.makeBoxPolyBody(
+                Utilities.getPPMWidth() / 2 - (Utilities.convertToPPM(Utilities.PADDLE_WIDTH) / 2),
+                Utilities.convertToPPM(10),
+                Utilities.convertToPPM(Utilities.PADDLE_WIDTH),
+                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT),
+                null,
+                BodyDef.BodyType.KinematicBody,
+                true,
+                false
+        );
+
+        b2bodyC.body.setUserData(playerEntity);
+        typeC.type = TypeComponent.PLAYER;
+
+        // attach ball to player
+        System.out.println("Attached Ball to Paddle");
+        attachC.setAttachedEntity(ballEntity);
+
+        System.out.println(attachC.attachedEntity);
+
+        // load texture
+        tc.region = new TextureRegion(
+                textures.findRegion("paddle-sheet-removebg-preview(1)"),
+                0, 0, 100, 30
+        );
+
+        // load transform
+        tranC.position.set(b2bodyC.body.getPosition().x, b2bodyC.body.getPosition().y, 0);
+
+        playerEntity.add(pc);
+        playerEntity.add(tc);
+        playerEntity.add(tranC);
+        playerEntity.add(cc);
+        playerEntity.add(typeC);
+        playerEntity.add(b2bodyC);
+        playerEntity.add(attachC);
+        b2bodyC.body.setUserData(playerEntity);
+
+        en.addEntity(playerEntity);
+
+    }
+
+    private void renderBall(Entity ballEntity){
+        if(BreakoutGame.DEBUG_MODE) System.out.println("(LevelLoader) Rendering Ball");
+        TextureComponent tc = en.createComponent(TextureComponent.class);
+        TransformComponent tranC = en.createComponent(TransformComponent.class);
+        CollisionComponent cc = en.createComponent(CollisionComponent.class);
+        TypeComponent typeC = en.createComponent(TypeComponent.class);
+        B2BodyComponent b2bodyC = en.createComponent(B2BodyComponent.class);
+        BallComponent ballC = en.createComponent(BallComponent.class);
+
+        // load texture
+        tc.region = new TextureRegion(
+                textures.findRegion("ball-sheet-removebg-preview"),
+                8, 31, 25, 25
+        );
+
+        // create box2d body
+        b2bodyC.body = bodyFactory.makeCirclePolyBody(
+                Utilities.getPPMWidth() / 2,
+                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT + 30),
                 Utilities.convertToPPM(tc.region.getRegionWidth()),
                 null,
                 BodyDef.BodyType.DynamicBody,
