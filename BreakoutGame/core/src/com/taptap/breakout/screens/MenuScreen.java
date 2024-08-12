@@ -14,10 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.*;
 import com.taptap.breakout.BreakoutGame;
+import com.taptap.breakout.Utilities;
 
 public class MenuScreen implements Screen {
-    private static final float VIRTUAL_WIDTH = 800;
-    private static final float VIRTUAL_HEIGHT = 450;
     private BreakoutGame game;
     private Viewport viewport;
 
@@ -31,7 +30,7 @@ public class MenuScreen implements Screen {
 
     public MenuScreen(BreakoutGame game){
         this.game = game;
-        viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+        viewport = new FitViewport(Utilities.VIRTUAL_WIDTH, Utilities.VIRTUAL_HEIGHT);
         stage = new Stage(viewport);
         stage.setDebugAll(false);
         skin = game.assetManager.manager.get("skin/craftacular-ui.json", Skin.class);

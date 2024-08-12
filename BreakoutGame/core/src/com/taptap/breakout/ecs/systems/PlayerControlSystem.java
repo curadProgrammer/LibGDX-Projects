@@ -66,7 +66,7 @@ public class PlayerControlSystem extends IteratingSystem {
             BallComponent ballComponent = ballComponentComponentMapper.get(ballEntity);
 
             // supply initial velocity
-            ballB2Body.body.setLinearVelocity(new Vector2(1f, 1f).nor().scl(ballComponent.speed));
+            ballB2Body.body.setLinearVelocity(new Vector2(0f, 1f).nor().scl(ballComponent.speed));
 
             // remove attached entity
             attachComponent.setAttachedEntity(null);

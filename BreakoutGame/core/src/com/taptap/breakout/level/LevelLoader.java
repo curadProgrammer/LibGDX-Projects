@@ -226,7 +226,7 @@ public class LevelLoader {
         // create box2d body
         b2bodyC.body = bodyFactory.makeCirclePolyBody(
                 Utilities.getPPMWidth() / 2,
-                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT + 30),
+                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT + 10),
                 Utilities.convertToPPM(tc.region.getRegionWidth()),
                 null,
                 BodyDef.BodyType.DynamicBody,

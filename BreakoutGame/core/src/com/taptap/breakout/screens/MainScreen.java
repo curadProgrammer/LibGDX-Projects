@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.taptap.breakout.BreakoutGame;
+import com.taptap.breakout.Hud;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.controller.KeyboardController;
 import com.taptap.breakout.ecs.systems.*;
@@ -21,6 +22,7 @@ public class MainScreen implements Screen {
     private BreakoutGame game;
     private OrthographicCamera cam;
     private Viewport viewport;
+    private Hud hud;
 
     private World world;
     private LevelManager levelManager;
@@ -53,11 +55,18 @@ public class MainScreen implements Screen {
         sb.setProjectionMatrix(cam.combined);
         engine.addSystem(new RenderingSystem(sb, cam));
         engine.addSystem(new PhysicsSystem(world, engine));
-        engine.addSystem(new PhysicsDebugSystem(world, cam));
+//        engine.addSystem(new PhysicsDebugSystem(world, cam));
         engine.addSystem(new BallSystem());
         engine.addSystem(new AttachSystem());
         engine.addSystem(new CollisionSystem());
         engine.addSystem(new PlayerControlSystem(controller, levelManager));
+
+        loadHud();
+    }
+
+    private void loadHud(){
+        // todo load ball texture region (replace null with texture region)
+        hud = new Hud(game, null);
     }
 
     @Override
@@ -75,6 +84,9 @@ public class MainScreen implements Screen {
 
         // update engine
         engine.update(delta);
+
+        // render hud at the end so it overlays on top of everything else
+        hud.render();
     }
 
     @Override
