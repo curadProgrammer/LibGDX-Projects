@@ -181,10 +181,7 @@ public class LevelLoader {
         typeC.type = TypeComponent.PLAYER;
 
         // attach ball to player
-        System.out.println("Attached Ball to Paddle");
         attachC.setAttachedEntity(ballEntity);
-
-        System.out.println(attachC.attachedEntity);
 
         // load texture
         tc.region = new TextureRegion(

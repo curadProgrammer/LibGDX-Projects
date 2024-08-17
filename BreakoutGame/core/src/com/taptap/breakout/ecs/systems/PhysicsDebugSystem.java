@@ -20,7 +20,8 @@ public class PhysicsDebugSystem extends IteratingSystem {
         super(Family.all().get());
         this.world = world;
         this.cam = cam;
-        debugRenderer = new Box2DDebugRenderer();
+        debugRenderer = new Box2DDebugRenderer(
+                true,true,true,true,true,true);
     }
 
     @Override

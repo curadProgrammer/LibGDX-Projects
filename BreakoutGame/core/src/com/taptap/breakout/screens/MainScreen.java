@@ -29,6 +29,7 @@ public class MainScreen implements Screen {
 
     private SpriteBatch sb;
     private PooledEngine engine;
+    private CollisionSystem collisionSystem;
 
     private KeyboardController controller;
 
@@ -55,20 +56,16 @@ public class MainScreen implements Screen {
         sb.setProjectionMatrix(cam.combined);
         engine.addSystem(new RenderingSystem(sb, cam));
         engine.addSystem(new PhysicsSystem(world, engine));
-//        engine.addSystem(new PhysicsDebugSystem(world, cam));
+        engine.addSystem(new PhysicsDebugSystem(world, cam));
         engine.addSystem(new BallSystem());
         engine.addSystem(new AttachSystem());
-        engine.addSystem(new CollisionSystem());
+
+        collisionSystem = new CollisionSystem();
+        engine.addSystem(collisionSystem);
         engine.addSystem(new PlayerControlSystem(controller, levelManager));
 
-        loadHud();
+        hud = new Hud(game);
     }
-
-    private void loadHud(){
-        // todo load ball texture region (replace null with texture region)
-        hud = new Hud(game, null);
-    }
-
     @Override
     public void show() {
         Gdx.input.setInputProcessor(controller);
