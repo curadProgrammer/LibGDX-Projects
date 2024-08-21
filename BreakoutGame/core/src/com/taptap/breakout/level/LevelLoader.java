@@ -2,6 +2,7 @@ package com.taptap.breakout.level;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapObject;
@@ -213,6 +214,11 @@ public class LevelLoader {
         TypeComponent typeC = en.createComponent(TypeComponent.class);
         B2BodyComponent b2bodyC = en.createComponent(B2BodyComponent.class);
         BallComponent ballC = en.createComponent(BallComponent.class);
+        SoundComponent soundComponent = en.createComponent(SoundComponent.class);
+
+        soundComponent.soundEffects.put("ding1", (Sound) game.assetManager.manager.get(game.assetManager.ding1Sound));
+        soundComponent.soundEffects.put("ding2", (Sound) game.assetManager.manager.get(game.assetManager.ding2Sound));
+
 
         // load texture
         tc.region = new TextureRegion(
@@ -250,6 +256,7 @@ public class LevelLoader {
         ballEntity.add(typeC);
         ballEntity.add(b2bodyC);
         ballEntity.add(ballC);
+        ballEntity.add(soundComponent);
         b2bodyC.body.setUserData(ballEntity);
 
         en.addEntity(ballEntity);
@@ -262,6 +269,7 @@ public class LevelLoader {
             TextureComponent tc = en.createComponent(TextureComponent.class);
             CollisionComponent collision = en.createComponent(CollisionComponent.class);
             TypeComponent type = en.createComponent(TypeComponent.class);
+            ScoreComponent scoreComponent = en.createComponent(ScoreComponent.class);
 
             // get the rectangle object from the map
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -313,6 +321,7 @@ public class LevelLoader {
             blockEntity.add(tc);
             blockEntity.add(collision);
             blockEntity.add(type);
+            blockEntity.add(scoreComponent);
             en.addEntity(blockEntity);
         }
     }

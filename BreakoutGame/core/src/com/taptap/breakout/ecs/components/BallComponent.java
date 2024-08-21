@@ -19,7 +19,6 @@ public class BallComponent implements Pool.Poolable, Component {
         // don't perform bounce logic if it can not bounce
         if(!canBounce) return;
 
-
         System.out.println("Ball Direction: " + bounceDirection);
 
         float angle;

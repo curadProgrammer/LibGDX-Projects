@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.components.*;
+import com.taptap.breakout.listeners.ScoreChangeListener;
 
 /*
     System to handle the ball's collisions
@@ -17,8 +18,11 @@ public class CollisionSystem extends IteratingSystem {
     private ComponentMapper<B2BodyComponent> b2BodyC = ComponentMapper.getFor(B2BodyComponent.class);
     private ComponentMapper<BallComponent> ballC = ComponentMapper.getFor(BallComponent.class);
 
-    public CollisionSystem(){
+    private ScoreChangeListener scoreChangeListener;
+
+    public CollisionSystem(ScoreChangeListener scoreChangeListener){
        super(Family.all(CollisionComponent.class, B2BodyComponent.class, BallComponent.class).get());
+        this.scoreChangeListener = scoreChangeListener;
     }
 
     @Override
@@ -68,6 +72,7 @@ public class CollisionSystem extends IteratingSystem {
             Vector2 force = new Vector2(0, 0);
             float angle = 0;
 
+
             if(ballPosition.x <=
                     blockPosition.x - Utilities.convertToPPM((float) blockTexture.region.getRegionWidth() /2)){ // LEFT
                 force = new Vector2(-1, 0);
@@ -99,6 +104,10 @@ public class CollisionSystem extends IteratingSystem {
             // block is destroyed
             System.out.println("Block is destroyed");
             blockB2Body.setToDestroy = true;
+
+            // update score
+            ScoreComponent scoreComponent = otherEntity.getComponent(ScoreComponent.class);
+            scoreChangeListener.onScoreChange(scoreComponent.scoreValue);
         }
     }
 }

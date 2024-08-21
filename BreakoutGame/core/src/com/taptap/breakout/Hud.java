@@ -17,6 +17,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.Locale;
+
 public class Hud implements Disposable {
     private BreakoutGame game;
     private Stage stage;
@@ -29,6 +31,7 @@ public class Hud implements Disposable {
     private Image ballImage;
     private int score, level, lives;
 
+    public int getScore(){return score;}
     public void setScore(int score) {
         this.score = score;
     }
@@ -63,7 +66,7 @@ public class Hud implements Disposable {
         table.setFillParent(true);
         table.setDebug(true);
 
-        scoreLabel = new Label("Score: 000000", new Label.LabelStyle(
+        scoreLabel = new Label(String.format(Locale.getDefault(), "Score: %06d", score), new Label.LabelStyle(
                 game.assetManager.manager.get(game.assetManager.fontSmall, BitmapFont.class), Color.WHITE));
 
         levelLabel = new Label("Level 1", new Label.LabelStyle(
@@ -92,7 +95,8 @@ public class Hud implements Disposable {
 
     // call this method to update the score, lives, level
     public void update(){
-
+        levelLabel.setText("Level " + level);
+        scoreLabel.setText(String.format(Locale.getDefault(), "Score: %06d", score));
     }
 
     public void render(){

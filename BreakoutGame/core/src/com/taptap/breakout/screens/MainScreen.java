@@ -17,8 +17,9 @@ import com.taptap.breakout.controller.KeyboardController;
 import com.taptap.breakout.ecs.systems.*;
 import com.taptap.breakout.level.B2dContactListener;
 import com.taptap.breakout.level.LevelManager;
+import com.taptap.breakout.listeners.ScoreChangeListener;
 
-public class MainScreen implements Screen {
+public class MainScreen implements Screen, ScoreChangeListener {
     private BreakoutGame game;
     private OrthographicCamera cam;
     private Viewport viewport;
@@ -59,22 +60,29 @@ public class MainScreen implements Screen {
         engine.addSystem(new PhysicsDebugSystem(world, cam));
         engine.addSystem(new BallSystem());
         engine.addSystem(new AttachSystem());
-
-        collisionSystem = new CollisionSystem();
+        collisionSystem = new CollisionSystem(this);
         engine.addSystem(collisionSystem);
+        engine.addSystem(new SoundSystem());
         engine.addSystem(new PlayerControlSystem(controller, levelManager));
 
         hud = new Hud(game);
     }
+
     @Override
     public void show() {
         Gdx.input.setInputProcessor(controller);
+    }
+
+    public void update(){
+        hud.update();
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0,0,0,1); //  clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        update();
 
         // load level
         levelManager.renderLevel();
@@ -109,5 +117,10 @@ public class MainScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    @Override
+    public void onScoreChange(int appendScore) {
+        hud.setScore(hud.getScore() + appendScore);
     }
 }
