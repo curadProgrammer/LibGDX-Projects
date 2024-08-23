@@ -14,9 +14,9 @@ public class LevelManager {
     private World world;
     private OrthographicCamera cam;
     private HashMap<Level, String> levels;
-    private LevelLoader currentLevel;
     private PooledEngine en;
     private BreakoutGame game;
+    public LevelLoader currentLevel;
 
     public LevelManager(BreakoutGame game, World world, PooledEngine en, OrthographicCamera cam){
         this.world = world;

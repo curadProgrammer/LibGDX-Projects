@@ -31,6 +31,8 @@ public class LevelLoader {
 
     private TextureAtlas textures;
 
+    public int numOfBlocksLeft;
+
     // mapFilePath - pass in the path to the map file to be loaded
     public LevelLoader(BreakoutGame game, World world, PooledEngine en, String mapFilePath){
         this.world = world;
@@ -59,103 +61,6 @@ public class LevelLoader {
         renderPlayer(playerEntity, ballEntity);
     }
 
-    private void renderPlayer(){
-        if(BreakoutGame.DEBUG_MODE) System.out.println("(LevelLoader) Rendering Player");
-        Entity playerEntity = en.createEntity();
-        PlayerComponent pc = en.createComponent(PlayerComponent.class);
-        TextureComponent tc = en.createComponent(TextureComponent.class);
-        TransformComponent tranC = en.createComponent(TransformComponent.class);
-        CollisionComponent cc = en.createComponent(CollisionComponent.class);
-        TypeComponent typeC = en.createComponent(TypeComponent.class);
-        B2BodyComponent b2bodyC = en.createComponent(B2BodyComponent.class);
-
-        // create box2d body
-        b2bodyC.body = bodyFactory.makeBoxPolyBody(
-                Utilities.getPPMWidth() / 2 - (Utilities.convertToPPM(Utilities.PADDLE_WIDTH) / 2),
-                Utilities.convertToPPM(10),
-                Utilities.convertToPPM(Utilities.PADDLE_WIDTH),
-                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT),
-                null,
-                BodyDef.BodyType.KinematicBody,
-                true,
-                false
-        );
-
-        b2bodyC.body.setUserData(playerEntity);
-        typeC.type = TypeComponent.PLAYER;
-
-        // load texture
-        tc.region = new TextureRegion(
-                textures.findRegion("paddle-sheet-removebg-preview(1)"),
-                0, 0, 100, 30
-        );
-
-        // load transform
-        tranC.position.set(b2bodyC.body.getPosition().x, b2bodyC.body.getPosition().y, 0);
-
-        playerEntity.add(pc);
-        playerEntity.add(tc);
-        playerEntity.add(tranC);
-        playerEntity.add(cc);
-        playerEntity.add(typeC);
-        playerEntity.add(b2bodyC);
-        b2bodyC.body.setUserData(playerEntity);
-
-        en.addEntity(playerEntity);
-
-    }
-
-    private void renderBall(){
-        if(BreakoutGame.DEBUG_MODE) System.out.println("(LevelLoader) Rendering Ball");
-        Entity ballEntity = en.createEntity();
-        TextureComponent tc = en.createComponent(TextureComponent.class);
-        TransformComponent tranC = en.createComponent(TransformComponent.class);
-        CollisionComponent cc = en.createComponent(CollisionComponent.class);
-        TypeComponent typeC = en.createComponent(TypeComponent.class);
-        B2BodyComponent b2bodyC = en.createComponent(B2BodyComponent.class);
-        BallComponent ballC = en.createComponent(BallComponent.class);
-
-        // load texture
-        tc.region = new TextureRegion(
-                textures.findRegion("ball-sheet-removebg-preview"),
-                8, 31, 25, 25
-        );
-
-        // create box2d body
-        b2bodyC.body = bodyFactory.makeCirclePolyBody(
-                Utilities.getPPMWidth() / 2,
-                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT + 10),
-                Utilities.convertToPPM(tc.region.getRegionWidth()),
-                null,
-                BodyDef.BodyType.DynamicBody,
-                true,
-                false
-        );
-
-        b2bodyC.body.setUserData(ballEntity);
-
-
-        // give ball an initial velocity
-        // todo will change this such that the ball will be on the paddle until the player presses spacebar to let go
-        ballC.speed = 5f;
-//        b2bodyC.body.setLinearVelocity(new Vector2(1f, 1f).nor().scl(ballC.speed));
-
-        typeC.type = TypeComponent.BALL;
-
-        // load transform
-        tranC.position.set(b2bodyC.body.getPosition().x, b2bodyC.body.getPosition().y, 0);
-
-        ballEntity.add(tc);
-        ballEntity.add(tranC);
-        ballEntity.add(cc);
-        ballEntity.add(typeC);
-        ballEntity.add(b2bodyC);
-        ballEntity.add(ballC);
-        b2bodyC.body.setUserData(ballEntity);
-
-        en.addEntity(ballEntity);
-    }
-
     private void renderPlayer(Entity playerEntity, Entity ballEntity){
         if(BreakoutGame.DEBUG_MODE) System.out.println("(LevelLoader) Rendering Player");
         PlayerComponent pc = en.createComponent(PlayerComponent.class);
@@ -180,8 +85,6 @@ public class LevelLoader {
 
         b2bodyC.body.setUserData(playerEntity);
         typeC.type = TypeComponent.PLAYER;
-
-        // attach ball to player
         attachC.setAttachedEntity(ballEntity);
 
         // load texture
@@ -200,7 +103,6 @@ public class LevelLoader {
         playerEntity.add(typeC);
         playerEntity.add(b2bodyC);
         playerEntity.add(attachC);
-        b2bodyC.body.setUserData(playerEntity);
 
         en.addEntity(playerEntity);
 
@@ -216,6 +118,7 @@ public class LevelLoader {
         BallComponent ballC = en.createComponent(BallComponent.class);
         SoundComponent soundComponent = en.createComponent(SoundComponent.class);
 
+        // add sound fx
         soundComponent.soundEffects.put("ding1", (Sound) game.assetManager.manager.get(game.assetManager.ding1Sound));
         soundComponent.soundEffects.put("ding2", (Sound) game.assetManager.manager.get(game.assetManager.ding2Sound));
 
@@ -229,7 +132,7 @@ public class LevelLoader {
         // create box2d body
         b2bodyC.body = bodyFactory.makeCirclePolyBody(
                 Utilities.getPPMWidth() / 2,
-                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT + 10),
+                Utilities.convertToPPM(Utilities.PADDLE_HEIGHT + 25),
                 Utilities.convertToPPM(tc.region.getRegionWidth()),
                 null,
                 BodyDef.BodyType.DynamicBody,
@@ -238,13 +141,7 @@ public class LevelLoader {
         );
 
         b2bodyC.body.setUserData(ballEntity);
-
-
-        // give ball an initial velocity
-        // todo will change this such that the ball will be on the paddle until the player presses spacebar to let go
         ballC.speed = 5f;
-//        b2bodyC.body.setLinearVelocity(new Vector2(1f, 1f).nor().scl(ballC.speed));
-
         typeC.type = TypeComponent.BALL;
 
         // load transform
@@ -257,8 +154,6 @@ public class LevelLoader {
         ballEntity.add(b2bodyC);
         ballEntity.add(ballC);
         ballEntity.add(soundComponent);
-        b2bodyC.body.setUserData(ballEntity);
-
         en.addEntity(ballEntity);
     }
 
@@ -323,6 +218,8 @@ public class LevelLoader {
             blockEntity.add(type);
             blockEntity.add(scoreComponent);
             en.addEntity(blockEntity);
+
+            numOfBlocksLeft++;
         }
     }
 }

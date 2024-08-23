@@ -6,8 +6,10 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.taptap.breakout.Hud;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.components.*;
+import com.taptap.breakout.level.LevelManager;
 import com.taptap.breakout.listeners.ScoreChangeListener;
 
 /*
@@ -19,10 +21,13 @@ public class CollisionSystem extends IteratingSystem {
     private ComponentMapper<BallComponent> ballC = ComponentMapper.getFor(BallComponent.class);
 
     private ScoreChangeListener scoreChangeListener;
+    private LevelManager levelManager;
+    private Hud hud;
 
-    public CollisionSystem(ScoreChangeListener scoreChangeListener){
+    public CollisionSystem(LevelManager levelManager, ScoreChangeListener scoreChangeListener){
        super(Family.all(CollisionComponent.class, B2BodyComponent.class, BallComponent.class).get());
-        this.scoreChangeListener = scoreChangeListener;
+       this.scoreChangeListener = scoreChangeListener;
+       this.levelManager = levelManager;
     }
 
     @Override
@@ -108,6 +113,12 @@ public class CollisionSystem extends IteratingSystem {
             // update score
             ScoreComponent scoreComponent = otherEntity.getComponent(ScoreComponent.class);
             scoreChangeListener.onScoreChange(scoreComponent.scoreValue);
+
+            // update block count in level
+            if(--levelManager.currentLevel.numOfBlocksLeft <= 0){
+                // display dialog and stop the game or prevent the world from processing anymore
+                System.out.println("Level Finished");
+            }
         }
     }
 }
