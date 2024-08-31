@@ -23,6 +23,9 @@ public class BallSystem extends IteratingSystem {
         B2BodyComponent ballB2body = b2bodyMapper.get(entity);
 
         Vector2 ballPosition = ballB2body.body.getPosition();
+
+        if(ballB2body.isDead) return;
+
         float ballRadius = ballB2body.body.getFixtureList().get(0).getShape().getRadius();
 
         // collision logic for when the ball hits the sides of the screens (top, down, left, right)

@@ -14,12 +14,13 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Disposable;
 import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.components.*;
 import com.taptap.breakout.loader.BodyFactory;
 
-public class LevelLoader {
+public class LevelLoader implements Disposable {
     private BodyFactory bodyFactory;
     private TmxMapLoader mapLoader;
     private TiledMap map;
@@ -220,6 +221,17 @@ public class LevelLoader {
             en.addEntity(blockEntity);
 
             numOfBlocksLeft++;
+        }
+    }
+
+    @Override
+    public void dispose() {
+        if (map != null) {
+            map.dispose();
+        }
+
+        if (mapRenderer != null) {
+            mapRenderer.dispose();
         }
     }
 }

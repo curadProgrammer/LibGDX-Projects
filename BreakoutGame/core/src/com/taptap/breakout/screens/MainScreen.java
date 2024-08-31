@@ -2,6 +2,7 @@ package com.taptap.breakout.screens;
 
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -32,6 +33,7 @@ public class MainScreen implements Screen, ScoreChangeListener {
     private PooledEngine engine;
     private CollisionSystem collisionSystem;
 
+    private InputMultiplexer inputMultiplexer;
     private KeyboardController controller;
 
 
@@ -46,13 +48,14 @@ public class MainScreen implements Screen, ScoreChangeListener {
         controller = new KeyboardController();
         world = new World(new Vector2(0, 0), true);
         world.setContactListener(new B2dContactListener());
+        inputMultiplexer = new InputMultiplexer();
 
         engine = new PooledEngine();
         levelManager = new LevelManager(game, world, engine, cam);
+        hud = new Hud(game, levelManager);
 
         // load first level
-        levelManager.loadLevel(LevelManager.Level.TEST);
-
+        levelManager.loadLevel(hud.getLevel());
 
         sb.setProjectionMatrix(cam.combined);
         engine.addSystem(new RenderingSystem(sb, cam));
@@ -60,17 +63,18 @@ public class MainScreen implements Screen, ScoreChangeListener {
         engine.addSystem(new PhysicsDebugSystem(world, cam));
         engine.addSystem(new BallSystem());
         engine.addSystem(new AttachSystem());
-        collisionSystem = new CollisionSystem(levelManager, this);
+        collisionSystem = new CollisionSystem(hud, levelManager, this);
         engine.addSystem(collisionSystem);
         engine.addSystem(new SoundSystem());
         engine.addSystem(new PlayerControlSystem(controller, levelManager));
 
-        hud = new Hud(game);
     }
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(controller);
+        inputMultiplexer.addProcessor(hud.getStage()); // Add stage first for UI priority
+        inputMultiplexer.addProcessor(controller);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     public void update(){
@@ -97,6 +101,7 @@ public class MainScreen implements Screen, ScoreChangeListener {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
+        hud.resize(width, height);
     }
 
     @Override
