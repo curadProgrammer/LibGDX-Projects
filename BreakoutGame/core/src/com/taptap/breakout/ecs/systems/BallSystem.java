@@ -24,6 +24,7 @@ public class BallSystem extends IteratingSystem {
 
         Vector2 ballPosition = ballB2body.body.getPosition();
 
+        // N: this is used when the ball is removed when loading a level
         if(ballB2body.isDead) return;
 
         float ballRadius = ballB2body.body.getFixtureList().get(0).getShape().getRadius();

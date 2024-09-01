@@ -35,6 +35,7 @@ public class LevelManager implements Disposable {
     }
 
     public void loadLevel(int level){
+        System.out.println("Loading Level: " + level);
         // todo reset the game objects as loading a new level involves creating new ones
         cleanupCurrentLevel();
 
@@ -46,6 +47,7 @@ public class LevelManager implements Disposable {
                 currentLevel = new LevelLoader(game, world, en, getLevelMapPath(Level.LEVEL2));
                 break;
             case 3:
+                System.out.println("Loading level 3");
                 currentLevel = new LevelLoader(game, world, en, getLevelMapPath(Level.LEVEL3));
                 break;
         }
@@ -85,8 +87,6 @@ public class LevelManager implements Disposable {
 
             // Remove all bodies from the current level
             ImmutableArray<Entity> matchingEntities = en.getEntitiesFor(Family.all(B2BodyComponent.class).get());
-            System.out.println(matchingEntities.size());
-
             for (Entity entity : matchingEntities) {
                 B2BodyComponent b2Body = entity.getComponent(B2BodyComponent.class);
                 b2Body.setToDestroy = true;

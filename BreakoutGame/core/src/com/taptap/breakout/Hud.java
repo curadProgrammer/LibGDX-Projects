@@ -34,7 +34,7 @@ public class Hud implements Disposable {
     // dialog table
     private Table dialog; // N: this will be used to show a dialog to the user
     private Label messageLabel;
-    private TextButton interactiveBtn;
+    private TextButton nextLevelBtn, tryAgainBtn, goBackToMenuScreenBtn;
 
     // hud table
     private Table table;
@@ -121,13 +121,41 @@ public class Hud implements Disposable {
 
         messageLabel = new Label("", new Label.LabelStyle(
                 game.assetManager.manager.get(game.assetManager.fontMedium, BitmapFont.class), Color.WHITE));
-        interactiveBtn = new TextButton("", skin);
+        nextLevelBtn = new TextButton("Next Level", skin);
+        nextLevelBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("Going to Next Level");
+                levelManager.loadLevel(++level);
+                System.out.println("Level: " + level);
 
-        dialog.add(messageLabel);
-        dialog.row();
-        dialog.add(interactiveBtn);
+                // hide dialog
+                closeDialog();
+            }
+        });
+        tryAgainBtn = new TextButton("Try Again", skin);
+        tryAgainBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("Resetting Level");
+
+                // hide dialog
+                closeDialog();
+            }
+        });
+
+        goBackToMenuScreenBtn = new TextButton("Go back to Menu Screen", skin);
+        goBackToMenuScreenBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("Going back to menu screen");
+
+                // hide dialog
+                closeDialog();
+            }
+        });
+
         dialog.setVisible(false);
-
         stage.addActor(dialog);
     }
 
@@ -135,8 +163,6 @@ public class Hud implements Disposable {
     public void update(){
         levelLabel.setText("Level " + level);
         scoreLabel.setText(String.format(Locale.getDefault(), "Score: %06d", score));
-
-
     }
 
     public void render(){
@@ -149,37 +175,22 @@ public class Hud implements Disposable {
     }
 
     public void openDialog(boolean hasWon){
-        if(hasWon){
+        dialog.clearChildren();
+        dialog.add(messageLabel);
+        dialog.row();
+
+        if(hasWon) {
             messageLabel.setText("Congratulations!");
-            interactiveBtn.setText("Next Level");
-            interactiveBtn.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    System.out.println("Going to Next Level");
-
-                    if(level >= LevelManager.MAX_LEVELS){
-                        // todo take them back to the menu screen
-                        System.out.println("Going back to menu screen");
-                    }else{
-                        levelManager.loadLevel(++level);
-                    }
-
-                    // hide dialog
-                    closeDialog();
-                }
-            });
+            if(level >= LevelManager.MAX_LEVELS){
+                dialog.add(goBackToMenuScreenBtn);
+            }else{
+                dialog.add(nextLevelBtn);
+            }
         }else{
-            messageLabel.setText("Too bad =[");
-            interactiveBtn.setText("Try Again");
-            interactiveBtn.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent event, Actor actor) {
-                    System.out.println("Resetting Level");
-                }
-            });
+            messageLabel.setText("Game Over =[");
+            dialog.add(tryAgainBtn);
         }
         dialog.setVisible(true);
-
     }
 
     public void closeDialog(){

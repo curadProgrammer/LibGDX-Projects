@@ -111,7 +111,7 @@ public class CollisionSystem extends IteratingSystem {
             otherCollision.canCollide = false;
 
             // block is destroyed
-            System.out.println("Block is destroyed");
+//            System.out.println("Block is destroyed");
             blockB2Body.setToDestroy = true;
 
             // update score
