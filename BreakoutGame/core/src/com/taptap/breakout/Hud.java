@@ -17,12 +17,17 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.taptap.breakout.level.LevelManager;
+import com.taptap.breakout.screens.MainScreen;
 import com.taptap.breakout.screens.ScreenManager;
 import javafx.scene.control.Button;
 
 import java.util.Locale;
+import java.util.logging.Logger;
 
 public class Hud implements Disposable {
+    private static final Logger logger = Logger.getLogger(Hud.class.getName());
+    private static final boolean DEBUG_MODE = true;
+
     private BreakoutGame game;
     private Stage stage;
     public Stage getStage(){return stage;}
@@ -58,6 +63,8 @@ public class Hud implements Disposable {
     }
 
     public Hud(BreakoutGame game, LevelManager levelManager){
+        if(DEBUG_MODE) logger.info("Constructor");
+
         this.game = game;
         this.levelManager = levelManager;
 
@@ -133,6 +140,7 @@ public class Hud implements Disposable {
                 closeDialog();
             }
         });
+
         tryAgainBtn = new TextButton("Try Again", skin);
         tryAgainBtn.addListener(new ChangeListener() {
             @Override
@@ -148,7 +156,12 @@ public class Hud implements Disposable {
         goBackToMenuScreenBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Going back to menu screen");
+                // reset configurations
+                level = 1;
+                lives = 3;
+                score = 0;
+
+                game.screenManager.changeScreen(ScreenManager.MENU);
 
                 // hide dialog
                 closeDialog();
@@ -175,6 +188,7 @@ public class Hud implements Disposable {
     }
 
     public void openDialog(boolean hasWon){
+        // needed to remove current actors from dialog
         dialog.clearChildren();
         dialog.add(messageLabel);
         dialog.row();

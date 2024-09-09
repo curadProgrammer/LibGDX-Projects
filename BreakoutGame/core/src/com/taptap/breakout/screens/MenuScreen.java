@@ -16,7 +16,12 @@ import com.badlogic.gdx.utils.viewport.*;
 import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.Utilities;
 
+import java.util.logging.Logger;
+
 public class MenuScreen implements Screen {
+    private static final Logger logger = Logger.getLogger(MenuScreen.class.getName());
+    private static final boolean DEBUG_MODE = true;
+
     private BreakoutGame game;
     private Viewport viewport;
 
@@ -29,6 +34,8 @@ public class MenuScreen implements Screen {
     private TextButton startGame, settings, exit;
 
     public MenuScreen(BreakoutGame game){
+        if(DEBUG_MODE) logger.info("Constructor Call");
+
         this.game = game;
         viewport = new FitViewport(Utilities.VIRTUAL_WIDTH, Utilities.VIRTUAL_HEIGHT);
         stage = new Stage(viewport);
@@ -38,6 +45,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
+        if(DEBUG_MODE) logger.info("Show()");
         stage.clear();
         Gdx.input.setInputProcessor(stage);
 
@@ -122,6 +130,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void dispose() {
+        if(DEBUG_MODE) logger.info("Dispose()");
         stage.dispose();
         skin.dispose();
     }

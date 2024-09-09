@@ -6,15 +6,9 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.ecs.components.B2BodyComponent;
-import com.taptap.breakout.ecs.components.BallComponent;
-
-import java.util.HashMap;
-
-import static com.taptap.breakout.level.LevelManager.Level.LEVEL1;
 
 public class LevelManager implements Disposable {
     public static int MAX_LEVELS = 3;
@@ -35,8 +29,6 @@ public class LevelManager implements Disposable {
     }
 
     public void loadLevel(int level){
-        System.out.println("Loading Level: " + level);
-        // todo reset the game objects as loading a new level involves creating new ones
         cleanupCurrentLevel();
 
         switch (level){
@@ -47,7 +39,6 @@ public class LevelManager implements Disposable {
                 currentLevel = new LevelLoader(game, world, en, getLevelMapPath(Level.LEVEL2));
                 break;
             case 3:
-                System.out.println("Loading level 3");
                 currentLevel = new LevelLoader(game, world, en, getLevelMapPath(Level.LEVEL3));
                 break;
         }
@@ -99,6 +90,7 @@ public class LevelManager implements Disposable {
 
     @Override
     public void dispose() {
+        System.out.println("Calling Level Manager dispose");
         cleanupCurrentLevel();
     }
 }

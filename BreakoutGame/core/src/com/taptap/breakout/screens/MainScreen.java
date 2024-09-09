@@ -20,7 +20,12 @@ import com.taptap.breakout.level.B2dContactListener;
 import com.taptap.breakout.level.LevelManager;
 import com.taptap.breakout.listeners.ScoreChangeListener;
 
+import java.util.logging.Logger;
+
 public class MainScreen implements Screen, ScoreChangeListener {
+    private static final Logger logger = Logger.getLogger(MainScreen.class.getName());
+    private static final boolean DEBUG_MODE = true;
+
     private BreakoutGame game;
     private OrthographicCamera cam;
     private Viewport viewport;
@@ -38,6 +43,8 @@ public class MainScreen implements Screen, ScoreChangeListener {
 
 
     public MainScreen(BreakoutGame game){
+        if(DEBUG_MODE) logger.info("Constructor");
+
         this.game = game;
         sb = new SpriteBatch();
         cam = new OrthographicCamera();
@@ -53,11 +60,16 @@ public class MainScreen implements Screen, ScoreChangeListener {
         engine = new PooledEngine();
         levelManager = new LevelManager(game, world, engine, cam);
         hud = new Hud(game, levelManager);
+        sb.setProjectionMatrix(cam.combined);
+    }
+
+    @Override
+    public void show() {
+        if(DEBUG_MODE) logger.info("Show");
 
         // load first level
-        levelManager.loadLevel(hud.getLevel());
+        levelManager.loadLevel(1);
 
-        sb.setProjectionMatrix(cam.combined);
         engine.addSystem(new RenderingSystem(sb, cam));
         engine.addSystem(new PhysicsSystem(world, engine));
         engine.addSystem(new PhysicsDebugSystem(world, cam));
@@ -68,10 +80,6 @@ public class MainScreen implements Screen, ScoreChangeListener {
         engine.addSystem(new SoundSystem());
         engine.addSystem(new PlayerControlSystem(controller, levelManager));
 
-    }
-
-    @Override
-    public void show() {
         inputMultiplexer.addProcessor(hud.getStage()); // Add stage first for UI priority
         inputMultiplexer.addProcessor(controller);
         Gdx.input.setInputProcessor(inputMultiplexer);
@@ -121,7 +129,8 @@ public class MainScreen implements Screen, ScoreChangeListener {
 
     @Override
     public void dispose() {
-
+        if(DEBUG_MODE) logger.info("Dispose()");
+        levelManager.dispose();
     }
 
     @Override
