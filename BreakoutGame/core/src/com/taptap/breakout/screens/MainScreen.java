@@ -77,7 +77,7 @@ public class MainScreen implements Screen, ScoreChangeListener {
         engine.addSystem(new AttachSystem());
         collisionSystem = new CollisionSystem(hud, levelManager, this);
         engine.addSystem(collisionSystem);
-        engine.addSystem(new SoundSystem());
+        engine.addSystem(new SoundSystem(game.getAppPreferences()));
         engine.addSystem(new PlayerControlSystem(controller, levelManager));
 
         inputMultiplexer.addProcessor(hud.getStage()); // Add stage first for UI priority

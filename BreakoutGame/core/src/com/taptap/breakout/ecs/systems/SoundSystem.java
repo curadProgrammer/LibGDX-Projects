@@ -3,17 +3,25 @@ package com.taptap.breakout.ecs.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.taptap.breakout.AppPreferences;
+import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.ecs.components.CollisionComponent;
 import com.taptap.breakout.ecs.components.SoundComponent;
 import com.taptap.breakout.ecs.components.TypeComponent;
 
 public class SoundSystem extends IteratingSystem{
-    public SoundSystem(){
+    private AppPreferences appPreferences;
+
+    public SoundSystem(AppPreferences appPreferences){
         super(Family.all(SoundComponent.class, CollisionComponent.class, TypeComponent.class).get());
+        this.appPreferences = appPreferences;
     }
 
     @Override
     protected void processEntity(Entity entity, float v) {
+        // don't play sound if the sound is disabled in settings
+        if(!appPreferences.isSoundEnabled()) return;
+
         SoundComponent soundComponent = entity.getComponent(SoundComponent.class);
         CollisionComponent collisionComponent = entity.getComponent(CollisionComponent.class);
         TypeComponent typeComponent = entity.getComponent(TypeComponent.class);
