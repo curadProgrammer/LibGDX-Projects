@@ -86,6 +86,8 @@ public class PreferencesScreen implements Screen {
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
                 super.touchDragged(event, x, y, pointer);
+
+                if(!game.getAppPreferences().isSoundEnabled()) return;
                 game.getAppPreferences().setSoundVolume(volumeSoundSlider.getValue());
                 ding1Sound.setVolume(ding1Sound.play(), volumeSoundSlider.getValue());
                 ding2Sound.setVolume(ding2Sound.play(), volumeSoundSlider.getValue());
@@ -153,14 +155,6 @@ public class PreferencesScreen implements Screen {
 
                 // update prefs
                 game.getAppPreferences().setSoundEnabled(enabled);
-
-                if(enabled){
-                    ding1Sound.setVolume(ding1Sound.play(), volumeSoundSlider.getValue());
-                    ding2Sound.setVolume(ding2Sound.play(), volumeSoundSlider.getValue());
-                }else{
-                    ding1Sound.setVolume(ding1Sound.play(), 0);
-                    ding2Sound.setVolume(ding2Sound.play(), 0);
-                }
             }
         });
 
