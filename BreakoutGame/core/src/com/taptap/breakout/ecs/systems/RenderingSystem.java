@@ -1,6 +1,5 @@
 package com.taptap.breakout.ecs.systems;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -11,7 +10,6 @@ import com.badlogic.gdx.utils.Array;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.components.B2BodyComponent;
 import com.taptap.breakout.ecs.components.TextureComponent;
-import com.taptap.breakout.ecs.components.TransformComponent;
 
 import java.util.Comparator;
 

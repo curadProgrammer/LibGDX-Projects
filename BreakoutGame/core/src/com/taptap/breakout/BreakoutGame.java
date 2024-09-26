@@ -1,7 +1,6 @@
 package com.taptap.breakout;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.audio.Music;
 import com.taptap.breakout.loader.B2dAssetManager;
 import com.taptap.breakout.screens.ScreenManager;
 
@@ -18,8 +17,7 @@ public class BreakoutGame extends Game {
 		return appPreferences;
 	}
 
-	// music
-	private Music backgroundMusic;
+
 
 	@Override
 	public void create () {
@@ -33,9 +31,6 @@ public class BreakoutGame extends Game {
 		// music
 		assetManager.queueAddMusic();
 		assetManager.manager.finishLoading();
-		backgroundMusic = assetManager.manager.get("music/night night.ogg");
-		backgroundMusic.setLooping(true);
-//		backgroundMusic.play();
 	}
 
 	@Override
@@ -46,7 +41,6 @@ public class BreakoutGame extends Game {
 	@Override
 	public void dispose () {
 		if(BreakoutGame.DEBUG_MODE) System.out.println("(BreakoutGame.java) Calling dispose()");
-		backgroundMusic.dispose();
 		assetManager.manager.dispose();
 	}
 }

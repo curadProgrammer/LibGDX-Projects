@@ -2,12 +2,15 @@ package com.taptap.breakout.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.taptap.breakout.BreakoutGame;
@@ -27,12 +30,21 @@ public class PreferencesScreen implements Screen {
     private TextButton musicOnOffCheck, soundOnOffCheck;
     private TextButton back;
 
+    private Music backgroundMusic;
+    private Sound ding1Sound, ding2Sound;
+
     public PreferencesScreen(BreakoutGame game){
         this.game = game;
         viewport = new FitViewport(Utilities.VIRTUAL_WIDTH, Utilities.VIRTUAL_HEIGHT);
         stage = new Stage(viewport);
         stage.setDebugAll(false);
         skin = game.assetManager.manager.get("skin/craftacular-ui.json", Skin.class);
+
+        backgroundMusic = game.assetManager.manager.get("music/night night.ogg");
+        backgroundMusic.setLooping(true);
+
+        ding1Sound = game.assetManager.manager.get("soundfx/ding_1.wav");
+        ding2Sound = game.assetManager.manager.get("soundfx/ding_2.wav");
     }
 
     @Override
@@ -63,17 +75,20 @@ public class PreferencesScreen implements Screen {
             @Override
             public boolean handle(Event event) {
                 game.getAppPreferences().setMusicVolume(volumeMusicSlider.getValue());
+                backgroundMusic.setVolume(volumeMusicSlider.getValue());
                 return false;
             }
         });
 
         volumeSoundSlider = new Slider(0f, 1f, 0.1f, false, skin);
         volumeSoundSlider.setValue(game.getAppPreferences().getSoundVolume());
-        volumeSoundSlider.addListener(new EventListener() {
+        volumeSoundSlider.addListener(new DragListener() {
             @Override
-            public boolean handle(Event event) {
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                super.touchDragged(event, x, y, pointer);
                 game.getAppPreferences().setSoundVolume(volumeSoundSlider.getValue());
-                return false;
+                ding1Sound.setVolume(ding1Sound.play(), volumeSoundSlider.getValue());
+                ding2Sound.setVolume(ding2Sound.play(), volumeSoundSlider.getValue());
             }
         });
 
@@ -104,6 +119,12 @@ public class PreferencesScreen implements Screen {
 
                 // update prefs
                 game.getAppPreferences().setMusicEnabled(enabled);
+
+                if(enabled){
+                    backgroundMusic.play();
+                }else{
+                    backgroundMusic.stop();
+                }
             }
         });
 
@@ -132,6 +153,14 @@ public class PreferencesScreen implements Screen {
 
                 // update prefs
                 game.getAppPreferences().setSoundEnabled(enabled);
+
+                if(enabled){
+                    ding1Sound.setVolume(ding1Sound.play(), volumeSoundSlider.getValue());
+                    ding2Sound.setVolume(ding2Sound.play(), volumeSoundSlider.getValue());
+                }else{
+                    ding1Sound.setVolume(ding1Sound.play(), 0);
+                    ding2Sound.setVolume(ding2Sound.play(), 0);
+                }
             }
         });
 

@@ -2,6 +2,7 @@ package com.taptap.breakout.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -33,6 +34,8 @@ public class MenuScreen implements Screen {
     private Label title;
     private TextButton startGame, settings, exit;
 
+    private Music backgroundMusic;
+
     public MenuScreen(BreakoutGame game){
         if(DEBUG_MODE) logger.info("Constructor Call");
 
@@ -41,6 +44,19 @@ public class MenuScreen implements Screen {
         stage = new Stage(viewport);
         stage.setDebugAll(false);
         skin = game.assetManager.manager.get("skin/craftacular-ui.json", Skin.class);
+
+        backgroundMusic = game.assetManager.manager.get("music/night night.ogg");
+        backgroundMusic.setLooping(true);
+
+        // enable or disable music
+        if(game.getAppPreferences().isMusicEnabled()){
+            backgroundMusic.play();
+        }else{
+            backgroundMusic.stop();
+        }
+
+        // adjust the volume of music
+        backgroundMusic.setVolume(game.getAppPreferences().getMusicVolume());
     }
 
     @Override
@@ -131,6 +147,7 @@ public class MenuScreen implements Screen {
     @Override
     public void dispose() {
         if(DEBUG_MODE) logger.info("Dispose()");
+        backgroundMusic.dispose();
         stage.dispose();
         skin.dispose();
     }
