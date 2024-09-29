@@ -110,12 +110,12 @@ public class Hud implements Disposable {
         table.add(livesTabel).left().padLeft(5);
         stage.addActor(table);
 
-        createDialog();
+        createNextLevelDialog();
 
         Gdx.input.setInputProcessor(stage);
     }
 
-    private void createDialog(){
+    private void createNextLevelDialog(){
         dialog = new Table();
         dialog.setFillParent(true);
         dialog.setDebug(true);
