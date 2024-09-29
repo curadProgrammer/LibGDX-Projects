@@ -9,7 +9,7 @@ public class KeyboardController implements InputProcessor{
     // paddle can only move left and right
     public boolean left, right;
 
-    public boolean space;
+    public boolean space, escape;
 
     // just in case the user wants to control with mouse
     public Vector2 mouseLocation;
@@ -38,6 +38,10 @@ public class KeyboardController implements InputProcessor{
                 space = true;
                 keyProcessed = true;
                 break;
+            case Input.Keys.ESCAPE:
+                escape = true;
+                keyProcessed = true;
+                break;
         }
         return keyProcessed;
     }
@@ -60,6 +64,11 @@ public class KeyboardController implements InputProcessor{
                 break;
             case Input.Keys.SPACE:
                 space = false;
+                keyProcessed = true;
+                break;
+            case Input.Keys.ESCAPE:
+                System.out.println("Releasing Escape key");
+                escape = false;
                 keyProcessed = true;
                 break;
         }

@@ -2,7 +2,6 @@ package com.taptap.breakout;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -11,15 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.taptap.breakout.level.LevelManager;
-import com.taptap.breakout.screens.MainScreen;
 import com.taptap.breakout.screens.ScreenManager;
-import javafx.scene.control.Button;
 
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -86,7 +81,7 @@ public class Hud implements Disposable {
 
         table = new Table();
         table.setFillParent(true);
-        table.setDebug(true);
+        table.setDebug(false);
 
         scoreLabel = new Label(String.format(Locale.getDefault(), "Score: %06d", score), new Label.LabelStyle(
                 game.assetManager.manager.get(game.assetManager.fontSmall, BitmapFont.class), Color.WHITE));
@@ -109,9 +104,10 @@ public class Hud implements Disposable {
             livesTabel.add(ballImage);
         }
 
-        table.add(livesTabel).left().expandX();
-        table.add(scoreLabel).center().padRight(50).expandX();
-        table.add(levelLabel).right().expandX();
+        table.add(levelLabel).left().padLeft(5).padTop(5).expandX();
+        table.add(scoreLabel).right().padRight(5).padTop(5).expandX();
+        table.row();
+        table.add(livesTabel).left().padLeft(5);
         stage.addActor(table);
 
         createDialog();
