@@ -7,9 +7,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -110,62 +112,7 @@ public class Hud implements Disposable {
         table.add(livesTabel).left().padLeft(5);
         stage.addActor(table);
 
-        createNextLevelDialog();
-
         Gdx.input.setInputProcessor(stage);
-    }
-
-    private void createNextLevelDialog(){
-        dialog = new Table();
-        dialog.setFillParent(true);
-        dialog.setDebug(true);
-        dialog.center();
-        dialog.setColor(Color.BLACK);
-
-        messageLabel = new Label("", new Label.LabelStyle(
-                game.assetManager.manager.get(game.assetManager.fontMedium, BitmapFont.class), Color.WHITE));
-        nextLevelBtn = new TextButton("Next Level", skin);
-        nextLevelBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Going to Next Level");
-                levelManager.loadLevel(++level);
-                System.out.println("Level: " + level);
-
-                // hide dialog
-                closeDialog();
-            }
-        });
-
-        tryAgainBtn = new TextButton("Try Again", skin);
-        tryAgainBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Resetting Level");
-
-                // hide dialog
-                closeDialog();
-            }
-        });
-
-        goBackToMenuScreenBtn = new TextButton("Go back to Menu Screen", skin);
-        goBackToMenuScreenBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                // reset configurations
-                level = 1;
-                lives = 3;
-                score = 0;
-
-                game.screenManager.changeScreen(ScreenManager.MENU);
-
-                // hide dialog
-                closeDialog();
-            }
-        });
-
-        dialog.setVisible(false);
-        stage.addActor(dialog);
     }
 
     // call this method to update the score, lives, level
@@ -183,30 +130,41 @@ public class Hud implements Disposable {
         viewport.update(width, height, true);
     }
 
-    public void openDialog(boolean hasWon){
-        // needed to remove current actors from dialog
-        dialog.clearChildren();
-        dialog.add(messageLabel);
-        dialog.row();
+    // opens a generic dialog which will have a confirm, cancel type button
+    private void openDialog(String title, String message, String positiveButtonText, String negativeButtonText,
+                            ClickListener positiveListener, ClickListener negativeListener){
+        Dialog dialog = new Dialog(title, skin);
+        dialog.text(message);
 
-        if(hasWon) {
-            messageLabel.setText("Congratulations!");
-            if(level >= LevelManager.MAX_LEVELS){
-                dialog.add(goBackToMenuScreenBtn);
-            }else{
-                dialog.add(nextLevelBtn);
-            }
-        }else{
-            messageLabel.setText("Game Over =[");
-            dialog.add(tryAgainBtn);
+        if(positiveButtonText != null){
+            dialog.button(positiveButtonText).addListener(positiveListener);
         }
-        dialog.setVisible(true);
+
+        if(negativeButtonText != null){
+            dialog.button(negativeButtonText).addListener(negativeListener);
+        }
+
+        dialog.show(stage);
     }
 
-    public void closeDialog(){
-        dialog.setVisible(false);
+    // Example method to show the level completion dialog
+    public void showLevelCompleteDialog() {
+        openDialog(
+                "Level Complete!",
+                "Congratulations! You've completed Level " + level + ".",
+                level < LevelManager.MAX_LEVELS ? "Next Level" : null,
+                null,
+                new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        if (level < LevelManager.MAX_LEVELS) {
+                            levelManager.loadLevel(++level);
+                        }
+                    }
+                },
+                null
+        );
     }
-
 
     @Override
     public void dispose() {

@@ -65,7 +65,7 @@ public class CollisionSystem extends IteratingSystem {
             if(blockB2Body.isDead) return;
 
             // todo remove this line of code
-            hud.openDialog(true);
+            hud.showLevelCompleteDialog();
 
             CollisionComponent otherCollision = otherEntity.getComponent(CollisionComponent.class);
 
@@ -122,7 +122,7 @@ public class CollisionSystem extends IteratingSystem {
             if(--levelManager.currentLevel.numOfBlocksLeft <= 0){
                 // display dialog and stop the game or prevent the world from processing anymore
                 System.out.println("Level Finished");
-                hud.openDialog(true);
+                hud.showLevelCompleteDialog();
             }
         }
     }
