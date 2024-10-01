@@ -131,11 +131,9 @@ public class Hud implements Disposable {
     }
 
     // opens a generic dialog which will have a confirm, cancel type button
-    private void openDialog(String title, String message, String positiveButtonText, String negativeButtonText,
+    private void openDialog(String message, String positiveButtonText, String negativeButtonText,
                             ClickListener positiveListener, ClickListener negativeListener){
-        Dialog dialog = new Dialog(title, skin);
-        dialog.text(message);
-
+        Dialog dialog = new Dialog(message, skin);
         if(positiveButtonText != null){
             dialog.button(positiveButtonText).addListener(positiveListener);
         }
@@ -150,7 +148,6 @@ public class Hud implements Disposable {
     // Example method to show the level completion dialog
     public void showLevelCompleteDialog() {
         openDialog(
-                "Level Complete!",
                 "Congratulations! You've completed Level " + level + ".",
                 level < LevelManager.MAX_LEVELS ? "Next Level" : null,
                 null,
@@ -163,6 +160,38 @@ public class Hud implements Disposable {
                     }
                 },
                 null
+        );
+    }
+
+    public void showGameOverDialog(){
+        openDialog(
+                "Game Over",
+                "Retry",
+                "Menu",
+                new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        // reset the current level
+                        logger.info("clicked on retry");
+                        levelManager.loadLevel(level);
+                    }
+                },
+
+                new ClickListener(){
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        logger.info("clicked on menu");
+
+                        // reset game state
+                        level = 1;
+                        lives = 3;
+                        score = 0;
+
+                        // take user back to the menu screen
+                        game.screenManager.changeScreen(ScreenManager.MENU);
+
+                    }
+                }
         );
     }
 

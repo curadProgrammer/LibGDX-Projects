@@ -65,7 +65,8 @@ public class CollisionSystem extends IteratingSystem {
             if(blockB2Body.isDead) return;
 
             // todo remove this line of code
-            hud.showLevelCompleteDialog();
+//            hud.showLevelCompleteDialog();
+            hud.showGameOverDialog();
 
             CollisionComponent otherCollision = otherEntity.getComponent(CollisionComponent.class);
 
