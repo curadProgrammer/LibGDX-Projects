@@ -133,13 +133,19 @@ public class Hud implements Disposable {
     // opens a generic dialog which will have a confirm, cancel type button
     private void openDialog(String message, String positiveButtonText, String negativeButtonText,
                             ClickListener positiveListener, ClickListener negativeListener){
-        Dialog dialog = new Dialog(message, skin);
+        Dialog dialog = new Dialog("", skin);
+        dialog.text(message);
+
         if(positiveButtonText != null){
-            dialog.button(positiveButtonText).addListener(positiveListener);
+            TextButton positiveButton = new TextButton(positiveButtonText, skin);
+            positiveButton.addListener(positiveListener);
+            dialog.button(positiveButton);
         }
 
         if(negativeButtonText != null){
-            dialog.button(negativeButtonText).addListener(negativeListener);
+            TextButton negativeButton = new TextButton(negativeButtonText, skin);
+            negativeButton.addListener(negativeListener);
+            dialog.button(negativeButton);
         }
 
         dialog.show(stage);
