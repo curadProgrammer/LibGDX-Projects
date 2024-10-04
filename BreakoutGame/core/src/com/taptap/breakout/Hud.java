@@ -1,5 +1,6 @@
 package com.taptap.breakout;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.taptap.breakout.ecs.components.BallComponent;
 import com.taptap.breakout.level.LevelManager;
 import com.taptap.breakout.screens.ScreenManager;
 
@@ -155,13 +157,21 @@ public class Hud implements Disposable {
     public void showLevelCompleteDialog() {
         openDialog(
                 "Congratulations! You've completed Level " + level + ".",
-                level < LevelManager.MAX_LEVELS ? "Next Level" : null,
+                level < LevelManager.MAX_LEVELS ? "Next Level" : "Menu",
                 null,
                 new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         if (level < LevelManager.MAX_LEVELS) {
                             levelManager.loadLevel(++level);
+                        }else{
+                            // reset game state
+                            level = 1;
+                            lives = 3;
+                            score = 0;
+
+                            // return to screen
+                            game.screenManager.changeScreen(ScreenManager.MENU);
                         }
                     }
                 },

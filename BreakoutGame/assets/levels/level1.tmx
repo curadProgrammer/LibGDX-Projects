@@ -20,16 +20,6 @@
 </data>
  </layer>
  <objectgroup id="2" name="Block Objects">
-  <object id="1" x="528" y="132" width="33" height="33">
-   <properties>
-    <property name="color" value="purple"/>
-   </properties>
-  </object>
-  <object id="4" x="231" y="132" width="33" height="33">
-   <properties>
-    <property name="color" value="red"/>
-   </properties>
-  </object>
   <object id="5" x="372.5" y="73" width="33" height="33">
    <properties>
     <property name="color" value="yellow"/>

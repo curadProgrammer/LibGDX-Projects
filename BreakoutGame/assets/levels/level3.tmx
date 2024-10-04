@@ -35,7 +35,7 @@
     <property name="color" value="red"/>
    </properties>
   </object>
-  <object id="4" x="331.714" y="190.267" width="33" height="33">
+  <object id="4" x="121.188" y="142.805" width="33" height="33">
    <properties>
     <property name="color" value="red"/>
    </properties>
@@ -45,7 +45,7 @@
     <property name="color" value="red"/>
    </properties>
   </object>
-  <object id="6" x="441.677" y="207.184" width="33" height="33">
+  <object id="6" x="652.203" y="76.5449" width="33" height="33">
    <properties>
     <property name="color" value="red"/>
    </properties>

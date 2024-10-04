@@ -42,6 +42,13 @@ public class CollisionSystem extends IteratingSystem {
 
         if(otherEntity == null) return;
 
+        // update block count in level
+        if(--levelManager.currentLevel.numOfBlocksLeft <= 0){
+            // display dialog and stop the game or prevent the world from processing anymore
+            hud.showLevelCompleteDialog();
+            ball.speed = 0;
+        }
+
         TypeComponent otherEntityType = otherEntity.getComponent(TypeComponent.class);
         if(otherEntityType.type == TypeComponent.PLAYER){ // ball collides with paddle
             B2BodyComponent paddleB2body = otherEntity.getComponent(B2BodyComponent.class);
@@ -66,7 +73,8 @@ public class CollisionSystem extends IteratingSystem {
 
             // todo remove this line of code
 //            hud.showLevelCompleteDialog();
-            hud.showGameOverDialog();
+//            hud.showGameOverDialog();
+//            ball.speed = 0;
 
             CollisionComponent otherCollision = otherEntity.getComponent(CollisionComponent.class);
 
@@ -119,12 +127,7 @@ public class CollisionSystem extends IteratingSystem {
             ScoreComponent scoreComponent = otherEntity.getComponent(ScoreComponent.class);
             scoreChangeListener.onScoreChange(scoreComponent.scoreValue);
 
-            // update block count in level
-            if(--levelManager.currentLevel.numOfBlocksLeft <= 0){
-                // display dialog and stop the game or prevent the world from processing anymore
-                System.out.println("Level Finished");
-                hud.showLevelCompleteDialog();
-            }
+
         }
     }
 }
