@@ -35,19 +35,10 @@ public class CollisionSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float v) {
         CollisionComponent collision = collisionC.get(entity);
         B2BodyComponent ballB2body = b2BodyC.get(entity);
-
         BallComponent ball = ballC.get(entity);
-
         Entity otherEntity = collision.collisionEntity;
 
         if(otherEntity == null) return;
-
-        // update block count in level
-        if(--levelManager.currentLevel.numOfBlocksLeft <= 0){
-            // display dialog and stop the game or prevent the world from processing anymore
-            hud.showLevelCompleteDialog();
-            ball.speed = 0;
-        }
 
         TypeComponent otherEntityType = otherEntity.getComponent(TypeComponent.class);
         if(otherEntityType.type == TypeComponent.PLAYER){ // ball collides with paddle
@@ -66,6 +57,16 @@ public class CollisionSystem extends IteratingSystem {
             }
 
         }else if(otherEntityType.type == TypeComponent.BLOCK){ // ball collides with block
+            if(--levelManager.currentLevel.numOfBlocksLeft <= 0){
+                System.out.println("Level Finished");
+
+                // display dialog
+                hud.showLevelCompleteDialog();
+
+                // stop ball
+                ball.speed = 0;
+            }
+
             // todo might make this outside because it is similar to lines 38 - 40
             B2BodyComponent blockB2Body = otherEntity.getComponent(B2BodyComponent.class);
 
