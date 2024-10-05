@@ -38,6 +38,13 @@ public class PlayerControlSystem extends IteratingSystem {
         PlayerComponent player = pc.get(entity);
         AttachComponent attachComponent = attachComponentComponentMapper.get(entity);
 
+        // prevents the paddle from moving when there are no more blocks
+        if(lvlManager.currentLevel.numOfBlocksLeft <= 0){
+            // stop paddle
+            b2body.body.setLinearVelocity(0, 0);
+            return;
+        }
+
         // get current width of paddle (note: we use 0 because there is only one fixture)
         // TODO fix this later
 //        float currentWidth = b2body.body.getFixtureList().get(0).getShape().getRadius() ;

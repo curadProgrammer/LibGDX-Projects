@@ -19,6 +19,7 @@ public class CollisionSystem extends IteratingSystem {
     private ComponentMapper<CollisionComponent> collisionC = ComponentMapper.getFor(CollisionComponent.class);
     private ComponentMapper<B2BodyComponent> b2BodyC = ComponentMapper.getFor(B2BodyComponent.class);
     private ComponentMapper<BallComponent> ballC = ComponentMapper.getFor(BallComponent.class);
+    private ComponentMapper<PlayerComponent> playerCompC = ComponentMapper.getFor(PlayerComponent.class);
 
     private ScoreChangeListener scoreChangeListener;
     private LevelManager levelManager;
@@ -39,6 +40,7 @@ public class CollisionSystem extends IteratingSystem {
         Entity otherEntity = collision.collisionEntity;
 
         if(otherEntity == null) return;
+
 
         TypeComponent otherEntityType = otherEntity.getComponent(TypeComponent.class);
         if(otherEntityType.type == TypeComponent.PLAYER){ // ball collides with paddle
