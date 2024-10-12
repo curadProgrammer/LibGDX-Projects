@@ -7,6 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.taptap.breakout.BreakoutGame;
+import com.taptap.breakout.Hud;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.controller.KeyboardController;
 import com.taptap.breakout.ecs.components.*;
@@ -21,14 +22,15 @@ public class PlayerControlSystem extends IteratingSystem {
     private ComponentMapper<AttachComponent> attachComponentComponentMapper = ComponentMapper.getFor(AttachComponent.class);
 
     private KeyboardController keyCon;
-
-    // N: figure out what to do with this
     private LevelManager lvlManager;
 
-    public PlayerControlSystem(KeyboardController keyCon, LevelManager lvlManager){
+    private Hud hud;
+
+    public PlayerControlSystem(KeyboardController keyCon, Hud hud, LevelManager lvlManager){
         // only gets entities that have the player component (in this case the paddle only)
         super(Family.all(PlayerComponent.class).get());
         this.keyCon = keyCon;
+        this.hud = hud;
         this.lvlManager = lvlManager;
     }
 
@@ -38,10 +40,11 @@ public class PlayerControlSystem extends IteratingSystem {
         PlayerComponent player = pc.get(entity);
         AttachComponent attachComponent = attachComponentComponentMapper.get(entity);
 
-        // prevents the paddle from moving when there are no more blocks
-        if(lvlManager.currentLevel.numOfBlocksLeft <= 0){
-            // stop paddle
+        if((hud.getDialog() != null && hud.getDialog().isVisible()) || lvlManager.currentLevel.numOfBlocksLeft <= 0){
             b2body.body.setLinearVelocity(0, 0);
+
+            // this is to prevent key presses being hanged when the dialog appears
+            keyCon.reset();
             return;
         }
 
@@ -64,6 +67,7 @@ public class PlayerControlSystem extends IteratingSystem {
                     b2body.body.getLinearVelocity().y
             );
         }else if(keyCon.space){
+            System.out.println("Key con space");
             Entity ballEntity = attachComponent.attachedEntity;
 
             // don't do anything if there is no attached entity
@@ -77,7 +81,9 @@ public class PlayerControlSystem extends IteratingSystem {
 
             // remove attached entity
             attachComponent.setAttachedEntity(null);
-
+        }else if(keyCon.escape){
+            // display dialog
+            hud.showMenuDialog();
         }else{
             if(BreakoutGame.DEBUG_MODE) System.out.println("Stop momentum");
             b2body.body.setLinearVelocity(0, 0);

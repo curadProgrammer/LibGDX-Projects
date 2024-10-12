@@ -72,20 +72,20 @@ public class LevelManager implements Disposable {
     }
 
     private void cleanupCurrentLevel(){
-        if (currentLevel != null) {
-            // Dispose the current level
-            currentLevel.dispose();
+        if (currentLevel == null) return;
 
-            // Remove all bodies from the current level
-            ImmutableArray<Entity> matchingEntities = en.getEntitiesFor(Family.all(B2BodyComponent.class).get());
-            for (Entity entity : matchingEntities) {
-                B2BodyComponent b2Body = entity.getComponent(B2BodyComponent.class);
-                b2Body.setToDestroy = true;
-            }
+        // Dispose the current level
+        currentLevel.dispose();
 
-            // Clear the current level
-            currentLevel = null;
+        // Remove all bodies from the current level
+        ImmutableArray<Entity> matchingEntities = en.getEntitiesFor(Family.all(B2BodyComponent.class).get());
+        for (Entity entity : matchingEntities) {
+            B2BodyComponent b2Body = entity.getComponent(B2BodyComponent.class);
+            b2Body.setToDestroy = true;
         }
+
+        // Clear the current level
+        currentLevel = null;
     }
 
     @Override

@@ -18,6 +18,13 @@ public class KeyboardController implements InputProcessor{
         mouseLocation = new Vector2();
     }
 
+    public void reset(){
+        left = false;
+        right = false;
+        space = false;
+        escape = false;
+    }
+
     @Override
     public boolean keyDown(int keycode) {
         boolean keyProcessed = false;

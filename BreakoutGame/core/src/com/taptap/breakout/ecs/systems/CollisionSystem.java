@@ -12,10 +12,14 @@ import com.taptap.breakout.ecs.components.*;
 import com.taptap.breakout.level.LevelManager;
 import com.taptap.breakout.listeners.ScoreChangeListener;
 
+import java.util.logging.Logger;
+
 /*
     System to handle the ball's collisions
  */
 public class CollisionSystem extends IteratingSystem {
+    private static final Logger logger = Logger.getLogger(CollisionSystem.class.getName());
+
     private ComponentMapper<CollisionComponent> collisionC = ComponentMapper.getFor(CollisionComponent.class);
     private ComponentMapper<B2BodyComponent> b2BodyC = ComponentMapper.getFor(B2BodyComponent.class);
     private ComponentMapper<BallComponent> ballC = ComponentMapper.getFor(BallComponent.class);
@@ -24,6 +28,7 @@ public class CollisionSystem extends IteratingSystem {
     private ScoreChangeListener scoreChangeListener;
     private LevelManager levelManager;
     private Hud hud;
+    private B2BodyComponent prevBallB2BodyComponentState;
 
     public CollisionSystem(Hud hud, LevelManager levelManager, ScoreChangeListener scoreChangeListener){
        super(Family.all(CollisionComponent.class, B2BodyComponent.class, BallComponent.class).get());
@@ -39,8 +44,21 @@ public class CollisionSystem extends IteratingSystem {
         BallComponent ball = ballC.get(entity);
         Entity otherEntity = collision.collisionEntity;
 
-        if(otherEntity == null) return;
+        if(hud.getDialog() != null && hud.getDialog().isVisible()){
+//            prevBallB2BodyComponentState = ballB2body;
+            ballB2body.body.setLinearVelocity(0, 0);
+            ball.speed = 0;
 
+        }else if(hud.dialogJustClosed && hud.lastDialogType == Hud.DialogType.MENU){ // only do this if the dialog that was closed is for menu dialogs
+            // add speed again
+            ballB2body.body.setLinearVelocity(0, 5);
+            ball.speed = 5;
+
+            // update flag
+            hud.dialogJustClosed = false;
+        }
+
+        if(otherEntity == null) return;
 
         TypeComponent otherEntityType = otherEntity.getComponent(TypeComponent.class);
         if(otherEntityType.type == TypeComponent.PLAYER){ // ball collides with paddle

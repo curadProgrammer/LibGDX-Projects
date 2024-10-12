@@ -9,9 +9,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.taptap.breakout.ecs.components.B2BodyComponent;
-import com.taptap.breakout.ecs.components.TextureComponent;
-import com.taptap.breakout.ecs.components.TransformComponent;
-import com.taptap.breakout.level.B2dContactListener;
 
 /*
     Handles the physics of the world (i.e. calculates anything physics related such as gravity)
@@ -20,6 +17,7 @@ public class PhysicsSystem extends IteratingSystem {
     private World world;
     private PooledEngine engine;
     private Array<Body> bodiesToRemove;
+    private Array<Entity> entitiesToBeRemoved;
 
     // components that we will be accessing and updating
     private ComponentMapper<B2BodyComponent> bm = ComponentMapper.getFor(B2BodyComponent.class);
@@ -29,6 +27,15 @@ public class PhysicsSystem extends IteratingSystem {
         this.world = world;
         this.engine = engine;
         bodiesToRemove = new Array<>();
+        entitiesToBeRemoved = new Array<>();
+    }
+
+    private void removeEntitiesWhenPossible(){
+        for(Entity entity : entitiesToBeRemoved){
+            engine.removeEntity(entity);
+        }
+
+        entitiesToBeRemoved.clear();
     }
 
     @Override
@@ -43,6 +50,8 @@ public class PhysicsSystem extends IteratingSystem {
 
         // clear bodiesToRemove to prevent deleting non-existing bodies
         bodiesToRemove.clear();
+
+        removeEntitiesWhenPossible();
     }
 
     @Override
@@ -53,6 +62,8 @@ public class PhysicsSystem extends IteratingSystem {
         if(b2BodyComponent.setToDestroy && !b2BodyComponent.isDead){
             bodiesToRemove.add(b2BodyComponent.body);
             b2BodyComponent.isDead = true;
+
+            entitiesToBeRemoved.add(entity);
         }
     }
 }

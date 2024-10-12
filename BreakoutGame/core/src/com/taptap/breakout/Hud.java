@@ -35,10 +35,12 @@ public class Hud implements Disposable {
     private Viewport viewport;
     private LevelManager levelManager;
 
-    // dialog table
-    private Table dialog; // N: this will be used to show a dialog to the user
-    private Label messageLabel;
-    private TextButton nextLevelBtn, tryAgainBtn, goBackToMenuScreenBtn;
+    private Dialog dialog;
+    public Dialog getDialog(){return dialog;}
+    public boolean dialogJustClosed;
+
+    public enum DialogType {NEXT_LEVEL, MENU, FINAL, GAME_OVER}
+    public DialogType lastDialogType;
 
     // hud table
     private Table table;
@@ -46,6 +48,8 @@ public class Hud implements Disposable {
     private Label scoreLabel, levelLabel, livesLabel;
     private Image ballImage;
     private int score, level, lives;
+
+
 
     public int getScore(){return score;}
     public void setScore(int score) {
@@ -60,6 +64,8 @@ public class Hud implements Disposable {
     public void setLives(int lives) {
         this.lives = lives;
     }
+
+
 
     public Hud(BreakoutGame game, LevelManager levelManager){
         if(DEBUG_MODE) logger.info("Constructor");
@@ -113,7 +119,6 @@ public class Hud implements Disposable {
         table.row();
         table.add(livesTabel).left().padLeft(5);
         stage.addActor(table);
-
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -134,8 +139,9 @@ public class Hud implements Disposable {
 
     // opens a generic dialog which will have a confirm, cancel type button
     private void openDialog(String message, String positiveButtonText, String negativeButtonText,
-                            ClickListener positiveListener, ClickListener negativeListener){
-        Dialog dialog = new Dialog("", skin);
+                            ClickListener positiveListener, ClickListener negativeListener, DialogType dialogType){
+        dialog = new Dialog("", skin);
+        dialog.setModal(true);
         dialog.text(message);
 
         if(positiveButtonText != null){
@@ -151,6 +157,8 @@ public class Hud implements Disposable {
         }
 
         dialog.show(stage);
+        dialog.setVisible(true);
+        lastDialogType = dialogType;
     }
 
     // Example method to show the level completion dialog
@@ -173,9 +181,12 @@ public class Hud implements Disposable {
                             // return to screen
                             game.screenManager.changeScreen(ScreenManager.MENU);
                         }
+
+                        handleDialogClosed();
                     }
                 },
-                null
+                null,
+                DialogType.NEXT_LEVEL
         );
     }
 
@@ -190,6 +201,8 @@ public class Hud implements Disposable {
                         // reset the current level
                         logger.info("clicked on retry");
                         levelManager.loadLevel(level);
+
+                        handleDialogClosed();
                     }
                 },
 
@@ -206,9 +219,46 @@ public class Hud implements Disposable {
                         // take user back to the menu screen
                         game.screenManager.changeScreen(ScreenManager.MENU);
 
+                        handleDialogClosed();
                     }
-                }
+                },
+                DialogType.GAME_OVER
         );
+    }
+
+    public void showMenuDialog(){
+        System.out.println("Show Menu Dialog");
+        openDialog(
+                "Exit Game?",
+                "Confirm",
+                "Cancel",
+                new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        // reset game state
+                        level = 1;
+                        lives = 3;
+                        score = 0;
+
+                        // return to screen
+                        game.screenManager.changeScreen(ScreenManager.MENU);
+                        handleDialogClosed();
+                    }
+                },
+                new ClickListener(){
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        handleDialogClosed();
+                    }
+                },
+                DialogType.MENU
+        );
+    }
+
+    private void handleDialogClosed(){
+        logger.info("Dialog Closed");
+        Hud.this.dialog.setVisible(false);
+        dialogJustClosed = true;
     }
 
     @Override
