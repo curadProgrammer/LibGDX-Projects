@@ -123,6 +123,7 @@ public class LevelLoader implements Disposable {
         soundComponent.soundEffects.put("ding1", (Sound) game.assetManager.manager.get(game.assetManager.ding1Sound));
         soundComponent.soundEffects.put("ding2", (Sound) game.assetManager.manager.get(game.assetManager.ding2Sound));
 
+        ballC.speed = 5f;
 
         // load texture
         tc.region = new TextureRegion(
@@ -142,7 +143,6 @@ public class LevelLoader implements Disposable {
         );
 
         b2bodyC.body.setUserData(ballEntity);
-        ballC.speed = 5f;
         typeC.type = TypeComponent.BALL;
 
         // load transform

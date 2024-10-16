@@ -42,6 +42,9 @@ public class Hud implements Disposable {
     public enum DialogType {NEXT_LEVEL, MENU, FINAL, GAME_OVER}
     public DialogType lastDialogType;
 
+    public enum UserChoice{NEXT_LEVEL, RETRY, MENU, CANCEL, NONE}
+    public UserChoice userChoice = UserChoice.NONE;
+
     // hud table
     private Table table;
     private TextureRegion ballTexture;
@@ -172,6 +175,8 @@ public class Hud implements Disposable {
                     public void clicked(InputEvent event, float x, float y) {
                         if (level < LevelManager.MAX_LEVELS) {
                             levelManager.loadLevel(++level);
+
+                            userChoice = UserChoice.NEXT_LEVEL;
                         }else{
                             // reset game state
                             level = 1;
@@ -180,6 +185,8 @@ public class Hud implements Disposable {
 
                             // return to screen
                             game.screenManager.changeScreen(ScreenManager.MENU);
+
+                            userChoice = UserChoice.MENU;
                         }
 
                         handleDialogClosed();
@@ -203,6 +210,7 @@ public class Hud implements Disposable {
                         levelManager.loadLevel(level);
 
                         handleDialogClosed();
+                        userChoice = UserChoice.RETRY;
                     }
                 },
 
@@ -220,6 +228,7 @@ public class Hud implements Disposable {
                         game.screenManager.changeScreen(ScreenManager.MENU);
 
                         handleDialogClosed();
+                        userChoice = UserChoice.MENU;
                     }
                 },
                 DialogType.GAME_OVER
@@ -243,12 +252,15 @@ public class Hud implements Disposable {
                         // return to screen
                         game.screenManager.changeScreen(ScreenManager.MENU);
                         handleDialogClosed();
+
+                        userChoice = UserChoice.MENU;
                     }
                 },
                 new ClickListener(){
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         handleDialogClosed();
+                        userChoice = UserChoice.CANCEL;
                     }
                 },
                 DialogType.MENU

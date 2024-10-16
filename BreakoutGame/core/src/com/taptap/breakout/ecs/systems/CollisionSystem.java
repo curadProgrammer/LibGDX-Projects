@@ -49,7 +49,10 @@ public class CollisionSystem extends IteratingSystem {
             ballB2body.body.setLinearVelocity(0, 0);
             ball.speed = 0;
 
-        }else if(hud.dialogJustClosed && hud.lastDialogType == Hud.DialogType.MENU){ // only do this if the dialog that was closed is for menu dialogs
+        }else if(hud.dialogJustClosed && hud.lastDialogType == Hud.DialogType.MENU
+                    && hud.userChoice == Hud.UserChoice.CANCEL){ // only do this if the dialog that was closed is for menu dialogs
+            logger.info("Adding speed to ball");
+
             // add speed again
             ballB2body.body.setLinearVelocity(0, 5);
             ball.speed = 5;

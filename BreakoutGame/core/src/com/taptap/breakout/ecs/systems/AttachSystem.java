@@ -25,6 +25,9 @@ public class AttachSystem extends IteratingSystem {
         B2BodyComponent attachedB2Body = b2BodyComponentComponentMapper.get(attachComponent.attachedEntity);
         attachedB2Body.body.setTransform(entityB2Body.body.getPosition().x,
                 attachedB2Body.body.getPosition().y, attachedB2Body.body.getAngle());
+
+        // set the velocity of the attached entity to 0 (for the ball)
+//        attachedB2Body.body.setLinearVelocity(0, 0);
     }
 }
 
