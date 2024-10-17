@@ -13,6 +13,7 @@ public class BallComponent implements Pool.Poolable, Component {
     public float speed = 0;
     public boolean isDead = false;
     public boolean canBounce = false;
+    public boolean isAttached = true;
 
     // this bounce method is mainly for the paddle
     public void bouncePaddle(Direction bounceDirection, Body ballB2body){
@@ -66,5 +67,6 @@ public class BallComponent implements Pool.Poolable, Component {
         speed = 0;
         isDead = false;
         canBounce = true;
+        isAttached = true;
     }
 }

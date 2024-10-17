@@ -65,7 +65,7 @@ public class MainScreen implements Screen, ScoreChangeListener {
 
     @Override
     public void show() {
-        if(DEBUG_MODE) logger.info("Show");
+        logger.info("Show");
 
         // load first level
         levelManager.loadLevel(1);

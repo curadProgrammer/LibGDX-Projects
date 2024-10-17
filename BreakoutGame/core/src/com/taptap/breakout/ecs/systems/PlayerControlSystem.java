@@ -67,7 +67,6 @@ public class PlayerControlSystem extends IteratingSystem {
                     b2body.body.getLinearVelocity().y
             );
         }else if(keyCon.space){
-            System.out.println("Key con space");
             Entity ballEntity = attachComponent.attachedEntity;
 
             // don't do anything if there is no attached entity
@@ -78,6 +77,9 @@ public class PlayerControlSystem extends IteratingSystem {
 
             // supply initial velocity
             ballB2Body.body.setLinearVelocity(new Vector2(0f, 1f).nor().scl(ballComponent.speed));
+
+            // update ball attached status
+            ballComponent.isAttached = false;
 
             // remove attached entity
             attachComponent.setAttachedEntity(null);

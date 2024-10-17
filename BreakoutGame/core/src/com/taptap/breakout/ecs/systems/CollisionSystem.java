@@ -50,7 +50,7 @@ public class CollisionSystem extends IteratingSystem {
             ball.speed = 0;
 
         }else if(hud.dialogJustClosed && hud.lastDialogType == Hud.DialogType.MENU
-                    && hud.userChoice == Hud.UserChoice.CANCEL){ // only do this if the dialog that was closed is for menu dialogs
+                    && hud.userChoice == Hud.UserChoice.CANCEL && !ball.isAttached){ // only do this if the dialog that was closed is for menu dialogs
             logger.info("Adding speed to ball");
 
             // add speed again
