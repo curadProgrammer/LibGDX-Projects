@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.taptap.breakout.Hud;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.components.*;
@@ -28,7 +29,7 @@ public class CollisionSystem extends IteratingSystem {
     private ScoreChangeListener scoreChangeListener;
     private LevelManager levelManager;
     private Hud hud;
-    private B2BodyComponent prevBallB2BodyComponentState;
+    private Vector2 prevBallLinearVelocity;
 
     public CollisionSystem(Hud hud, LevelManager levelManager, ScoreChangeListener scoreChangeListener){
        super(Family.all(CollisionComponent.class, B2BodyComponent.class, BallComponent.class).get());
@@ -44,21 +45,32 @@ public class CollisionSystem extends IteratingSystem {
         BallComponent ball = ballC.get(entity);
         Entity otherEntity = collision.collisionEntity;
 
-        if(hud.getDialog() != null && hud.getDialog().isVisible()){
-//            prevBallB2BodyComponentState = ballB2body;
+        if(hud.getDialog() != null && hud.getDialog().isVisible() && hud.dialogJustOpened){
+            Vector2 currentBallLinearVelocity = ballB2body.body.getLinearVelocity();
+
+            prevBallLinearVelocity = new Vector2(currentBallLinearVelocity.x, currentBallLinearVelocity.y);
+            logger.info("(Dialog Open) Prev Ball LinVel: "  + prevBallLinearVelocity);
+
             ballB2body.body.setLinearVelocity(0, 0);
             ball.speed = 0;
 
+            hud.dialogJustOpened = false;
+
+//            logger.info("(Dialog Open) Ball LinVel: " + ballB2body.body.getLinearVelocity());
         }else if(hud.dialogJustClosed && hud.lastDialogType == Hud.DialogType.MENU
                     && hud.userChoice == Hud.UserChoice.CANCEL && !ball.isAttached){ // only do this if the dialog that was closed is for menu dialogs
-            logger.info("Adding speed to ball");
-
             // add speed again
-            ballB2body.body.setLinearVelocity(0, 5);
+            ballB2body.body.setLinearVelocity(prevBallLinearVelocity.x, prevBallLinearVelocity.y);
+//            ballB2body.body.setLinearVelocity(0, 5);
             ball.speed = 5;
+
+            // reset prev
+            prevBallLinearVelocity = null;
 
             // update flag
             hud.dialogJustClosed = false;
+
+            logger.info("(Dialog Closed) Ball LinVel: " + ballB2body.body.getLinearVelocity());
         }
 
         if(otherEntity == null) return;

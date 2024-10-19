@@ -37,7 +37,7 @@ public class Hud implements Disposable {
 
     private Dialog dialog;
     public Dialog getDialog(){return dialog;}
-    public boolean dialogJustClosed;
+    public boolean dialogJustOpened, dialogJustClosed;
 
     public enum DialogType {NEXT_LEVEL, MENU, FINAL, GAME_OVER}
     public DialogType lastDialogType;
@@ -162,6 +162,7 @@ public class Hud implements Disposable {
         dialog.show(stage);
         dialog.setVisible(true);
         lastDialogType = dialogType;
+        dialogJustOpened = true;
     }
 
     // Example method to show the level completion dialog
