@@ -88,6 +88,10 @@ public class CollisionSystem extends IteratingSystem {
             }
 
         }else if(otherEntityType.type == TypeComponent.BLOCK){ // ball collides with block
+            // update score
+            ScoreComponent scoreComponent = otherEntity.getComponent(ScoreComponent.class);
+            scoreChangeListener.onScoreChange(scoreComponent.scoreValue);
+
             if(--levelManager.currentLevel.numOfBlocksLeft <= 0){
                 System.out.println("Level Finished");
 
@@ -154,12 +158,6 @@ public class CollisionSystem extends IteratingSystem {
             // block is destroyed
 //            System.out.println("Block is destroyed");
             blockB2Body.setToDestroy = true;
-
-            // update score
-            ScoreComponent scoreComponent = otherEntity.getComponent(ScoreComponent.class);
-            scoreChangeListener.onScoreChange(scoreComponent.scoreValue);
-
-
         }
     }
 }

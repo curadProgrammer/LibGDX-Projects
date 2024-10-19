@@ -168,7 +168,7 @@ public class Hud implements Disposable {
     // Example method to show the level completion dialog
     public void showLevelCompleteDialog() {
         openDialog(
-                "Congratulations! You've completed Level " + level + ".",
+                level < LevelManager.MAX_LEVELS ? "Congratulations! You've completed Level " + level + "." : "Your final score is: " + score,
                 level < LevelManager.MAX_LEVELS ? "Next Level" : "Menu",
                 null,
                 new ClickListener() {
