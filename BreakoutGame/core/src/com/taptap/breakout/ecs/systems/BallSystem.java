@@ -30,8 +30,8 @@ public class BallSystem extends IteratingSystem {
         float ballRadius = ballB2body.body.getFixtureList().get(0).getShape().getRadius();
 
         // collision logic for when the ball hits the sides of the screens (top, down, left, right)
-        if(ballPosition.y + ballRadius >= Utilities.getPPMHeight()
-                || ballPosition.y - ballRadius <= 0){ // reverse y-direction
+        if(ballPosition.y + ballRadius >= Utilities.getPPMHeight()){ // reverse y-direction
+            // || ballPosition.y - ballRadius <= 0 conditional logic to bounce ball when it hits the bottom side
             ballC.reverseY(ballB2body.body);
             ballC.canBounce = true;
         }
