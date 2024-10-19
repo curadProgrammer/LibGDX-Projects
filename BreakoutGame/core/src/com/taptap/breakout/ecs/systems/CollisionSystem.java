@@ -45,32 +45,28 @@ public class CollisionSystem extends IteratingSystem {
         BallComponent ball = ballC.get(entity);
         Entity otherEntity = collision.collisionEntity;
 
-        if(hud.getDialog() != null && hud.getDialog().isVisible() && hud.dialogJustOpened){
-            Vector2 currentBallLinearVelocity = ballB2body.body.getLinearVelocity();
+        if(!ball.isAttached){
+            if(hud.getDialog() != null && hud.getDialog().isVisible() && hud.dialogJustOpened){
 
-            prevBallLinearVelocity = new Vector2(currentBallLinearVelocity.x, currentBallLinearVelocity.y);
-            logger.info("(Dialog Open) Prev Ball LinVel: "  + prevBallLinearVelocity);
+                Vector2 currentBallLinearVelocity = ballB2body.body.getLinearVelocity();
 
-            ballB2body.body.setLinearVelocity(0, 0);
-            ball.speed = 0;
+                prevBallLinearVelocity = new Vector2(currentBallLinearVelocity.x, currentBallLinearVelocity.y);
 
-            hud.dialogJustOpened = false;
+                ballB2body.body.setLinearVelocity(0, 0);
 
-//            logger.info("(Dialog Open) Ball LinVel: " + ballB2body.body.getLinearVelocity());
-        }else if(hud.dialogJustClosed && hud.lastDialogType == Hud.DialogType.MENU
-                    && hud.userChoice == Hud.UserChoice.CANCEL && !ball.isAttached){ // only do this if the dialog that was closed is for menu dialogs
-            // add speed again
-            ballB2body.body.setLinearVelocity(prevBallLinearVelocity.x, prevBallLinearVelocity.y);
-//            ballB2body.body.setLinearVelocity(0, 5);
-            ball.speed = 5;
+                hud.dialogJustOpened = false;
+            }else if(hud.dialogJustClosed && hud.lastDialogType == Hud.DialogType.MENU
+                    && hud.userChoice == Hud.UserChoice.CANCEL && prevBallLinearVelocity != null){
 
-            // reset prev
-            prevBallLinearVelocity = null;
+                // add speed again
+                ballB2body.body.setLinearVelocity(prevBallLinearVelocity.x, prevBallLinearVelocity.y);
 
-            // update flag
-            hud.dialogJustClosed = false;
+                // reset prev
+                prevBallLinearVelocity = null;
 
-            logger.info("(Dialog Closed) Ball LinVel: " + ballB2body.body.getLinearVelocity());
+                // update flag
+                hud.dialogJustClosed = false;
+            }
         }
 
         if(otherEntity == null) return;
