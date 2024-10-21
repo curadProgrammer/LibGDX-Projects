@@ -29,7 +29,6 @@ public class CollisionSystem extends IteratingSystem {
     private ScoreChangeListener scoreChangeListener;
     private LevelManager levelManager;
     private Hud hud;
-    private Vector2 prevBallLinearVelocity;
 
     public CollisionSystem(Hud hud, LevelManager levelManager, ScoreChangeListener scoreChangeListener){
        super(Family.all(CollisionComponent.class, B2BodyComponent.class, BallComponent.class).get());
@@ -45,24 +44,31 @@ public class CollisionSystem extends IteratingSystem {
         BallComponent ball = ballC.get(entity);
         Entity otherEntity = collision.collisionEntity;
 
+        // stop and resume ball's motion
         if(!ball.isAttached){
             if(hud.getDialog() != null && hud.getDialog().isVisible() && hud.dialogJustOpened){
+                logger.info("Stopping Ball");
+                logger.info("getDialog: " + hud.getDialog());
+                logger.info("isVisible: " + hud.getDialog().isVisible());
+                logger.info("dialogJustOpened: " + hud.dialogJustOpened);
 
                 Vector2 currentBallLinearVelocity = ballB2body.body.getLinearVelocity();
-
-                prevBallLinearVelocity = new Vector2(currentBallLinearVelocity.x, currentBallLinearVelocity.y);
-
+                ball.prevBallLinearVelocity = new Vector2(currentBallLinearVelocity.x, currentBallLinearVelocity.y);
                 ballB2body.body.setLinearVelocity(0, 0);
-
                 hud.dialogJustOpened = false;
             }else if(hud.dialogJustClosed && hud.lastDialogType == Hud.DialogType.MENU
-                    && hud.userChoice == Hud.UserChoice.CANCEL && prevBallLinearVelocity != null){
+                    && hud.userChoice == Hud.UserChoice.CANCEL && ball.prevBallLinearVelocity != null){
+                logger.info("Resuming Ball");
+                logger.info("DialogJustClosed: " + hud.dialogJustClosed);
+                logger.info("LastDialogType: " + hud.lastDialogType);
+                logger.info("UserChoice: " + hud.userChoice);
+                logger.info("PrevBallLinearVelocity: " + ball.prevBallLinearVelocity);
 
                 // add speed again
-                ballB2body.body.setLinearVelocity(prevBallLinearVelocity.x, prevBallLinearVelocity.y);
+                ballB2body.body.setLinearVelocity(ball.prevBallLinearVelocity.x, ball.prevBallLinearVelocity.y);
 
                 // reset prev
-                prevBallLinearVelocity = null;
+                ball.prevBallLinearVelocity = null;
 
                 // update flag
                 hud.dialogJustClosed = false;
@@ -107,11 +113,6 @@ public class CollisionSystem extends IteratingSystem {
 
             if(blockB2Body.isDead) return;
 
-            // todo remove this line of code
-//            hud.showLevelCompleteDialog();
-//            hud.showGameOverDialog();
-//            ball.speed = 0;
-
             CollisionComponent otherCollision = otherEntity.getComponent(CollisionComponent.class);
 
             // prevents multiple collision detections in an instance
@@ -125,7 +126,6 @@ public class CollisionSystem extends IteratingSystem {
             ballB2body.body.setLinearVelocity(0, 0);
             Vector2 force = new Vector2(0, 0);
             float angle = 0;
-
 
             if(ballPosition.x <=
                     blockPosition.x - Utilities.convertToPPM((float) blockTexture.region.getRegionWidth() /2)){ // LEFT
@@ -156,7 +156,6 @@ public class CollisionSystem extends IteratingSystem {
             otherCollision.canCollide = false;
 
             // block is destroyed
-//            System.out.println("Block is destroyed");
             blockB2Body.setToDestroy = true;
         }
     }
