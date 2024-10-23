@@ -48,7 +48,7 @@ public class CollisionSystem extends IteratingSystem {
         if(!ball.isAttached){
             if(hud.getDialog() != null && hud.getDialog().isVisible() && hud.dialogJustOpened){
                 logger.info("Stopping Ball");
-                logger.info("getDialog: " + hud.getDialog());
+                logger.info("getDialog: " + (hud.getDialog() != null));
                 logger.info("isVisible: " + hud.getDialog().isVisible());
                 logger.info("dialogJustOpened: " + hud.dialogJustOpened);
 
@@ -56,13 +56,14 @@ public class CollisionSystem extends IteratingSystem {
                 ball.prevBallLinearVelocity = new Vector2(currentBallLinearVelocity.x, currentBallLinearVelocity.y);
                 ballB2body.body.setLinearVelocity(0, 0);
                 hud.dialogJustOpened = false;
-            }else if(hud.dialogJustClosed && hud.lastDialogType == Hud.DialogType.MENU
+            }else if(hud.dialogJustClosed && !hud.getDialog().isVisible() && hud.lastDialogType == Hud.DialogType.MENU
                     && hud.userChoice == Hud.UserChoice.CANCEL && ball.prevBallLinearVelocity != null){
                 logger.info("Resuming Ball");
                 logger.info("DialogJustClosed: " + hud.dialogJustClosed);
                 logger.info("LastDialogType: " + hud.lastDialogType);
                 logger.info("UserChoice: " + hud.userChoice);
                 logger.info("PrevBallLinearVelocity: " + ball.prevBallLinearVelocity);
+                logger.info("isVisible: " + hud.getDialog().isVisible());
 
                 // add speed again
                 ballB2body.body.setLinearVelocity(ball.prevBallLinearVelocity.x, ball.prevBallLinearVelocity.y);
