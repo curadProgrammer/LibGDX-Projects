@@ -44,7 +44,7 @@ public class CollisionSystem extends IteratingSystem {
         BallComponent ball = ballC.get(entity);
         Entity otherEntity = collision.collisionEntity;
 
-        // stop and resume ball's motion
+        // stop and resume ball's motion only when the ball is not attached to the paddle
         if(!ball.isAttached){
             if(hud.getDialog() != null && hud.getDialog().isVisible() && hud.dialogJustOpened){
                 logger.info("Stopping Ball");

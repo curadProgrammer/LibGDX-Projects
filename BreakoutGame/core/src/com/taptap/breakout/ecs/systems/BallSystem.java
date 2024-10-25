@@ -5,16 +5,25 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import com.taptap.breakout.Hud;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.components.B2BodyComponent;
 import com.taptap.breakout.ecs.components.BallComponent;
+import com.taptap.breakout.level.LevelManager;
+
+import java.util.logging.Logger;
 
 public class BallSystem extends IteratingSystem {
+    private static final Logger logger = Logger.getLogger(BallSystem.class.getName());
     private ComponentMapper<BallComponent> ballMapper = ComponentMapper.getFor(BallComponent.class);
     private ComponentMapper<B2BodyComponent> b2bodyMapper = ComponentMapper.getFor(B2BodyComponent.class);
 
-    public BallSystem(){
+    private Hud hud;
+    private LevelManager levelManager;
+    public BallSystem(Hud hud, LevelManager levelManager){
         super(Family.all(BallComponent.class, B2BodyComponent.class).get());
+        this.hud = hud;
+        this.levelManager = levelManager;
     }
 
     @Override
@@ -34,6 +43,17 @@ public class BallSystem extends IteratingSystem {
             // || ballPosition.y - ballRadius <= 0 conditional logic to bounce ball when it hits the bottom side
             ballC.reverseY(ballB2body.body);
             ballC.canBounce = true;
+        }else if(ballPosition.y - ballRadius <= 0 && !ballC.isDead){ // ball fell through
+            // decrease the lives count
+            hud.setLives(hud.getLives() - 1);
+            hud.updateLives();
+            ballC.isDead = true;
+
+            // reset ball position
+            levelManager.currentLevel.paddleAndBall.resetBall();
+
+            // reset ball properties
+            ballC.reset();
         }
 
         if(ballPosition.x + ballRadius >= Utilities.getPPMWidth()

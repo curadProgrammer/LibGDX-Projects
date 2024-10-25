@@ -46,13 +46,11 @@ public class Hud implements Disposable {
     public UserChoice userChoice = UserChoice.NONE;
 
     // hud table
-    private Table table;
+    private Table table, livesTable;
     private TextureRegion ballTexture;
     private Label scoreLabel, levelLabel, livesLabel;
     private Image ballImage;
     private int score, level, lives;
-
-
 
     public int getScore(){return score;}
     public void setScore(int score) {
@@ -64,11 +62,10 @@ public class Hud implements Disposable {
         this.level = level;
     }
 
+    public int getLives(){return lives;}
     public void setLives(int lives) {
         this.lives = lives;
     }
-
-
 
     public Hud(BreakoutGame game, LevelManager levelManager){
         if(DEBUG_MODE) logger.info("Constructor");
@@ -108,19 +105,19 @@ public class Hud implements Disposable {
         table.top();
 
         // add lives
-        Table livesTabel = new Table();
-        livesTabel.setDebug(false);
-        livesTabel.add(livesLabel);
+        livesTable = new Table();
+        livesTable.setDebug(false);
+        livesTable.add(livesLabel);
         for(int i = 0; i < lives; i++){
             ballImage = new Image(ballTexture);
             ballImage.setScale(0.85f);
-            livesTabel.add(ballImage);
+            livesTable.add(ballImage);
         }
 
         table.add(levelLabel).left().padLeft(5).padTop(5).expandX();
         table.add(scoreLabel).right().padRight(5).padTop(5).expandX();
         table.row();
-        table.add(livesTabel).left().padLeft(5);
+        table.add(livesTable).left().padLeft(5);
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
     }
@@ -134,6 +131,17 @@ public class Hud implements Disposable {
     public void render(){
         stage.act();
         stage.draw();
+    }
+
+    public void updateLives(){
+        livesTable.clearChildren();
+        livesTable.add(livesLabel);
+        for(int i = 0; i < lives; i++){
+            logger.info("Update Lives: " + lives);
+            ballImage = new Image(ballTexture);
+            ballImage.setScale(0.85f);
+            livesTable.add(ballImage);
+        }
     }
 
     public void resize(int width, int height) {
@@ -262,6 +270,9 @@ public class Hud implements Disposable {
                     public void clicked(InputEvent event, float x, float y) {
                         handleDialogClosed();
                         userChoice = UserChoice.CANCEL;
+
+//                        lives--;
+//                        logger.info("Lives: " + lives);
                     }
                 },
                 DialogType.MENU

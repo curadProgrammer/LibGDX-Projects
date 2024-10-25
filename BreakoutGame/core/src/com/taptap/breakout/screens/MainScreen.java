@@ -19,6 +19,7 @@ import com.taptap.breakout.ecs.systems.*;
 import com.taptap.breakout.level.B2dContactListener;
 import com.taptap.breakout.level.LevelManager;
 import com.taptap.breakout.listeners.ScoreChangeListener;
+import com.taptap.breakout.utils.PaddleAndBall;
 
 import java.util.logging.Logger;
 
@@ -40,7 +41,6 @@ public class MainScreen implements Screen, ScoreChangeListener {
 
     private InputMultiplexer inputMultiplexer;
     private KeyboardController controller;
-
 
     public MainScreen(BreakoutGame game){
         if(DEBUG_MODE) logger.info("Constructor");
@@ -73,7 +73,7 @@ public class MainScreen implements Screen, ScoreChangeListener {
         engine.addSystem(new RenderingSystem(sb, cam));
         engine.addSystem(new PhysicsSystem(world, engine));
         engine.addSystem(new PhysicsDebugSystem(world, cam));
-        engine.addSystem(new BallSystem());
+        engine.addSystem(new BallSystem(hud, levelManager));
         engine.addSystem(new AttachSystem());
         collisionSystem = new CollisionSystem(hud, levelManager, this);
         engine.addSystem(collisionSystem);

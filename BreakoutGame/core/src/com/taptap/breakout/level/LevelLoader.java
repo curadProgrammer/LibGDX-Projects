@@ -19,6 +19,7 @@ import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.components.*;
 import com.taptap.breakout.loader.BodyFactory;
+import com.taptap.breakout.utils.PaddleAndBall;
 
 public class LevelLoader implements Disposable {
     private BodyFactory bodyFactory;
@@ -33,6 +34,7 @@ public class LevelLoader implements Disposable {
     private TextureAtlas textures;
 
     public int numOfBlocksLeft;
+    public PaddleAndBall paddleAndBall;
 
     // mapFilePath - pass in the path to the map file to be loaded
     public LevelLoader(BreakoutGame game, World world, PooledEngine en, String mapFilePath){
@@ -60,6 +62,7 @@ public class LevelLoader implements Disposable {
         Entity ballEntity = en.createEntity();
         renderBall(ballEntity);
         renderPlayer(playerEntity, ballEntity);
+        paddleAndBall = new PaddleAndBall(playerEntity, ballEntity);
     }
 
     private void renderPlayer(Entity playerEntity, Entity ballEntity){

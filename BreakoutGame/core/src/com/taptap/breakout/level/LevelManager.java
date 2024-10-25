@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.ecs.components.B2BodyComponent;
+import com.taptap.breakout.utils.PaddleAndBall;
 
 public class LevelManager implements Disposable {
     public static int MAX_LEVELS = 3;
