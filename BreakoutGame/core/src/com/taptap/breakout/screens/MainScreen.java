@@ -70,6 +70,7 @@ public class MainScreen implements Screen, ScoreChangeListener {
         // load first level
         levelManager.loadLevel(1);
 
+        hud.updateLives();
         engine.addSystem(new RenderingSystem(sb, cam));
         engine.addSystem(new PhysicsSystem(world, engine));
         engine.addSystem(new PhysicsDebugSystem(world, cam));

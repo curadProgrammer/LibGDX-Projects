@@ -50,10 +50,11 @@ public class BallSystem extends IteratingSystem {
             ballC.isDead = true;
 
             // reset ball position
-            levelManager.currentLevel.paddleAndBall.resetBall();
+            levelManager.currentLevel.paddleAndBall.resetBallToPaddle();
 
             // reset ball properties
             ballC.reset();
+            ballC.speed = 5f;
         }
 
         if(ballPosition.x + ballRadius >= Utilities.getPPMWidth()

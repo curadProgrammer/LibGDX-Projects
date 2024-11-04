@@ -5,8 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.components.AttachComponent;
 import com.taptap.breakout.ecs.components.B2BodyComponent;
-import com.taptap.breakout.ecs.components.BallComponent;
-import com.taptap.breakout.ecs.components.PlayerComponent;
 
 public class PaddleAndBall {
     ComponentMapper<B2BodyComponent> b2bodyCM = ComponentMapper.getFor(B2BodyComponent.class);
@@ -21,7 +19,7 @@ public class PaddleAndBall {
     }
 
     // this method will be in charge of resetting the ball to the paddle
-    public void resetBall(){
+    public void resetBallToPaddle(){
         // reset ball to paddle's position
         B2BodyComponent ballB2Body = b2bodyCM.get(ball);
         B2BodyComponent paddleB2Body = b2bodyCM.get(paddle);
