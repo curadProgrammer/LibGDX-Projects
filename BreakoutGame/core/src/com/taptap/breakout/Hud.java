@@ -134,6 +134,7 @@ public class Hud implements Disposable {
     }
 
     public void updateLives(){
+        logger.info("Updating Lives");
         livesTable.clearChildren();
         livesTable.add(livesLabel);
         for(int i = 0; i < lives; i++){
@@ -216,10 +217,17 @@ public class Hud implements Disposable {
                     public void clicked(InputEvent event, float x, float y) {
                         // reset the current level
                         logger.info("clicked on retry");
+
+                        // reset game state
+                        level = 1;
+                        lives = 3;
+                        score = 0;
+
                         levelManager.loadLevel(level);
 
                         handleDialogClosed();
                         userChoice = UserChoice.RETRY;
+                        updateLives();
                     }
                 },
 
