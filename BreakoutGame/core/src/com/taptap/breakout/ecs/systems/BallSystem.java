@@ -50,6 +50,12 @@ public class BallSystem extends IteratingSystem {
             // decrease the lives count
             hud.setLives(hud.getLives() - 1);
             hud.updateLives();
+
+            if(hud.getLives() <= 0){
+                // display game over dialog
+                hud.showGameOverDialog();
+            }
+
             ballC.isDead = true;
 
             // reset ball position
