@@ -10,6 +10,7 @@ import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.components.B2BodyComponent;
 import com.taptap.breakout.ecs.components.BallComponent;
 import com.taptap.breakout.level.LevelManager;
+import com.taptap.breakout.utils.SoundUtil;
 
 import java.util.logging.Logger;
 
@@ -44,6 +45,8 @@ public class BallSystem extends IteratingSystem {
             ballC.reverseY(ballB2body.body);
             ballC.canBounce = true;
         }else if(ballPosition.y - ballRadius <= 0 && !ballC.isDead){ // ball fell through
+            SoundUtil.getInstance().playExplosion();
+
             // decrease the lives count
             hud.setLives(hud.getLives() - 1);
             hud.updateLives();

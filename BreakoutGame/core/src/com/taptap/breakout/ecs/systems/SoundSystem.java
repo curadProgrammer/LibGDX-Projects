@@ -8,6 +8,7 @@ import com.taptap.breakout.BreakoutGame;
 import com.taptap.breakout.ecs.components.CollisionComponent;
 import com.taptap.breakout.ecs.components.SoundComponent;
 import com.taptap.breakout.ecs.components.TypeComponent;
+import com.taptap.breakout.utils.SoundUtil;
 
 public class SoundSystem extends IteratingSystem{
     private AppPreferences appPreferences;
@@ -33,9 +34,9 @@ public class SoundSystem extends IteratingSystem{
             Entity otherEntity = collisionComponent.collisionEntity;
             TypeComponent otherEntityType = otherEntity.getComponent(TypeComponent.class);
             if (otherEntityType.type == TypeComponent.BLOCK) {
-                soundComponent.soundEffects.get("ding1").play();
+                SoundUtil.getInstance().playDingSound1();
             } else if (otherEntityType.type == TypeComponent.PLAYER) {
-                soundComponent.soundEffects.get("ding2").play();
+                SoundUtil.getInstance().playDingSound2();
             }
         }
 
