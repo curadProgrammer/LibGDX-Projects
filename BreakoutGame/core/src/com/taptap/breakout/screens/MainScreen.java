@@ -73,7 +73,7 @@ public class MainScreen implements Screen, ScoreChangeListener {
         hud.updateLives();
         engine.addSystem(new RenderingSystem(sb, cam));
         engine.addSystem(new PhysicsSystem(world, engine));
-        engine.addSystem(new PhysicsDebugSystem(world, cam));
+//        engine.addSystem(new PhysicsDebugSystem(world, cam));
         engine.addSystem(new BallSystem(hud, levelManager));
         engine.addSystem(new AttachSystem());
         collisionSystem = new CollisionSystem(hud, levelManager, this);
