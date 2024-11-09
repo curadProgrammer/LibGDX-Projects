@@ -3,6 +3,7 @@ package com.taptap.breakout;
 import com.badlogic.gdx.Game;
 import com.taptap.breakout.loader.B2dAssetManager;
 import com.taptap.breakout.screens.ScreenManager;
+import com.taptap.breakout.utils.SoundUtil;
 
 public class BreakoutGame extends Game {
 	// change this to false to turn of debug mode
@@ -17,13 +18,11 @@ public class BreakoutGame extends Game {
 		return appPreferences;
 	}
 
-
-
 	@Override
 	public void create () {
-		appPreferences = new AppPreferences();
+		appPreferences = AppPreferences.getInstance();
 		screenManager = new ScreenManager(this);
-		assetManager = new B2dAssetManager();
+		assetManager = B2dAssetManager.getInstance();
 
 		// change the screen to the loading screen
 		screenManager.changeScreen(ScreenManager.LOADING);

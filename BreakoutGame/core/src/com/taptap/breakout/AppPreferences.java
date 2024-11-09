@@ -4,11 +4,32 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
 public class AppPreferences {
+    private static volatile AppPreferences instance;
+
     private static final String PREF_MUSIC_VOLUME = "volume";
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOL = "sound";
     private static final String PREFS_NAME = "breakout";
+
+    // Private constructor
+    private AppPreferences() {
+        // Prevent reflection instantiation
+        if (instance != null) {
+            throw new IllegalStateException("Already instantiated");
+        }
+    }
+
+    public static AppPreferences getInstance() {
+        if (instance == null) {
+            synchronized (AppPreferences.class) {
+                if (instance == null) {
+                    instance = new AppPreferences();
+                }
+            }
+        }
+        return instance;
+    }
 
     protected Preferences getPrefs(){
         return Gdx.app.getPreferences(PREFS_NAME);

@@ -125,6 +125,7 @@ public class LevelLoader implements Disposable {
         // add sound fx
         soundComponent.soundEffects.put("ding1", (Sound) game.assetManager.manager.get(game.assetManager.ding1Sound));
         soundComponent.soundEffects.put("ding2", (Sound) game.assetManager.manager.get(game.assetManager.ding2Sound));
+        soundComponent.soundEffects.put("explode", (Sound) game.assetManager.manager.get(game.assetManager.explosionSound));
 
         ballC.speed = 5f;
 

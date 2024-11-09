@@ -10,12 +10,11 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class B2dAssetManager {
-    public final AssetManager manager = new AssetManager();
+    private static volatile B2dAssetManager instance;
+    public final AssetManager manager;
 
     // textures
     public final String gameImages = "images/breakout-game.atlas";
@@ -23,6 +22,7 @@ public class B2dAssetManager {
     // soundfx
     public final String ding1Sound = "soundfx/ding_1.wav";
     public final String ding2Sound = "soundfx/ding_2.wav";
+    public final String explosionSound = "soundfx/explosion.wav";
 
     // music
     public final String backgroundMusic = "music/night night.ogg";
@@ -36,27 +36,42 @@ public class B2dAssetManager {
     public final String fontMedium = "size36.otf";
     public final String fontSmall = "size18.otf";
 
+    // Private constructor
+    private B2dAssetManager() {
+        manager = new AssetManager();
+    }
 
-    public void queueAddImages(){
+    public static B2dAssetManager getInstance() {
+        if (instance == null) {
+            synchronized (B2dAssetManager.class) {
+                if (instance == null) {
+                    instance = new B2dAssetManager();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public void queueAddImages() {
         manager.load(gameImages, TextureAtlas.class);
     }
 
-    public void queueAddSounds(){
+    public void queueAddSounds() {
         manager.load(ding1Sound, Sound.class);
         manager.load(ding2Sound, Sound.class);
+        manager.load(explosionSound, Sound.class);
     }
 
-    public void queueAddMusic(){
+    public void queueAddMusic() {
         manager.load(backgroundMusic, Music.class);
     }
 
-    public void queueAddSkin(){
-        // N: I wonder if we have to edit the params to make the buttons bigger
+    public void queueAddSkin() {
         SkinLoader.SkinParameter params = new SkinLoader.SkinParameter("skin/craftacular-ui.atlas");
         manager.load(skin, Skin.class, params);
     }
 
-    public void queueAddFonts(){
+    public void queueAddFonts() {
         // Register the FreeTypeFontLoader with the AssetManager
         manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
         manager.setLoader(BitmapFont.class, ".otf", new FreetypeFontLoader(new InternalFileHandleResolver()));
@@ -78,6 +93,13 @@ public class B2dAssetManager {
         fontParameterLarge.fontFileName = gamerFont;
         fontParameterLarge.fontParameters.size = 64;
         manager.load(fontLarge, BitmapFont.class, fontParameterLarge);
+    }
+
+    public void dispose() {
+        if (manager != null) {
+            manager.dispose();
+        }
+        instance = null;  // Allow for recreation if needed
     }
 }
 
