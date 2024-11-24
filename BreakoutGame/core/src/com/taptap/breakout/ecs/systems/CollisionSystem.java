@@ -12,6 +12,7 @@ import com.taptap.breakout.Utilities;
 import com.taptap.breakout.ecs.components.*;
 import com.taptap.breakout.level.LevelManager;
 import com.taptap.breakout.listeners.ScoreChangeListener;
+import com.taptap.breakout.utils.ParticlesManager;
 
 import java.util.logging.Logger;
 
@@ -29,12 +30,16 @@ public class CollisionSystem extends IteratingSystem {
     private ScoreChangeListener scoreChangeListener;
     private LevelManager levelManager;
     private Hud hud;
+    public ParticlesManager particlesManager;
 
     public CollisionSystem(Hud hud, LevelManager levelManager, ScoreChangeListener scoreChangeListener){
        super(Family.all(CollisionComponent.class, B2BodyComponent.class, BallComponent.class).get());
        this.hud = hud;
        this.scoreChangeListener = scoreChangeListener;
        this.levelManager = levelManager;
+
+       particlesManager = new ParticlesManager("particles/block-particle.p", "particles");
+       particlesManager.setScale(1f);
     }
 
     @Override
@@ -155,6 +160,9 @@ public class CollisionSystem extends IteratingSystem {
             // update ball flag to allow it bounce from the paddle again
             ball.canBounce = true;
             otherCollision.canCollide = false;
+
+            // spawn particle
+            particlesManager.spawn(blockB2Body.body.getPosition().x, blockB2Body.body.getPosition().y);
 
             // block is destroyed
             blockB2Body.setToDestroy = true;

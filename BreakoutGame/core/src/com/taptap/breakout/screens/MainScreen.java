@@ -6,7 +6,9 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -20,6 +22,7 @@ import com.taptap.breakout.level.B2dContactListener;
 import com.taptap.breakout.level.LevelManager;
 import com.taptap.breakout.listeners.ScoreChangeListener;
 import com.taptap.breakout.utils.PaddleAndBall;
+import com.taptap.breakout.utils.ParticlesManager;
 
 import java.util.logging.Logger;
 
@@ -42,6 +45,9 @@ public class MainScreen implements Screen, ScoreChangeListener {
     private InputMultiplexer inputMultiplexer;
     private KeyboardController controller;
 
+    // particles
+    private ParticlesManager particlesManager;
+
     public MainScreen(BreakoutGame game){
         if(DEBUG_MODE) logger.info("Constructor");
 
@@ -60,6 +66,11 @@ public class MainScreen implements Screen, ScoreChangeListener {
         engine = new PooledEngine();
         levelManager = new LevelManager(game, world, engine, cam);
         hud = new Hud(game, levelManager);
+
+        particlesManager = new ParticlesManager("particles/test.p", "particles");
+        particlesManager.setScale(1f);
+        particlesManager.spawn(10, 20);
+
         sb.setProjectionMatrix(cam.combined);
     }
 
@@ -86,7 +97,8 @@ public class MainScreen implements Screen, ScoreChangeListener {
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
-    public void update(){
+    public void update(float delta){
+        collisionSystem.particlesManager.update(delta);
         hud.update();
     }
 
@@ -95,13 +107,16 @@ public class MainScreen implements Screen, ScoreChangeListener {
         Gdx.gl.glClearColor(0,0,0,1); //  clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        update();
+        update(delta);
 
         // load level
         levelManager.renderLevel();
 
         // update engine
         engine.update(delta);
+
+        // particles
+        collisionSystem.particlesManager.render(sb);
 
         // render hud at the end so it overlays on top of everything else
         hud.render();
