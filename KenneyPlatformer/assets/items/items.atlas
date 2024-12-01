@@ -1,0 +1,15 @@
+items.png
+size:128,32
+repeat:none
+tile
+index:165
+bounds:2,2,18,18
+tile
+index:10
+bounds:22,2,18,18
+tile
+index:151
+bounds:42,2,18,18
+tile
+index:30
+bounds:62,2,18,18

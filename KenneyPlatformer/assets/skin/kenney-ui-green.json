@@ -1,0 +1,60 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: {
+	Kenney_Future: {
+		file: Kenney Future.fnt
+		scaledSize: -1
+		markupEnabled: false
+		flip: false
+	}
+}
+com.badlogic.gdx.graphics.Color: {
+	RGBA_255_255_255_255: {
+		r: 1
+		g: 1
+		b: 1
+		a: 1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: button_square_depth_gloss
+		down: button_square_gloss
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
+	default: {
+		checkboxOn: check_square_color_checkmark
+		checkboxOff: check_square_color
+		checkboxOnDisabled: check_square_grey
+		font: Kenney_Future
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: {
+		font: Kenney_Future
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
+	default-horizontal: {
+		background: slide_horizontal_grey
+		knob: icon_circle
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+	default: {
+		font: Kenney_Future
+		up: button_rectangle_depth_gradient
+		down: button_rectangle_depth_flat
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+	default: {
+		label: default
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+	default: {
+		titleFont: Kenney_Future
+	}
+}
+}
