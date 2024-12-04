@@ -6,14 +6,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.screens.ScreenManager;
 
 public class MyGdxGame extends Game {
-	private SpriteBatch spriteBatch;
+	public SpriteBatch spriteBatch;
 
 	@Override
 	public void create() {
+		spriteBatch = new SpriteBatch();
+
 		ScreenManager screenManager = ScreenManager.getInstance();
 		screenManager.initialize(this);
 
-		screenManager.setScreen(ScreenManager.ScreenType.TITLE_SCREEN);
+		// start loading screen
+		screenManager.setScreen(ScreenManager.ScreenType.LOADING_SCREEN);
 	}
 
 	@Override

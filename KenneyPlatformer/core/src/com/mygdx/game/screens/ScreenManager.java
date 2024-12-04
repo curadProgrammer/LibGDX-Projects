@@ -47,8 +47,11 @@ public class ScreenManager {
 
     private Screen createScreen(ScreenType screenType) {
         switch (screenType) {
+            case LOADING_SCREEN:
+                logger.info("Creating and Switching to LOADING_SCREEN");
+                return new LoadingScreen(game);
             case TITLE_SCREEN:
-                logger.info("Creating and Switching to TITLE SCREEN");
+                logger.info("Creating and Switching to TITLE_SCREEN");
                 return new TitleScreen(game);
 //            case GAME_SCREEN:
 //                return new GamePlayScreen(game);
