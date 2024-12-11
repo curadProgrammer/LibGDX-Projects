@@ -2,12 +2,14 @@ package com.mygdx.game.assets;
 
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 
 public class B2DAssetmanager {
@@ -22,6 +24,10 @@ public class B2DAssetmanager {
     public final String fontLarge = "size72.ttf";
     public final String fontMedium = "size36.ttf";
     public final String fontSmall = "size18.ttf";
+
+    // skin
+    public final String skinPath = "skin/kenney-ui-green.json";
+    private final String skinAtlasPath = "skin/kenney-ui-green.atlas";
 
     private B2DAssetmanager() {
         assetManager = new AssetManager();
@@ -39,7 +45,9 @@ public class B2DAssetmanager {
     }
 
     public void queueAddSkin() {
-
+        System.out.println(skinPath);
+        SkinLoader.SkinParameter params = new SkinLoader.SkinParameter(skinAtlasPath);
+        assetManager.load(skinPath, Skin.class, params);
     }
 
     public void queueAddFonts() {
@@ -50,7 +58,7 @@ public class B2DAssetmanager {
         // small
         FreetypeFontLoader.FreeTypeFontLoaderParameter fontParameterSmall = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         fontParameterSmall.fontFileName = gamerFont;
-        fontParameterSmall.fontParameters.size = 18;
+        fontParameterSmall.fontParameters.size = 24;
         assetManager.load(fontSmall, BitmapFont.class, fontParameterSmall);
 
         // medium

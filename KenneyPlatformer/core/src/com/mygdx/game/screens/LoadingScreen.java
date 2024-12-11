@@ -18,6 +18,7 @@ public class LoadingScreen implements Screen {
     public void show() {
         B2DAssetmanager.getInstance().queueAddImages();
         B2DAssetmanager.getInstance().queueAddFonts();
+        B2DAssetmanager.getInstance().queueAddSkin();
         B2DAssetmanager.getInstance().assetManager.finishLoading();
     }
 
