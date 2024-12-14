@@ -16,12 +16,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.assets.B2DAssetmanager;
 import com.mygdx.game.utils.GameUtil;
+
+import javax.swing.*;
 
 
 public class TitleScreen implements Screen {
@@ -42,7 +45,6 @@ public class TitleScreen implements Screen {
     private Label title;
     private TextButton startGameBtn, settingsBtn, exitBtn;
 
-    private NinePatch ninePatch;
 
     public TitleScreen(MyGdxGame game){
         logger.info("Constructor");
@@ -54,8 +56,7 @@ public class TitleScreen implements Screen {
         stage = new Stage(viewport);
         stage.setDebugAll(true);
         skin = B2DAssetmanager.getInstance().assetManager.get(B2DAssetmanager.getInstance().skinPath);
-        ninePatch = new NinePatch(new Texture(Gdx.files.internal("skin/nine-patch/button_rectangle_depth_flat.9.png")),
-                                        12, 12, 12, 12);
+
     }
 
     @Override
@@ -72,16 +73,47 @@ public class TitleScreen implements Screen {
         table.setFillParent(true);
         table.setDebug(false);
 
-        NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(ninePatch);
+        // todo clean this up
+        NinePatch labelNinePatch = new NinePatch(new Texture(Gdx.files.internal("skin/nine-patch/button_rectangle_depth_flat.9.png")),
+                12, 12, 12, 12);
+
+        NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(labelNinePatch);
+
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font =  B2DAssetmanager.getInstance().assetManager.get(
                 B2DAssetmanager.getInstance().fontLarge, BitmapFont.class
         );
         labelStyle.fontColor = Color.WHITE;
         labelStyle.background = ninePatchDrawable;
-
         title = new Label("Kenney Platformer", labelStyle);
+        title.setFontScale(2f);
+
+        labelStyle = new Label.LabelStyle();
+        labelStyle.font =  B2DAssetmanager.getInstance().assetManager.get(
+                B2DAssetmanager.getInstance().fontMedium, BitmapFont.class
+        );
+
+        startGameBtn = new TextButton("", skin);
+        startGameBtn.setLabel(new Label("Start", labelStyle));
+        startGameBtn.getLabel().setAlignment(Align.center);
+
+        settingsBtn = new TextButton("", skin);
+        settingsBtn.setLabel(new Label("Settings", labelStyle));
+        settingsBtn.getLabel().setAlignment(Align.center);
+
+        exitBtn = new TextButton("", skin);
+        exitBtn.setLabel(new Label("Exit", labelStyle));
+        exitBtn.getLabel().setAlignment(Align.center);
+
+        table.top().padTop(100);
         table.add(title).fillX().uniformX();
+        table.row().padTop(150);
+        table.add(startGameBtn).width(500);
+        table.row().padTop(20);
+        table.add(settingsBtn).width(500);
+        table.row().padTop(20);
+        table.add(exitBtn).width(500);
+
         stage.addActor(table);
     }
 

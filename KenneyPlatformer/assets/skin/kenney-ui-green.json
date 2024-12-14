@@ -45,7 +45,7 @@ com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: {
 		font: Kenney_Future
 		up: button_rectangle_depth_gradient
-		down: button_rectangle_depth_flat
+		down: button_rectangle_flat
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {

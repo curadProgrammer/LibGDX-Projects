@@ -21,9 +21,12 @@ public class B2DAssetmanager {
 
     // fonts (LARGE, MEDIUM, SMALL)
     public final String gamerFont = "fonts/Kenney Future.ttf";
-    public final String fontLarge = "size72.ttf";
-    public final String fontMedium = "size36.ttf";
-    public final String fontSmall = "size18.ttf";
+    public final String fontLarge = "sizeLg.ttf";
+    public final String fontMedium = "sizeMd.ttf";
+    public final String fontSmall = "sizeSm.ttf";
+    private final int fontLargeValue = 64;
+    private final int fontMediumValue = 48;
+    private final int fontSmallValue = 16;
 
     // skin
     public final String skinPath = "skin/kenney-ui-green.json";
@@ -58,19 +61,19 @@ public class B2DAssetmanager {
         // small
         FreetypeFontLoader.FreeTypeFontLoaderParameter fontParameterSmall = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         fontParameterSmall.fontFileName = gamerFont;
-        fontParameterSmall.fontParameters.size = 24;
+        fontParameterSmall.fontParameters.size = fontSmallValue;
         assetManager.load(fontSmall, BitmapFont.class, fontParameterSmall);
 
         // medium
         FreetypeFontLoader.FreeTypeFontLoaderParameter fontParameterMedium = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         fontParameterMedium.fontFileName = gamerFont;
-        fontParameterMedium.fontParameters.size = 36;
+        fontParameterMedium.fontParameters.size = fontMediumValue;
         assetManager.load(fontMedium, BitmapFont.class, fontParameterMedium);
 
         // large
         FreetypeFontLoader.FreeTypeFontLoaderParameter fontParameterLarge = new FreetypeFontLoader.FreeTypeFontLoaderParameter();
         fontParameterLarge.fontFileName = gamerFont;
-        fontParameterLarge.fontParameters.size = 64;
+        fontParameterLarge.fontParameters.size = fontLargeValue;
         assetManager.load(fontLarge, BitmapFont.class, fontParameterLarge);
     }
 }
