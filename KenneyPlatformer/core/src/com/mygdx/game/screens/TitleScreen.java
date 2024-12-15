@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -54,7 +56,7 @@ public class TitleScreen implements Screen {
         viewport = new StretchViewport(GameUtil.VIRTUAL_WIDTH, GameUtil.VIRTUAL_HEIGHT, camera);
 
         stage = new Stage(viewport);
-        stage.setDebugAll(true);
+        stage.setDebugAll(false);
         skin = B2DAssetmanager.getInstance().assetManager.get(B2DAssetmanager.getInstance().skinPath);
 
     }
@@ -107,14 +109,40 @@ public class TitleScreen implements Screen {
 
         table.top().padTop(100);
         table.add(title).fillX().uniformX();
-        table.row().padTop(150);
+        table.row().padTop(100);
         table.add(startGameBtn).width(500);
-        table.row().padTop(20);
+        table.row().padTop(50);
         table.add(settingsBtn).width(500);
-        table.row().padTop(20);
+        table.row().padTop(50);
         table.add(exitBtn).width(500);
-
         stage.addActor(table);
+
+        addTitleAction();
+    }
+
+    private void addTitleAction(){
+        // add action to title by making it go up and down
+        MoveToAction moveUpAction = new MoveToAction();
+        moveUpAction.setPosition(GameUtil.VIRTUAL_WIDTH / 2 - title.getWidth() + 15,
+                                    GameUtil.VIRTUAL_HEIGHT - title.getHeight() - 150);
+        moveUpAction.setDuration(1);
+        moveUpAction.setInterpolation(Interpolation.smooth);
+
+        MoveToAction moveDownAction = new MoveToAction();
+        moveDownAction.setPosition(GameUtil.VIRTUAL_WIDTH / 2 - title.getWidth() + 15,
+                GameUtil.VIRTUAL_HEIGHT - title.getHeight() - 175);
+        moveDownAction.setDuration(1);
+        moveDownAction.setInterpolation(Interpolation.smooth);
+
+        SequenceAction overallSequence = new SequenceAction();
+        overallSequence.addAction(moveUpAction);
+        overallSequence.addAction(moveDownAction);
+
+        RepeatAction infiniteLoop = new RepeatAction();
+        infiniteLoop.setCount(RepeatAction.FOREVER);
+        infiniteLoop.setAction(overallSequence);
+
+        title.addAction(infiniteLoop);
     }
 
     public void update(float delta){
