@@ -2,32 +2,31 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
+
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.assets.B2DAssetmanager;
+import com.mygdx.game.listeners.CustomClickListener;
+import com.mygdx.game.utils.ActionsUtil;
 import com.mygdx.game.utils.GameUtil;
-
-import javax.swing.*;
-
 
 public class TitleScreen implements Screen {
     private static final Logger logger = new Logger("Title Screen", Logger.DEBUG);
@@ -98,14 +97,20 @@ public class TitleScreen implements Screen {
         startGameBtn = new TextButton("", skin);
         startGameBtn.setLabel(new Label("Start", labelStyle));
         startGameBtn.getLabel().setAlignment(Align.center);
+        startGameBtn.setTransform(true);
+        startGameBtn.addListener(new CustomClickListener(startGameBtn));
 
         settingsBtn = new TextButton("", skin);
         settingsBtn.setLabel(new Label("Settings", labelStyle));
         settingsBtn.getLabel().setAlignment(Align.center);
+        settingsBtn.setTransform(true);
+        settingsBtn.addListener(new CustomClickListener(settingsBtn));
 
         exitBtn = new TextButton("", skin);
         exitBtn.setLabel(new Label("Exit", labelStyle));
         exitBtn.getLabel().setAlignment(Align.center);
+        exitBtn.setTransform(true);
+        exitBtn.addListener(new CustomClickListener(exitBtn));
 
         table.top().padTop(100);
         table.add(title).fillX().uniformX();
@@ -117,32 +122,7 @@ public class TitleScreen implements Screen {
         table.add(exitBtn).width(500);
         stage.addActor(table);
 
-        addTitleAction();
-    }
-
-    private void addTitleAction(){
-        // add action to title by making it go up and down
-        MoveToAction moveUpAction = new MoveToAction();
-        moveUpAction.setPosition(GameUtil.VIRTUAL_WIDTH / 2 - title.getWidth() + 15,
-                                    GameUtil.VIRTUAL_HEIGHT - title.getHeight() - 150);
-        moveUpAction.setDuration(1);
-        moveUpAction.setInterpolation(Interpolation.smooth);
-
-        MoveToAction moveDownAction = new MoveToAction();
-        moveDownAction.setPosition(GameUtil.VIRTUAL_WIDTH / 2 - title.getWidth() + 15,
-                GameUtil.VIRTUAL_HEIGHT - title.getHeight() - 175);
-        moveDownAction.setDuration(1);
-        moveDownAction.setInterpolation(Interpolation.smooth);
-
-        SequenceAction overallSequence = new SequenceAction();
-        overallSequence.addAction(moveUpAction);
-        overallSequence.addAction(moveDownAction);
-
-        RepeatAction infiniteLoop = new RepeatAction();
-        infiniteLoop.setCount(RepeatAction.FOREVER);
-        infiniteLoop.setAction(overallSequence);
-
-        title.addAction(infiniteLoop);
+        ActionsUtil.addMovingUpDownAction(title);
     }
 
     public void update(float delta){
