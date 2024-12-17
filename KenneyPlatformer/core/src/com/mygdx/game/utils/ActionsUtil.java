@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
-// this class will have actions that I can use to add to actors
+// this class will have UI actions that I can use to add to actors
 public class ActionsUtil {
 
     // add action by making it go up and down

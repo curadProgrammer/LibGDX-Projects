@@ -11,20 +11,17 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.math.MathUtils;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Logger;
-import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.assets.B2DAssetmanager;
-import com.mygdx.game.listeners.CustomClickListener;
+import com.mygdx.game.listeners.HoverListener;
 import com.mygdx.game.utils.ActionsUtil;
 import com.mygdx.game.utils.GameUtil;
 
@@ -98,19 +95,40 @@ public class TitleScreen implements Screen {
         startGameBtn.setLabel(new Label("Start", labelStyle));
         startGameBtn.getLabel().setAlignment(Align.center);
         startGameBtn.setTransform(true);
-        startGameBtn.addListener(new CustomClickListener(startGameBtn));
+        startGameBtn.addListener(new HoverListener(startGameBtn));
+        startGameBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+            }
+        });
 
         settingsBtn = new TextButton("", skin);
         settingsBtn.setLabel(new Label("Settings", labelStyle));
         settingsBtn.getLabel().setAlignment(Align.center);
         settingsBtn.setTransform(true);
-        settingsBtn.addListener(new CustomClickListener(settingsBtn));
+        settingsBtn.addListener(new HoverListener(settingsBtn));
+        settingsBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+            }
+        });
 
         exitBtn = new TextButton("", skin);
         exitBtn.setLabel(new Label("Exit", labelStyle));
         exitBtn.getLabel().setAlignment(Align.center);
         exitBtn.setTransform(true);
-        exitBtn.addListener(new CustomClickListener(exitBtn));
+        exitBtn.addListener(new HoverListener(exitBtn));
+        exitBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                logger.info("Exit");
+
+                // exit
+                Gdx.app.exit();
+            }
+        });
 
         table.top().padTop(100);
         table.add(title).fillX().uniformX();

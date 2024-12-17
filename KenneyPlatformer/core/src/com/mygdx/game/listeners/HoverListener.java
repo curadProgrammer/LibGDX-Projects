@@ -7,10 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Null;
 import com.mygdx.game.utils.ActionsUtil;
 
-public class CustomClickListener extends ClickListener {
+// this listener is used to add hover actions
+public class HoverListener extends ClickListener {
     private Actor actor;
 
-    public CustomClickListener(Actor actor){
+    public HoverListener(Actor actor){
         this.actor = actor;
     }
 
