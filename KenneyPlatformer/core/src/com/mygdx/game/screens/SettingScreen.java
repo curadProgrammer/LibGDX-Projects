@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,28 +10,27 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.math.MathUtils;
-
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.assets.B2DAssetmanager;
-import com.mygdx.game.listeners.HoverListener;
-import com.mygdx.game.utils.ActionsUtil;
+import com.mygdx.game.config.GameConfig;
 import com.mygdx.game.utils.GameUtil;
 
-public class TitleScreen implements Screen {
-    private static final Logger logger = new Logger(TitleScreen.class.toString(), Logger.DEBUG);
+public class SettingScreen implements Screen {
+    private static final Logger logger = new com.badlogic.gdx.utils.Logger(Screen.class.toString(), Logger.DEBUG);
 
+    private MyGdxGame game;
     private OrthographicCamera camera;
     private Viewport viewport;
-    private MyGdxGame game;
 
     private Texture bgTexture;
     private float bgTextureElapsedTime;
@@ -40,25 +40,28 @@ public class TitleScreen implements Screen {
     private Stage stage;
     private Table table;
     private Skin skin;
-    private Label title;
-    private TextButton startGameBtn, settingsBtn, exitBtn;
 
+    private Label settingTitleLabel, volumeMusicLabel, volumeSoundLabel, musicOnOffLabel, soundOnOffLabel;
+    private Slider volumeMusicSlider, volumeSoundSlider;
+    private CheckBox musicOnOffCheck, soundOnOffCheck;
+    private TextButton back;
 
-    public TitleScreen(MyGdxGame game){
+    public SettingScreen(MyGdxGame game){
         logger.info("Constructor");
+
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
         viewport = new StretchViewport(GameUtil.VIRTUAL_WIDTH, GameUtil.VIRTUAL_HEIGHT, camera);
-
         stage = new Stage(viewport);
         stage.setDebugAll(false);
-        skin = B2DAssetmanager.getInstance().assetManager.get(B2DAssetmanager.getInstance().skinPath);
-
+        skin = B2DAssetmanager.getInstance().assetManager.get(B2DAssetmanager.getInstance().skinPath, Skin.class);
     }
 
     @Override
     public void show() {
+        logger.info("Show");
+
         bgTexture = B2DAssetmanager.getInstance().assetManager.get(
                 B2DAssetmanager.getInstance().titleBgTexturePath,
                 Texture.class
@@ -81,71 +84,66 @@ public class TitleScreen implements Screen {
         labelStyle.font =  B2DAssetmanager.getInstance().assetManager.get(
                 B2DAssetmanager.getInstance().fontLarge, BitmapFont.class
         );
-        labelStyle.fontColor = Color.WHITE;
         labelStyle.background = ninePatchDrawable;
-        title = new Label("Kenney Platformer", labelStyle);
-        title.setFontScale(2f);
+
+        // labels
+        settingTitleLabel = new Label("Settings", labelStyle);
+        settingTitleLabel.setFontScale(1.5f);
+        settingTitleLabel.setAlignment(Align.center);
+
+        volumeMusicLabel = new Label("Music Volume: ", labelStyle);
+        volumeSoundLabel = new Label("Sound Volume: ", labelStyle);
+
+        // sliders
+        volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
+        volumeMusicSlider.setValue(GameConfig.getInstance().getMusicVolume());
+        volumeMusicSlider.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                GameConfig.getInstance().setMusicVolume(volumeMusicSlider.getValue());
+                return false;
+            }
+        });
+
+        volumeSoundSlider = new Slider(0f, 1f, 0.1f, false, skin);
+        volumeSoundSlider.setValue(GameConfig.getInstance().getSoundVolume());
+        volumeSoundSlider.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                GameConfig.getInstance().setMusicVolume(volumeSoundSlider.getValue());
+                return false;
+            }
+        });
 
         labelStyle = new Label.LabelStyle();
         labelStyle.font =  B2DAssetmanager.getInstance().assetManager.get(
                 B2DAssetmanager.getInstance().fontMedium, BitmapFont.class
         );
 
-        startGameBtn = new TextButton("", skin);
-        startGameBtn.setLabel(new Label("Start", labelStyle));
-        startGameBtn.getLabel().setAlignment(Align.center);
-        startGameBtn.setTransform(true);
-        startGameBtn.addListener(new HoverListener(startGameBtn));
-        startGameBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
+        // checkboxes
+        musicOnOffCheck = new CheckBox("Enable Music", skin);
+        musicOnOffCheck.getImage().setScale(2);
+        musicOnOffCheck.getLabel().setStyle(labelStyle);
 
-            }
-        });
+        soundOnOffCheck = new CheckBox("Enable Sound", skin);
+        soundOnOffCheck.getImage().setScale(2);
+        soundOnOffCheck.getLabel().setStyle(labelStyle);
 
-        settingsBtn = new TextButton("", skin);
-        settingsBtn.setLabel(new Label("Settings", labelStyle));
-        settingsBtn.getLabel().setAlignment(Align.center);
-        settingsBtn.setTransform(true);
-        settingsBtn.addListener(new HoverListener(settingsBtn));
-        settingsBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                logger.info("Setting Screen");
-
-                ScreenManager.getInstance().setScreen(ScreenManager.ScreenType.SETTING_SCREEN);
-            }
-        });
-
-        exitBtn = new TextButton("", skin);
-        exitBtn.setLabel(new Label("Exit", labelStyle));
-        exitBtn.getLabel().setAlignment(Align.center);
-        exitBtn.setTransform(true);
-        exitBtn.addListener(new HoverListener(exitBtn));
-        exitBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                logger.info("Exit");
-
-                // exit
-                Gdx.app.exit();
-            }
-        });
-
-        table.top().padTop(100);
-        table.add(title).fillX().uniformX();
-        table.row().padTop(100);
-        table.add(startGameBtn).width(500);
-        table.row().padTop(50);
-        table.add(settingsBtn).width(500);
-        table.row().padTop(50);
-        table.add(exitBtn).width(500);
+        table.top().padTop(50);
+        table.add(settingTitleLabel).fillX().uniformX().colspan(2);
+        table.row().pad(10, 0, 0, 0);
+        table.add(volumeMusicLabel).padRight(100).left();
+        table.add(volumeMusicSlider).width(1000).height(100);
+        table.row().pad(10, 0, 0, 0);
+        table.add(volumeSoundLabel).padRight(100).left();
+        table.add(volumeSoundSlider).width(1000).height(100);
+        table.row().pad(50, 0, 0, 10);
+        table.add(musicOnOffCheck).center();
+        table.add(soundOnOffCheck).fillX();
         stage.addActor(table);
-
-        ActionsUtil.addMovingUpDownAction(title);
     }
 
-    public void update(float delta){
+    private void update(float delta){
         bgTextureElapsedTime += delta;
 
         // use MathUtils for smooth back-and-forth movement
@@ -154,18 +152,16 @@ public class TitleScreen implements Screen {
         stage.act();
         camera.update();
     }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0,0,0,1); //  clear the screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         update(delta);
 
         game.spriteBatch.setProjectionMatrix(camera.combined);
         game.spriteBatch.begin();
-
-        // Note: we adjust the initial position to move the texture to the left and a bit down
-        // We also scale the image bigger to prevent seeing the black background as we moved the image
+        game.spriteBatch.setColor(0.5f, 0.5f, 0.5f, 1f); // darken background texture
         game.spriteBatch.draw(
                 bgTexture,
                 bgTextureXPos - 100,
@@ -173,8 +169,9 @@ public class TitleScreen implements Screen {
                 GameUtil.VIRTUAL_WIDTH * 1.5f,
                 GameUtil.VIRTUAL_HEIGHT  * 1.5f
         );
-
+        game.spriteBatch.setColor(1, 1, 1, 1f); // reset so that other textures are colored properly
         game.spriteBatch.end();
+
         stage.draw();
     }
 
@@ -200,7 +197,7 @@ public class TitleScreen implements Screen {
 
     @Override
     public void dispose() {
-        // todo figure out a proper way to dispose
-        // bgTexture.dispose();
+        stage.dispose();
+        skin.dispose();
     }
 }

@@ -32,20 +32,19 @@ com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	default: {
 		font: Kenney_Future
-		background: button_rectangle_depth_flat
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 	default-horizontal: {
 		background: slide_horizontal_grey
-		knob: icon_circle
+		knob: slide_hangle
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
 	default: {
 		font: Kenney_Future
 		up: button_rectangle_depth_gradient
-		down: button_rectangle_flat
+		down: button_rectangle_depth_flat
 	}
 }
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {

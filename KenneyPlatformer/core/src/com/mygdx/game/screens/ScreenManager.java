@@ -1,13 +1,13 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.utils.Logger;
 import com.mygdx.game.MyGdxGame;
 
-import java.util.logging.Logger;
 
 
 public class ScreenManager {
-    private static final Logger logger = Logger.getLogger(ScreenManager.class.getName());
+    private static final Logger logger = new Logger(ScreenManager.class.toString(), Logger.DEBUG);
 
     private static ScreenManager instance;
     private MyGdxGame game;
@@ -16,7 +16,7 @@ public class ScreenManager {
     public enum ScreenType {
         TITLE_SCREEN,
         GAME_SCREEN,
-        OPTIONS_SCREEN,
+        SETTING_SCREEN,
         LOADING_SCREEN
     }
 
@@ -55,8 +55,8 @@ public class ScreenManager {
                 return new TitleScreen(game);
 //            case GAME_SCREEN:
 //                return new GamePlayScreen(game);
-//            case OPTIONS_SCREEN:
-//                return new OptionsScreen(game);
+            case SETTING_SCREEN:
+                return new SettingScreen(game);
             default:
                 throw new IllegalArgumentException("Unknown screen type: " + screenType);
         }
