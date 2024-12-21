@@ -12,8 +12,10 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Logger;
@@ -44,7 +46,7 @@ public class SettingScreen implements Screen {
     private Label settingTitleLabel, volumeMusicLabel, volumeSoundLabel, musicOnOffLabel, soundOnOffLabel;
     private Slider volumeMusicSlider, volumeSoundSlider;
     private CheckBox musicOnOffCheck, soundOnOffCheck;
-    private TextButton back;
+    private TextButton backBtn;
 
     public SettingScreen(MyGdxGame game){
         logger.info("Constructor");
@@ -55,6 +57,7 @@ public class SettingScreen implements Screen {
         viewport = new StretchViewport(GameUtil.VIRTUAL_WIDTH, GameUtil.VIRTUAL_HEIGHT, camera);
         stage = new Stage(viewport);
         stage.setDebugAll(false);
+//        stage.setDebugTableUnderMouse(true);
         skin = B2DAssetmanager.getInstance().assetManager.get(B2DAssetmanager.getInstance().skinPath, Skin.class);
     }
 
@@ -69,10 +72,6 @@ public class SettingScreen implements Screen {
 
         stage.clear();
         Gdx.input.setInputProcessor(stage);
-
-        table = new Table();
-        table.setFillParent(true);
-        table.setDebug(false);
 
         // todo clean this up
         NinePatch labelNinePatch = new NinePatch(new Texture(Gdx.files.internal("skin/nine-patch/button_rectangle_depth_flat.9.png")),
@@ -91,8 +90,8 @@ public class SettingScreen implements Screen {
         settingTitleLabel.setFontScale(1.5f);
         settingTitleLabel.setAlignment(Align.center);
 
-        volumeMusicLabel = new Label("Music Volume: ", labelStyle);
-        volumeSoundLabel = new Label("Sound Volume: ", labelStyle);
+        volumeMusicLabel = new Label("Music Volume:", labelStyle);
+        volumeSoundLabel = new Label("Sound Volume:", labelStyle);
 
         // sliders
         volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
@@ -115,31 +114,71 @@ public class SettingScreen implements Screen {
             }
         });
 
+        // checkboxes
         labelStyle = new Label.LabelStyle();
         labelStyle.font =  B2DAssetmanager.getInstance().assetManager.get(
-                B2DAssetmanager.getInstance().fontMedium, BitmapFont.class
+                B2DAssetmanager.getInstance().fontLarge, BitmapFont.class
         );
 
-        // checkboxes
         musicOnOffCheck = new CheckBox("Enable Music", skin);
-        musicOnOffCheck.getImage().setScale(2);
+        musicOnOffCheck.setChecked(GameConfig.getInstance().isMusicEnabled());
         musicOnOffCheck.getLabel().setStyle(labelStyle);
+        musicOnOffCheck.getLabelCell().padLeft(10);
+        musicOnOffCheck.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                GameConfig.getInstance().setMusicEnabled(musicOnOffCheck.isChecked());
+                return false;
+            }
+        });
 
         soundOnOffCheck = new CheckBox("Enable Sound", skin);
-        soundOnOffCheck.getImage().setScale(2);
+        soundOnOffCheck.setChecked(GameConfig.getInstance().isSoundEnabled());
         soundOnOffCheck.getLabel().setStyle(labelStyle);
+        soundOnOffCheck.getLabelCell().padLeft(10);
+        soundOnOffCheck.addListener(new EventListener() {
+            @Override
+            public boolean handle(Event event) {
+                GameConfig.getInstance().setMusicEnabled(soundOnOffCheck.isChecked());
+                return false;
+            }
+        });
 
+        // buttons
+        backBtn = new TextButton("Back", skin);
+        backBtn.getLabel().setStyle(labelStyle);
+        backBtn.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // go back to menu screen
+                ScreenManager.getInstance().setScreen(ScreenManager.ScreenType.TITLE_SCREEN);
+            }
+        });
+
+        table = new Table();
+        table.setFillParent(true);
+
+        table.setDebug(true);
         table.top().padTop(50);
-        table.add(settingTitleLabel).fillX().uniformX().colspan(2);
-        table.row().pad(10, 0, 0, 0);
-        table.add(volumeMusicLabel).padRight(100).left();
-        table.add(volumeMusicSlider).width(1000).height(100);
-        table.row().pad(10, 0, 0, 0);
-        table.add(volumeSoundLabel).padRight(100).left();
-        table.add(volumeSoundSlider).width(1000).height(100);
-        table.row().pad(50, 0, 0, 10);
-        table.add(musicOnOffCheck).center();
-        table.add(soundOnOffCheck).fillX();
+        table.add(settingTitleLabel).fillX().uniformX().colspan(4);
+
+        table.row().pad(60, 0, 0, 0);
+        table.add(volumeMusicLabel).left().fillX();
+        table.add().width(0);
+        table.add(volumeMusicSlider).fill().colspan(2);
+
+        table.row().pad(60, 0, 0, 0);
+        table.add(volumeSoundLabel).left().fillX();
+        table.add().width(0);
+        table.add(volumeSoundSlider).fill().colspan(2);
+
+        table.row().pad(60, 0, 0, 0);
+        table.add(musicOnOffCheck).left().colspan(2);
+        table.add(soundOnOffCheck).center().colspan(2);
+
+        table.row().pad(150, 0, 0, 0);
+        table.add(backBtn).fillY().center().colspan(4);
+
         stage.addActor(table);
     }
 
@@ -197,7 +236,6 @@ public class SettingScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
-        skin.dispose();
+
     }
 }
