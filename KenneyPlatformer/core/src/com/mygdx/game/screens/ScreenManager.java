@@ -53,8 +53,8 @@ public class ScreenManager {
             case TITLE_SCREEN:
                 logger.info("Creating and Switching to TITLE_SCREEN");
                 return new TitleScreen(game);
-//            case GAME_SCREEN:
-//                return new GamePlayScreen(game);
+            case GAME_SCREEN:
+                return new GameScreen(game);
             case SETTING_SCREEN:
                 return new SettingScreen(game);
             default:

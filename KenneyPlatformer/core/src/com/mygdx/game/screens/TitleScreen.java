@@ -99,7 +99,9 @@ public class TitleScreen implements Screen {
         startGameBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                logger.info("Main Screen");
 
+                ScreenManager.getInstance().setScreen(ScreenManager.ScreenType.GAME_SCREEN);
             }
         });
 

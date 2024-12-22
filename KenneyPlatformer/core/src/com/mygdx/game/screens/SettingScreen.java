@@ -109,7 +109,7 @@ public class SettingScreen implements Screen {
         volumeSoundSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                GameConfig.getInstance().setMusicVolume(volumeSoundSlider.getValue());
+                GameConfig.getInstance().setSoundVolume(volumeSoundSlider.getValue());
                 return false;
             }
         });
@@ -139,7 +139,7 @@ public class SettingScreen implements Screen {
         soundOnOffCheck.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                GameConfig.getInstance().setMusicEnabled(soundOnOffCheck.isChecked());
+                GameConfig.getInstance().setSoundEnabled(soundOnOffCheck.isChecked());
                 return false;
             }
         });
