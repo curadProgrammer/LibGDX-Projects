@@ -15,7 +15,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(MyGdxGame game){
         this.game = game;
-        mapManager = new MapManager(this);
+        mapManager = new MapManager(this, game);
     }
 
     @Override

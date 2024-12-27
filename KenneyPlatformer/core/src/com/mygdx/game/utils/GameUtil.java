@@ -12,7 +12,7 @@ public class GameUtil {
     public static final float VIRTUAL_HEIGHT = 1080;
 
     public static List<String> getMapPaths(String folderPath){
-        FileHandle folder = Gdx.files.internal(folderPath)
+        FileHandle folder = Gdx.files.internal(folderPath);
 
         List<String> paths = new ArrayList<>();
 
