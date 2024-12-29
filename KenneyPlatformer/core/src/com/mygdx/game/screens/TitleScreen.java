@@ -43,13 +43,16 @@ public class TitleScreen implements Screen {
     private Label title;
     private TextButton startGameBtn, settingsBtn, exitBtn;
 
+    private final float TITLE_VIRTUAL_WIDTH = 1920;
+    private final float TITLE_VIRTUAL_HEIGHT = 1080;
+
 
     public TitleScreen(MyGdxGame game){
         logger.info("Constructor");
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
-        viewport = new StretchViewport(GameUtil.VIRTUAL_WIDTH, GameUtil.VIRTUAL_HEIGHT, camera);
+        viewport = new StretchViewport(TITLE_VIRTUAL_WIDTH, TITLE_VIRTUAL_HEIGHT, camera);
 
         stage = new Stage(viewport);
         stage.setDebugAll(false);
@@ -172,8 +175,8 @@ public class TitleScreen implements Screen {
                 bgTexture,
                 bgTextureXPos - 100,
                 -100,
-                GameUtil.VIRTUAL_WIDTH * 1.5f,
-                GameUtil.VIRTUAL_HEIGHT  * 1.5f
+                TITLE_VIRTUAL_WIDTH * 1.5f,
+                TITLE_VIRTUAL_HEIGHT  * 1.5f
         );
 
         game.spriteBatch.end();

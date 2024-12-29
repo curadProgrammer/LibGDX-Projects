@@ -8,8 +8,8 @@ import java.util.List;
 
 public class GameUtil {
     public static final float PPM = 100;
-    public static final float VIRTUAL_WIDTH = 1920;
-    public static final float VIRTUAL_HEIGHT = 1080;
+    public static final float VIRTUAL_WIDTH = 600;
+    public static final float VIRTUAL_HEIGHT = 300;
 
     public static List<String> getMapPaths(String folderPath){
         FileHandle folder = Gdx.files.internal(folderPath);

@@ -19,29 +19,36 @@ public class MapManager {
     private MyGdxGame game;
     private GameScreen gameScreen;
     private List<MapData> maps;
-    private MapData currentMap;
-    private MapRenderer mapRenderer;
+    private final MapRenderer mapRenderer;
 
     public MapManager(GameScreen gameScreen, MyGdxGame game){
         this.gameScreen = gameScreen;
         this.game = game;
         loadMaps();
+
+        mapRenderer = new MapRenderer(game, gameScreen);
     }
 
     // method to start at the first level
     public void start(){
-        currentMap = maps.get(0);
+        logger.info("Start");
+        mapRenderer.setCurrentMap(maps.get(0));
+    }
+
+    public void render(){
+        mapRenderer.render();
     }
 
     // todo create a method to load a specific level
 
 
-    // Note: to calculate the number of levels we will use the size of the mapPaths list
+    // creates multiple map data objects based on the number of map files in the levels directory
     private void loadMaps(){
-        // load map
         List<String> mapPaths = GameUtil.getMapPaths(Gdx.files.getLocalStoragePath() + "/levels");
+
         int levelCount = mapPaths.size();
         maps = new ArrayList<>(levelCount);
+
         for(int i = 0; i < levelCount; i++){
             String mapPath = mapPaths.get(i);
             MapData mapData = new MapData(i, mapPath);

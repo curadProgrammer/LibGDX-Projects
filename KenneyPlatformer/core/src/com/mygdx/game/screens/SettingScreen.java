@@ -45,13 +45,18 @@ public class SettingScreen implements Screen {
     private CheckBox musicOnOffCheck, soundOnOffCheck;
     private TextButton backBtn;
 
+    private final float SETTING_VIRTUAL_WIDTH = 1920;
+    private final float SETTING_VIRTUAL_HEIGHT = 1080;
+
     public SettingScreen(MyGdxGame game){
         logger.info("Constructor");
 
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
-        viewport = new StretchViewport(GameUtil.VIRTUAL_WIDTH, GameUtil.VIRTUAL_HEIGHT, camera);
+
+        // todo refactor
+        viewport = new StretchViewport(SETTING_VIRTUAL_WIDTH, SETTING_VIRTUAL_HEIGHT, camera);
         stage = new Stage(viewport);
         stage.setDebugAll(false);
 //        stage.setDebugTableUnderMouse(true);
@@ -202,8 +207,8 @@ public class SettingScreen implements Screen {
                 bgTexture,
                 bgTextureXPos - 100,
                 -100,
-                GameUtil.VIRTUAL_WIDTH * 1.5f,
-                GameUtil.VIRTUAL_HEIGHT  * 1.5f
+                SETTING_VIRTUAL_WIDTH * 1.5f,
+                SETTING_VIRTUAL_HEIGHT  * 1.5f
         );
         game.spriteBatch.setColor(1, 1, 1, 1f); // reset so that other textures are colored properly
         game.spriteBatch.end();

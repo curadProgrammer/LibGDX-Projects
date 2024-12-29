@@ -11,16 +11,17 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 public class ActionsUtil {
 
     // add action by making it go up and down
+    // todo refactor so that you aren't using static width and height sizes
     public static void addMovingUpDownAction(Actor actor){
         MoveToAction moveUpAction = new MoveToAction();
-        moveUpAction.setPosition(GameUtil.VIRTUAL_WIDTH / 2 - actor.getWidth() + 15,
-                GameUtil.VIRTUAL_HEIGHT - actor.getHeight() - 150);
+        moveUpAction.setPosition(1920 / 2f - actor.getWidth() + 15,
+                1080 - actor.getHeight() - 150);
         moveUpAction.setDuration(1);
         moveUpAction.setInterpolation(Interpolation.smooth);
 
         MoveToAction moveDownAction = new MoveToAction();
-        moveDownAction.setPosition(GameUtil.VIRTUAL_WIDTH / 2 - actor.getWidth() + 15,
-                GameUtil.VIRTUAL_HEIGHT - actor.getHeight() - 175);
+        moveDownAction.setPosition(1920 / 2f - actor.getWidth() + 15,
+                1080 - actor.getHeight() - 175);
         moveDownAction.setDuration(1);
         moveDownAction.setInterpolation(Interpolation.smooth);
 
