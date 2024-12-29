@@ -31,7 +31,7 @@ public class MapRenderer {
         logger.info("Setting Map Data");
 
         // Load map once when setting new map data
-        map = mapLoader.load("levels/test.tmx");
+        map = mapLoader.load(currentMap.getMapPath());
         mapRenderer = new OrthogonalTiledMapRenderer(map, 1/GameUtil.PPM);
     }
 

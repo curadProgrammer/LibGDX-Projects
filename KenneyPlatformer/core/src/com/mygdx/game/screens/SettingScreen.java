@@ -22,28 +22,24 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.assets.B2DAssetmanager;
 import com.mygdx.game.config.GameConfig;
-import com.mygdx.game.utils.GameUtil;
 
 public class SettingScreen implements Screen {
     private static final Logger logger = new com.badlogic.gdx.utils.Logger(Screen.class.toString(), Logger.DEBUG);
 
-    private MyGdxGame game;
-    private OrthographicCamera camera;
-    private Viewport viewport;
+    private final MyGdxGame game;
+    private final OrthographicCamera camera;
+    private final Viewport viewport;
 
     private Texture bgTexture;
     private float bgTextureElapsedTime;
     private float bgTextureXPos;
 
     // ui
-    private Stage stage;
-    private Table table;
-    private Skin skin;
+    private final Stage stage;
+    private final Skin skin;
 
-    private Label settingTitleLabel, volumeMusicLabel, volumeSoundLabel, musicOnOffLabel, soundOnOffLabel;
     private Slider volumeMusicSlider, volumeSoundSlider;
     private CheckBox musicOnOffCheck, soundOnOffCheck;
-    private TextButton backBtn;
 
     private final float SETTING_VIRTUAL_WIDTH = 1920;
     private final float SETTING_VIRTUAL_HEIGHT = 1080;
@@ -88,12 +84,12 @@ public class SettingScreen implements Screen {
         labelStyle.background = ninePatchDrawable;
 
         // labels
-        settingTitleLabel = new Label("Settings", labelStyle);
+        Label settingTitleLabel = new Label("Settings", labelStyle);
         settingTitleLabel.setFontScale(1.5f);
         settingTitleLabel.setAlignment(Align.center);
 
-        volumeMusicLabel = new Label("Music Volume:", labelStyle);
-        volumeSoundLabel = new Label("Sound Volume:", labelStyle);
+        Label volumeMusicLabel = new Label("Music Volume:", labelStyle);
+        Label volumeSoundLabel = new Label("Sound Volume:", labelStyle);
 
         // sliders
         volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
@@ -147,7 +143,7 @@ public class SettingScreen implements Screen {
         });
 
         // buttons
-        backBtn = new TextButton("Back", skin);
+        TextButton backBtn = new TextButton("Back", skin);
         backBtn.getLabel().setStyle(labelStyle);
         backBtn.addListener(new ClickListener(){
             @Override
@@ -157,7 +153,7 @@ public class SettingScreen implements Screen {
             }
         });
 
-        table = new Table();
+        Table table = new Table();
         table.setFillParent(true);
 
         table.setDebug(true);
@@ -238,6 +234,6 @@ public class SettingScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        stage.dispose();
     }
 }

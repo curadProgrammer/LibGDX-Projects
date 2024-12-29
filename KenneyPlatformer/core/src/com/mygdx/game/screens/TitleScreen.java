@@ -207,5 +207,6 @@ public class TitleScreen implements Screen {
     public void dispose() {
         // todo figure out a proper way to dispose
         // bgTexture.dispose();
+        stage.dispose();
     }
 }

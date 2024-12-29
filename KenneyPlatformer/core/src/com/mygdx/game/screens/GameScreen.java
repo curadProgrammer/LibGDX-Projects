@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -19,6 +21,8 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private Viewport viewport;
 
+    private World world;
+
     public GameScreen(MyGdxGame game){
         this.game = game;
         camera = new OrthographicCamera();
@@ -26,8 +30,12 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, viewport.getWorldWidth(), viewport.getWorldHeight());
         camera.position.set(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2, 0);
 
+        // todo change gravity later
+        world = new World(new Vector2(0, 0), true);
+
         mapManager = new MapManager(this, game);
         mapManager.start();
+
     }
 
     @Override
