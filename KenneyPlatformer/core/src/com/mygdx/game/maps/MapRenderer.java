@@ -43,6 +43,9 @@ public class MapRenderer {
         mapRenderer.render();
     }
 
+    public void renderPlatforms(){
+
+    }
 
 
     public TiledMap getMap() {
