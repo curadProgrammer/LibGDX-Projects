@@ -1,5 +1,6 @@
 package com.mygdx.game.screens;
 
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -7,9 +8,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.ecs.systems.PhysicsDebugSystem;
 import com.mygdx.game.maps.MapManager;
 import com.mygdx.game.utils.GameUtil;
 
@@ -22,6 +25,7 @@ public class GameScreen implements Screen {
     private Viewport viewport;
 
     private World world;
+    private PooledEngine engine;
 
     public GameScreen(MyGdxGame game){
         this.game = game;
@@ -32,6 +36,7 @@ public class GameScreen implements Screen {
 
         // todo change gravity later
         world = new World(new Vector2(0, 0), true);
+        engine = new PooledEngine();
 
         mapManager = new MapManager(this, game);
         mapManager.start();
@@ -40,7 +45,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
+        engine.addSystem(new PhysicsDebugSystem(this));
     }
 
     private void update(float delta){
@@ -54,6 +59,9 @@ public class GameScreen implements Screen {
         update(delta);
 
         mapManager.render();
+
+        // note: the engine has to update after the map renders
+        engine.update(delta);
     }
 
     @Override
@@ -87,5 +95,13 @@ public class GameScreen implements Screen {
 
     public Viewport getViewport() {
         return viewport;
+    }
+
+    public World getWorld(){
+        return world;
+    }
+
+    public PooledEngine getEngine(){
+        return engine;
     }
 }
