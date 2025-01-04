@@ -2,21 +2,35 @@ package com.mygdx.game.maps;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.objects.CircleMapObject;
+import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.Pool;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.assets.B2DAssetmanager;
+import com.mygdx.game.ecs.components.AnimationComponent;
 import com.mygdx.game.ecs.components.B2BodyComponent;
 import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.utils.GameUtil;
+
+import java.util.HashMap;
 
 /**
  * This class will be in charge of rendering a single map file
@@ -52,6 +66,7 @@ public class MapRenderer {
 
         // only when the map has been loaded should we render the platforms and other objs
         renderPlatforms();
+        renderEntities();
     }
 
     public void render(){
@@ -62,8 +77,9 @@ public class MapRenderer {
         mapRenderer.render();
     }
 
-    public void renderPlatforms(){
+    private void renderPlatforms(){
         logger.info("Rendering Platform Objects");
+
         // todo might place the names as config strings
         MapLayer platformLayer = map.getLayers().get("Platforms");
 
@@ -92,6 +108,70 @@ public class MapRenderer {
         }
     }
 
+    private void renderEntities(){
+        logger.info("Rendering Entities");
+
+        // todo might place the names as config strings
+        MapLayer entitiesLayer = map.getLayers().get("Entities");
+
+        // don't render platform if the map file doesn't have a platform layer
+        if(entitiesLayer == null) return;
+
+        for(EllipseMapObject object : entitiesLayer.getObjects().getByType(EllipseMapObject.class)) {
+            MapProperties properties = object.getProperties();
+            Entity entity = engine.createEntity();
+            Ellipse ellipse = object.getEllipse();
+
+            // check to see if the entity is the player entity
+            String isPlayerProperty = (String) properties.get("isPlayer");
+            if(isPlayerProperty != null){
+                renderPlayer(entity, ellipse);
+            }else{
+                // render others
+                renderOthers(entity);
+            }
+        }
+
+    }
+
+    private void renderPlayer(Entity playerEntity, Ellipse mapObject){
+        B2BodyComponent b2BodyComponent = engine.createComponent(B2BodyComponent.class);
+        AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
+
+        // create body with bodyfactory
+        b2BodyComponent.body = bodyFactory.makeVerticalPillBody(
+                GameUtil.convertToPPM(mapObject.x),
+                GameUtil.convertToPPM(mapObject.y),
+                GameUtil.convertToPPM(mapObject.width),
+                GameUtil.convertToPPM(mapObject.height),
+                BodyDef.BodyType.StaticBody,
+                true,
+                false
+        );
+
+        // add animations to player
+        Array<TextureRegion> frames = new Array<>();
+        animationComponent.animationMap = new HashMap<>();
+
+        // standing animation
+        frames.add(
+                new TextureRegion(
+                    ((TextureAtlas) B2DAssetmanager.getInstance()
+                            .assetManager.get(B2DAssetmanager.getInstance().charactersAtlasPath)).findRegion("tile", 0)
+                )
+        );
+
+        // todo figure out how to not include the time duration for the stand "animation"
+        animationComponent.animationMap.put("STAND", new Animation<TextureRegion>(10, frames));
+
+        playerEntity.add(animationComponent);
+        playerEntity.add(b2BodyComponent);
+        engine.addEntity(playerEntity);
+    }
+
+    private void renderOthers(Entity otherEntities){
+
+    }
 
     public TiledMap getMap() {
         return map;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="40" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="5">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="40" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="15">
  <tileset firstgid="1" source="tilemap-backgrounds_packed.tsx"/>
  <tileset firstgid="28" source="tilemap_packed.tsx"/>
  <layer id="1" name="Background" width="40" height="20">
@@ -52,5 +52,13 @@
  </layer>
  <objectgroup id="3" name="Platforms">
   <object id="2" x="0" y="240" width="160" height="80"/>
+ </objectgroup>
+ <objectgroup id="4" name="Entities">
+  <object id="11" x="18.6165" y="212.538" width="43.4385" height="20.5557">
+   <properties>
+    <property name="isPlayer" value=""/>
+   </properties>
+   <ellipse/>
+  </object>
  </objectgroup>
 </map>

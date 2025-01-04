@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
@@ -18,6 +19,7 @@ public class B2DAssetmanager {
 
     // images
     public String titleBgTexturePath = "ui/title-bg.png";
+    public String charactersAtlasPath = "characters/characters.atlas";
 
     // fonts (LARGE, MEDIUM, SMALL)
     public final String gamerFont = "fonts/Kenney Future.ttf";
@@ -45,6 +47,7 @@ public class B2DAssetmanager {
 
     public void queueAddImages() {
         assetManager.load(titleBgTexturePath, Texture.class);
+        assetManager.load(charactersAtlasPath, TextureAtlas.class);
     }
 
     public void queueAddSkin() {

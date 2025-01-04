@@ -1,5 +1,6 @@
 package com.mygdx.game.maps;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 /**
@@ -47,4 +48,37 @@ public class BodyFactory {
 
         return boxBody;
     }
+
+    public Body makeVerticalPillBody(float posx, float posy, float width, float height,
+                                     BodyDef.BodyType bodyType, boolean fixedRotation, boolean isSensor) {
+        BodyDef pillBodyDef = new BodyDef();
+        pillBodyDef.type = bodyType;
+        pillBodyDef.position.x = posx + (width / 2);
+        pillBodyDef.position.y = posy + (height / 2);
+        pillBodyDef.fixedRotation = fixedRotation;
+
+        Body pillBody = world.createBody(pillBodyDef);
+
+        // Create center rectangle
+        PolygonShape boxShape = new PolygonShape();
+        boxShape.setAsBox(width / 2, (height - width) / 2);
+        pillBody.createFixture(makeFixture(boxShape, isSensor));
+        boxShape.dispose();
+
+        // Create circles for rounded ends
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(width / 2);
+
+        // Bottom circle
+        circleShape.setPosition(new Vector2(0, -(height - width) / 2));
+        pillBody.createFixture(makeFixture(circleShape, isSensor));
+
+        // Top circle
+        circleShape.setPosition(new Vector2(0, (height - width) / 2));
+        pillBody.createFixture(makeFixture(circleShape, isSensor));
+        circleShape.dispose();
+
+        return pillBody;
+    }
+
 }

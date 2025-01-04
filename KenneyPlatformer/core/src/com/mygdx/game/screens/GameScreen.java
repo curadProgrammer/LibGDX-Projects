@@ -12,7 +12,9 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.ecs.systems.AnimationSystem;
 import com.mygdx.game.ecs.systems.PhysicsDebugSystem;
+import com.mygdx.game.ecs.systems.RenderingSystem;
 import com.mygdx.game.maps.MapManager;
 import com.mygdx.game.utils.GameUtil;
 
@@ -46,10 +48,15 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         engine.addSystem(new PhysicsDebugSystem(this));
+        engine.addSystem(new AnimationSystem());
+        engine.addSystem(new RenderingSystem(game));
     }
 
     private void update(float delta){
         camera.update();
+
+        // important
+        game.spriteBatch.setProjectionMatrix(camera.combined);
     }
 
     @Override
