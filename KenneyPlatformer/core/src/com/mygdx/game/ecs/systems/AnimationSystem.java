@@ -19,6 +19,5 @@ public class AnimationSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float v) {
         AnimationComponent animationComponent = animationComponentMapper.get(entity);
-        animationComponent.currentFrame = animationComponent.animationMap.get("STAND").getKeyFrame(v);
     }
 }

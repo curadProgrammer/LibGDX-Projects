@@ -54,7 +54,7 @@
   <object id="2" x="0" y="240" width="160" height="80"/>
  </objectgroup>
  <objectgroup id="4" name="Entities">
-  <object id="11" x="18.6165" y="212.538" width="43.4385" height="20.5557">
+  <object id="11" x="22.1066" y="195.473" width="8.14474" height="20.5557">
    <properties>
     <property name="isPlayer" value=""/>
    </properties>

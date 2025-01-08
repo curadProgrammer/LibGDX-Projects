@@ -10,14 +10,13 @@ import com.badlogic.gdx.utils.Logger;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.ecs.components.AnimationComponent;
 import com.mygdx.game.ecs.components.B2BodyComponent;
-import com.mygdx.game.maps.MapRenderer;
 import com.mygdx.game.utils.GameUtil;
 
 public class RenderingSystem extends IteratingSystem {
     private static final Logger logger = new Logger(RenderingSystem.class.toString(), Logger.DEBUG);
 
-    private ComponentMapper<B2BodyComponent> b2BodyComponentMapper = ComponentMapper.getFor(B2BodyComponent.class);
-    private ComponentMapper<AnimationComponent> animationComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
+    private final ComponentMapper<B2BodyComponent> b2BodyComponentMapper = ComponentMapper.getFor(B2BodyComponent.class);
+    private final ComponentMapper<AnimationComponent> animationComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
 
     private MyGdxGame game;
     public RenderingSystem(MyGdxGame game){
@@ -39,15 +38,15 @@ public class RenderingSystem extends IteratingSystem {
     }
 
     private void render(B2BodyComponent b2BodyComponent, AnimationComponent animationComponent, float delta){
-        logger.info("Rendering");
-
         // have to use texture region instead of texture (Not fully sure why though)
+        // todo might put this in a separate method
         TextureRegion currentFrame = animationComponent.currentFrame;
         float width = GameUtil.convertToPPM(currentFrame.getRegionWidth());
         float height = GameUtil.convertToPPM(currentFrame.getRegionHeight());
         float originX = width * 0.5f;
         float originY = height * 0.5f;
 
+        // update body
         game.spriteBatch.begin();
         game.spriteBatch.draw(
                 currentFrame,

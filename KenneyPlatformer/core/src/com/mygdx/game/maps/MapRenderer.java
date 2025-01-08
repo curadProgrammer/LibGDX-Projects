@@ -18,6 +18,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
@@ -138,17 +139,6 @@ public class MapRenderer {
         B2BodyComponent b2BodyComponent = engine.createComponent(B2BodyComponent.class);
         AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
 
-        // create body with bodyfactory
-        b2BodyComponent.body = bodyFactory.makeVerticalPillBody(
-                GameUtil.convertToPPM(mapObject.x),
-                GameUtil.convertToPPM(mapObject.y),
-                GameUtil.convertToPPM(mapObject.width),
-                GameUtil.convertToPPM(mapObject.height),
-                BodyDef.BodyType.StaticBody,
-                true,
-                false
-        );
-
         // add animations to player
         Array<TextureRegion> frames = new Array<>();
         animationComponent.animationMap = new HashMap<>();
@@ -156,13 +146,45 @@ public class MapRenderer {
         // standing animation
         frames.add(
                 new TextureRegion(
-                    ((TextureAtlas) B2DAssetmanager.getInstance()
-                            .assetManager.get(B2DAssetmanager.getInstance().charactersAtlasPath)).findRegion("tile", 0)
+                        ((TextureAtlas) B2DAssetmanager.getInstance()
+                                .assetManager.get(B2DAssetmanager.getInstance().charactersAtlasPath))
+                                .findRegion("tile", 1)
                 )
         );
 
-        // todo figure out how to not include the time duration for the stand "animation"
-        animationComponent.animationMap.put("STAND", new Animation<TextureRegion>(10, frames));
+        Animation<TextureRegion> standingAnimation = new Animation<>(0, frames);
+        standingAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+        frames.clear();
+
+        // starting texture is standing for the player
+        animationComponent.currentFrame = standingAnimation.getKeyFrame(0);
+        animationComponent.animationMap.put("STAND", standingAnimation);
+
+        // create body with bodyfactory
+        b2BodyComponent.body = bodyFactory.makeCirclePolyBody(
+                GameUtil.convertToPPM(mapObject.x),
+                GameUtil.convertToPPM(mapObject.y),
+                GameUtil.convertToPPM(animationComponent.currentFrame.getRegionWidth()/1.15f),
+                BodyDef.BodyType.DynamicBody,
+                true,
+                false
+        );
+
+        // add top edge (play with values)
+        bodyFactory.addEdgeShape(
+                b2BodyComponent.body,
+                new Vector2(-10/GameUtil.PPM, 12/GameUtil.PPM),
+                new Vector2(10/GameUtil.PPM, 12/GameUtil.PPM),
+                GameUtil.PLAYER_TOP
+        );
+
+        // add bottom edge
+        bodyFactory.addEdgeShape(
+                b2BodyComponent.body,
+                new Vector2(-10/GameUtil.PPM, -12/GameUtil.PPM),
+                new Vector2(10/GameUtil.PPM, -12/GameUtil.PPM),
+                GameUtil.PLAYER_BOTTOM
+        );
 
         playerEntity.add(animationComponent);
         playerEntity.add(b2BodyComponent);

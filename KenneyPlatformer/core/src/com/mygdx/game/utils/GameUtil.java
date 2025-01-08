@@ -11,6 +11,10 @@ public class GameUtil {
     public static final float VIRTUAL_WIDTH = 600;
     public static final float VIRTUAL_HEIGHT = 300;
 
+    // Game Bits (used for filtering box2d bodies)
+    public static final short PLAYER_TOP = 2;
+    public static final short PLAYER_BOTTOM = 4;
+
     public static List<String> getMapPaths(String folderPath){
         FileHandle folder = Gdx.files.internal(folderPath);
 

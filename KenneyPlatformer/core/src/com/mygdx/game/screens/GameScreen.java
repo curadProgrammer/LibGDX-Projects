@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.ecs.systems.AnimationSystem;
 import com.mygdx.game.ecs.systems.PhysicsDebugSystem;
+import com.mygdx.game.ecs.systems.PhysicsSystem;
 import com.mygdx.game.ecs.systems.RenderingSystem;
 import com.mygdx.game.maps.MapManager;
 import com.mygdx.game.utils.GameUtil;
@@ -31,13 +32,12 @@ public class GameScreen implements Screen {
 
     public GameScreen(MyGdxGame game){
         this.game = game;
-        camera = new OrthographicCamera();
+        camera = new OrthographicCamera(30, 50);
         viewport = new StretchViewport(GameUtil.getPPMWidth(), GameUtil.getPPMHeight(), camera);
         camera.setToOrtho(false, viewport.getWorldWidth(), viewport.getWorldHeight());
         camera.position.set(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2, 0);
 
-        // todo change gravity later
-        world = new World(new Vector2(0, 0), true);
+        world = new World(new Vector2(0, -20), true);
         engine = new PooledEngine();
 
         mapManager = new MapManager(this, game);
@@ -47,6 +47,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        engine.addSystem(new PhysicsSystem(world, engine));
         engine.addSystem(new PhysicsDebugSystem(this));
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new RenderingSystem(game));
@@ -55,7 +56,7 @@ public class GameScreen implements Screen {
     private void update(float delta){
         camera.update();
 
-        // important
+        // important to render sprites properly on screen
         game.spriteBatch.setProjectionMatrix(camera.combined);
     }
 

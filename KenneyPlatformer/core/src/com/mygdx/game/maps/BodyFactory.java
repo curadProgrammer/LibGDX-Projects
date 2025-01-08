@@ -19,14 +19,21 @@ public class BodyFactory {
     }
 
     // this method will be used by other methods to actually create the fixture for the Box2D world
-    private static FixtureDef makeFixture(Shape shape, boolean isSensor){
+    private FixtureDef makeFixture(Shape shape, boolean isSensor){
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-
-        // make fixture a sensor
-        if(isSensor) fixtureDef.isSensor = true;
+        fixtureDef.isSensor = isSensor;
 
         return fixtureDef;
+    }
+
+    private FixtureDef makeFixture(Shape shape, boolean isSensor, short filterBit){
+        FixtureDef fdef = new FixtureDef();
+        fdef.shape = shape;
+        fdef.filter.categoryBits = filterBit;
+        fdef.isSensor = isSensor;
+
+        return fdef;
     }
 
     // make a box shape box2d body
@@ -49,36 +56,30 @@ public class BodyFactory {
         return boxBody;
     }
 
-    public Body makeVerticalPillBody(float posx, float posy, float width, float height,
-                                     BodyDef.BodyType bodyType, boolean fixedRotation, boolean isSensor) {
-        BodyDef pillBodyDef = new BodyDef();
-        pillBodyDef.type = bodyType;
-        pillBodyDef.position.x = posx + (width / 2);
-        pillBodyDef.position.y = posy + (height / 2);
-        pillBodyDef.fixedRotation = fixedRotation;
+    public Body makeCirclePolyBody(float posx, float posy, float diameter,
+                                   BodyDef.BodyType bodyType, boolean fixedRotation, boolean isSensor){
+        BodyDef boxBodyDef = new BodyDef();
+        boxBodyDef.type = bodyType;
+        boxBodyDef.position.x = posx;
+        boxBodyDef.position.y = posy;
+        boxBodyDef.fixedRotation = fixedRotation;
 
-        Body pillBody = world.createBody(pillBodyDef);
-
-        // Create center rectangle
-        PolygonShape boxShape = new PolygonShape();
-        boxShape.setAsBox(width / 2, (height - width) / 2);
-        pillBody.createFixture(makeFixture(boxShape, isSensor));
-        boxShape.dispose();
-
-        // Create circles for rounded ends
+        Body boxBody = world.createBody(boxBodyDef);
         CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(width / 2);
-
-        // Bottom circle
-        circleShape.setPosition(new Vector2(0, -(height - width) / 2));
-        pillBody.createFixture(makeFixture(circleShape, isSensor));
-
-        // Top circle
-        circleShape.setPosition(new Vector2(0, (height - width) / 2));
-        pillBody.createFixture(makeFixture(circleShape, isSensor));
+        circleShape.setRadius(diameter /2);
+        boxBody.createFixture(makeFixture(circleShape, isSensor));
         circleShape.dispose();
-
-        return pillBody;
+        return boxBody;
     }
 
+    // method used to add edge shapes to body (default to sensor)
+    public void addEdgeShape(Body body, Vector2 start, Vector2 end, short bitFilter){
+        EdgeShape edgeShape = new EdgeShape();
+        edgeShape.set(start, end);
+
+        // todo might need to mask bits (so they don't collide with everything and only the ones we want)
+
+        body.createFixture(makeFixture(edgeShape, true, bitFilter)).setUserData(this);
+        edgeShape.dispose();
+    }
 }
