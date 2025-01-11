@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,10 +13,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MyGdxGame;
-import com.mygdx.game.ecs.systems.AnimationSystem;
-import com.mygdx.game.ecs.systems.PhysicsDebugSystem;
-import com.mygdx.game.ecs.systems.PhysicsSystem;
-import com.mygdx.game.ecs.systems.RenderingSystem;
+import com.mygdx.game.ecs.systems.*;
 import com.mygdx.game.maps.MapManager;
 import com.mygdx.game.utils.GameUtil;
 
@@ -26,9 +24,11 @@ public class GameScreen implements Screen {
     private MapManager mapManager;
     private OrthographicCamera camera;
     private Viewport viewport;
+    private InputMultiplexer inputMultiplexer;
 
     private World world;
     private PooledEngine engine;
+    private ControllerSystem controllerSystem;
 
     public GameScreen(MyGdxGame game){
         this.game = game;
@@ -42,15 +42,21 @@ public class GameScreen implements Screen {
 
         mapManager = new MapManager(this, game);
         mapManager.start();
-
+        inputMultiplexer = new InputMultiplexer();
     }
 
     @Override
     public void show() {
+        controllerSystem = new ControllerSystem(mapManager);
+
         engine.addSystem(new PhysicsSystem(world, engine));
         engine.addSystem(new PhysicsDebugSystem(this));
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new RenderingSystem(game));
+        engine.addSystem(controllerSystem);
+
+        inputMultiplexer.addProcessor(controllerSystem);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     private void update(float delta){
