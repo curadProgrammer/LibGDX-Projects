@@ -28,6 +28,7 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.assets.B2DAssetmanager;
 import com.mygdx.game.ecs.components.AnimationComponent;
 import com.mygdx.game.ecs.components.B2BodyComponent;
+import com.mygdx.game.ecs.components.ControllerComponent;
 import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.utils.GameUtil;
 
@@ -138,6 +139,7 @@ public class MapRenderer {
     private void renderPlayer(Entity playerEntity, Ellipse mapObject){
         B2BodyComponent b2BodyComponent = engine.createComponent(B2BodyComponent.class);
         AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
+        ControllerComponent controllerComponent = engine.createComponent(ControllerComponent.class);
 
         // add animations to player
         Array<TextureRegion> frames = new Array<>();
@@ -161,10 +163,11 @@ public class MapRenderer {
         animationComponent.animationMap.put("STAND", standingAnimation);
 
         // create body with bodyfactory
-        b2BodyComponent.body = bodyFactory.makeCirclePolyBody(
+        b2BodyComponent.body = bodyFactory.makeBoxPolyBody(
                 GameUtil.convertToPPM(mapObject.x),
                 GameUtil.convertToPPM(mapObject.y),
-                GameUtil.convertToPPM(animationComponent.currentFrame.getRegionWidth()/1.15f),
+                GameUtil.convertToPPM(animationComponent.currentFrame.getRegionWidth()/1.5f),
+                GameUtil.convertToPPM(animationComponent.currentFrame.getRegionHeight()/1.5f),
                 BodyDef.BodyType.DynamicBody,
                 true,
                 false
@@ -173,19 +176,20 @@ public class MapRenderer {
         // add top edge (play with values)
         bodyFactory.addEdgeShape(
                 b2BodyComponent.body,
-                new Vector2(-10/GameUtil.PPM, 12/GameUtil.PPM),
-                new Vector2(10/GameUtil.PPM, 12/GameUtil.PPM),
+                new Vector2(-8/GameUtil.PPM, 12/GameUtil.PPM),
+                new Vector2(8/GameUtil.PPM, 12/GameUtil.PPM),
                 GameUtil.PLAYER_TOP
         );
 
         // add bottom edge
         bodyFactory.addEdgeShape(
                 b2BodyComponent.body,
-                new Vector2(-10/GameUtil.PPM, -12/GameUtil.PPM),
-                new Vector2(10/GameUtil.PPM, -12/GameUtil.PPM),
+                new Vector2(-8/GameUtil.PPM, -12/GameUtil.PPM),
+                new Vector2(8/GameUtil.PPM, -12/GameUtil.PPM),
                 GameUtil.PLAYER_BOTTOM
         );
 
+        playerEntity.add(controllerComponent);
         playerEntity.add(animationComponent);
         playerEntity.add(b2BodyComponent);
         engine.addEntity(playerEntity);

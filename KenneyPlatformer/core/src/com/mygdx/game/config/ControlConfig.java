@@ -1,6 +1,7 @@
 package com.mygdx.game.config;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 
 /**
@@ -39,42 +40,42 @@ public class ControlConfig {
     }
 
     // default key to go left will be A
-    public String getPrefLeftKey(){
-        return getPrefs().getString(PREF_LEFT_KEY, "A");
+    public Integer getPrefLeftKey(){
+        return getPrefs().getInteger(PREF_LEFT_KEY, Input.Keys.A);
     }
 
-    public void setPrefLeftKey(String leftKey){
-        getPrefs().putString(PREF_LEFT_KEY, leftKey);
+    public void setPrefLeftKey(Integer leftKey){
+        getPrefs().putInteger(PREF_LEFT_KEY, leftKey);
         getPrefs().flush();
     }
 
     // default key to go right will be D
-    public String getPrefRightKey(){
-        return getPrefs().getString(PREF_RIGHT_KEY, "D");
+    public Integer getPrefRightKey(){
+        return getPrefs().getInteger(PREF_RIGHT_KEY, Input.Keys.D);
     }
 
-    public void setPrefRightKey(String rightKey){
-        getPrefs().putString(PREF_RIGHT_KEY, rightKey);
+    public void setPrefRightKey(Integer rightKey){
+        getPrefs().putInteger(PREF_RIGHT_KEY, rightKey);
         getPrefs().flush();
     }
 
     // default key to go up will be W
-    public String getPrefUpKey(){
-        return getPrefs().getString(PREF_UP_KEY, "W");
+    public Integer getPrefUpKey(){
+        return getPrefs().getInteger(PREF_UP_KEY, Input.Keys.W);
     }
 
-    public void setPrefUpKey(String upKey){
-        getPrefs().putString(PREF_UP_KEY, upKey);
+    public void setPrefUpKey(Integer upKey){
+        getPrefs().putInteger(PREF_UP_KEY, upKey);
         getPrefs().flush();
     }
 
     // default key to jump will be space
-    public String getPrefJumpKey(){
-        return getPrefs().getString(PREF_UP_KEY, "SPACE");
+    public Integer getPrefJumpKey(){
+        return getPrefs().getInteger(PREF_JUMP_KEY, Input.Keys.SPACE);
     }
 
-    public void setPrefJumpKey(String jumpKey){
-        getPrefs().putString(PREF_UP_KEY, jumpKey);
+    public void setPrefJumpKey(Integer jumpKey){
+        getPrefs().putInteger(PREF_JUMP_KEY, jumpKey);
         getPrefs().flush();
     }
 
