@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.ecs.systems.*;
+import com.mygdx.game.ecs.systems.states.MovementStateSystem;
 import com.mygdx.game.maps.MapManager;
 import com.mygdx.game.utils.GameUtil;
 
@@ -52,6 +53,10 @@ public class GameScreen implements Screen {
         engine.addSystem(new PhysicsDebugSystem(this));
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new RenderingSystem(game));
+
+        // states
+        engine.addSystem(new MovementStateSystem());
+
         engine.addSystem(controllerSystem);
 
         inputMultiplexer.addProcessor(controllerSystem);

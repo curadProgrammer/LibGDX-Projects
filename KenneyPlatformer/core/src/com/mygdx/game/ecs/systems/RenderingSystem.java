@@ -12,6 +12,11 @@ import com.mygdx.game.ecs.components.AnimationComponent;
 import com.mygdx.game.ecs.components.B2BodyComponent;
 import com.mygdx.game.utils.GameUtil;
 
+/**
+ *  Notes:
+ *  1. I think this system will process when the texture should be flipped as we have access to the b2body
+ *
+ */
 public class RenderingSystem extends IteratingSystem {
     private static final Logger logger = new Logger(RenderingSystem.class.toString(), Logger.DEBUG);
 
@@ -41,6 +46,13 @@ public class RenderingSystem extends IteratingSystem {
         // have to use texture region instead of texture (Not fully sure why though)
         // todo might put this in a separate method
         TextureRegion currentFrame = animationComponent.currentFrame;
+
+        // todo make this better
+        if(animationComponent.isFlip){
+            currentFrame.flip(true, false);
+            animationComponent.isFlip = false;
+        }
+
         float width = GameUtil.convertToPPM(currentFrame.getRegionWidth());
         float height = GameUtil.convertToPPM(currentFrame.getRegionHeight());
         float originX = width * 0.5f;
