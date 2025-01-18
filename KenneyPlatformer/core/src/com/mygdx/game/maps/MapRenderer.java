@@ -29,6 +29,7 @@ import com.mygdx.game.assets.B2DAssetmanager;
 import com.mygdx.game.ecs.components.AnimationComponent;
 import com.mygdx.game.ecs.components.B2BodyComponent;
 import com.mygdx.game.ecs.components.ControllerComponent;
+import com.mygdx.game.ecs.components.StatsComponent;
 import com.mygdx.game.ecs.components.states.MovementStateComponent;
 import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.utils.GameUtil;
@@ -141,6 +142,7 @@ public class MapRenderer {
         B2BodyComponent b2BodyComponent = engine.createComponent(B2BodyComponent.class);
         AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
         ControllerComponent controllerComponent = engine.createComponent(ControllerComponent.class);
+        StatsComponent statsComponent = engine.createComponent(StatsComponent.class);
 
         // states
         MovementStateComponent movementStateComponent = new MovementStateComponent();
@@ -196,6 +198,7 @@ public class MapRenderer {
         // states
         playerEntity.add(movementStateComponent);
 
+        playerEntity.add(statsComponent);
         playerEntity.add(controllerComponent);
         playerEntity.add(animationComponent);
         playerEntity.add(b2BodyComponent);

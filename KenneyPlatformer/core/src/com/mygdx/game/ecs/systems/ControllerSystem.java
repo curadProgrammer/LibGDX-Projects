@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Logger;
 import com.mygdx.game.ecs.components.B2BodyComponent;
 import com.mygdx.game.ecs.components.ControllerComponent;
+import com.mygdx.game.ecs.components.StatsComponent;
 import com.mygdx.game.maps.MapManager;
 import com.mygdx.game.config.ControlConfig;
 import com.mygdx.game.utils.GameUtil;
@@ -23,42 +24,39 @@ public class ControllerSystem extends IteratingSystem implements InputProcessor 
 
     private ComponentMapper<ControllerComponent> controllerComponentMapper = ComponentMapper.getFor(ControllerComponent.class);
     private ComponentMapper<B2BodyComponent> b2BodyComponentMapper = ComponentMapper.getFor(B2BodyComponent.class);
-
-    // todo will also process the user's statcomponent so that we can control their max speed for now we will use a contant value
-    // todo refactor this and put it in a component (StatsComponent)
-    private final float xVelocity = 100 / GameUtil.PPM;
-    private final float yVelocity = 100 / GameUtil.PPM;
+    private ComponentMapper<StatsComponent> statsComponentMapper = ComponentMapper.getFor(StatsComponent.class);
 
     // todo will also need to get animation component so that we can face the texture the right way
     public ControllerSystem(MapManager mapManager){
-        super(Family.all(ControllerComponent.class, B2BodyComponent.class).get());
+        super(Family.all(ControllerComponent.class, B2BodyComponent.class, StatsComponent.class).get());
     }
 
     @Override
     protected void processEntity(Entity entity, float v) {
         ControllerComponent controllerComponent = controllerComponentMapper.get(entity);
         B2BodyComponent b2BodyComponent = b2BodyComponentMapper.get(entity);
+        StatsComponent statsComponent = statsComponentMapper.get(entity);
 
         // todo refactor (this is used to prevent sliding)
         b2BodyComponent.body.setLinearDamping(10f);
 
         // Note: using separate if statements (not else-if) to handle multiple simultaneous inputs
         if(controllerComponent.left){
-            if(b2BodyComponent.body.getLinearVelocity().x >= -xVelocity){
-                b2BodyComponent.body.applyLinearImpulse(new Vector2(-xVelocity, 0), b2BodyComponent.body.getWorldCenter(), true);
+            if(b2BodyComponent.body.getLinearVelocity().x >= -statsComponent.xVelocity){
+                b2BodyComponent.body.applyLinearImpulse(new Vector2(-statsComponent.xVelocity, 0), b2BodyComponent.body.getWorldCenter(), true);
             }
         }
 
         if(controllerComponent.right){
-            if(b2BodyComponent.body.getLinearVelocity().x <= xVelocity){
-                b2BodyComponent.body.applyLinearImpulse(new Vector2(xVelocity, 0), b2BodyComponent.body.getWorldCenter(), true);
+            if(b2BodyComponent.body.getLinearVelocity().x <= statsComponent.xVelocity){
+                b2BodyComponent.body.applyLinearImpulse(new Vector2(statsComponent.xVelocity, 0), b2BodyComponent.body.getWorldCenter(), true);
             }
         }
 
         if(controllerComponent.up || controllerComponent.space){
             // todo will need to figure out how access the canJump so that the user can't jump all the time
             b2BodyComponent.body.applyLinearImpulse(new Vector2(0
-                    , yVelocity), b2BodyComponent.body.getWorldCenter(), true);
+                    , statsComponent.yVelocity), b2BodyComponent.body.getWorldCenter(), true);
         }
 
     }
