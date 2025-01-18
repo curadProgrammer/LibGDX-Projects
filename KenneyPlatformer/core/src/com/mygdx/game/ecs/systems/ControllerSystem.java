@@ -25,7 +25,9 @@ public class ControllerSystem extends IteratingSystem implements InputProcessor 
     private ComponentMapper<B2BodyComponent> b2BodyComponentMapper = ComponentMapper.getFor(B2BodyComponent.class);
 
     // todo will also process the user's statcomponent so that we can control their max speed for now we will use a contant value
+    // todo refactor this and put it in a component (StatsComponent)
     private final float xVelocity = 100 / GameUtil.PPM;
+    private final float yVelocity = 100 / GameUtil.PPM;
 
     // todo will also need to get animation component so that we can face the texture the right way
     public ControllerSystem(MapManager mapManager){
@@ -53,12 +55,10 @@ public class ControllerSystem extends IteratingSystem implements InputProcessor 
             }
         }
 
-        if(controllerComponent.up){
-
-        }
-
-        if(controllerComponent.space){
-
+        if(controllerComponent.up || controllerComponent.space){
+            // todo will need to figure out how access the canJump so that the user can't jump all the time
+            b2BodyComponent.body.applyLinearImpulse(new Vector2(0
+                    , yVelocity), b2BodyComponent.body.getWorldCenter(), true);
         }
 
     }
