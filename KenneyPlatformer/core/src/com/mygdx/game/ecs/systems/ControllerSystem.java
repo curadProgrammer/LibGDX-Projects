@@ -11,9 +11,9 @@ import com.badlogic.gdx.utils.Logger;
 import com.mygdx.game.ecs.components.B2BodyComponent;
 import com.mygdx.game.ecs.components.ControllerComponent;
 import com.mygdx.game.ecs.components.StatsComponent;
+import com.mygdx.game.ecs.components.states.MovementStateComponent;
 import com.mygdx.game.maps.MapManager;
 import com.mygdx.game.config.ControlConfig;
-import com.mygdx.game.utils.GameUtil;
 
 /**
  *  This class will be in charge of updating the box2d position for those that have the controller component
@@ -25,6 +25,7 @@ public class ControllerSystem extends IteratingSystem implements InputProcessor 
     private ComponentMapper<ControllerComponent> controllerComponentMapper = ComponentMapper.getFor(ControllerComponent.class);
     private ComponentMapper<B2BodyComponent> b2BodyComponentMapper = ComponentMapper.getFor(B2BodyComponent.class);
     private ComponentMapper<StatsComponent> statsComponentMapper = ComponentMapper.getFor(StatsComponent.class);
+    private ComponentMapper<MovementStateComponent> movementStateComponentMapper = ComponentMapper.getFor(MovementStateComponent.class);
 
     // todo will also need to get animation component so that we can face the texture the right way
     public ControllerSystem(MapManager mapManager){
@@ -36,27 +37,29 @@ public class ControllerSystem extends IteratingSystem implements InputProcessor 
         ControllerComponent controllerComponent = controllerComponentMapper.get(entity);
         B2BodyComponent b2BodyComponent = b2BodyComponentMapper.get(entity);
         StatsComponent statsComponent = statsComponentMapper.get(entity);
+        MovementStateComponent movementStateComponent = movementStateComponentMapper.get(entity);
 
         // todo refactor (this is used to prevent sliding)
         b2BodyComponent.body.setLinearDamping(10f);
 
         // Note: using separate if statements (not else-if) to handle multiple simultaneous inputs
         if(controllerComponent.left){
-            if(b2BodyComponent.body.getLinearVelocity().x >= -statsComponent.xVelocity){
-                b2BodyComponent.body.applyLinearImpulse(new Vector2(-statsComponent.xVelocity, 0), b2BodyComponent.body.getWorldCenter(), true);
+            if(b2BodyComponent.body.getLinearVelocity().x >= -statsComponent.xSpeed){
+                b2BodyComponent.body.applyLinearImpulse(new Vector2(-statsComponent.xSpeed, 0), b2BodyComponent.body.getWorldCenter(), true);
             }
         }
 
         if(controllerComponent.right){
-            if(b2BodyComponent.body.getLinearVelocity().x <= statsComponent.xVelocity){
-                b2BodyComponent.body.applyLinearImpulse(new Vector2(statsComponent.xVelocity, 0), b2BodyComponent.body.getWorldCenter(), true);
+            if(b2BodyComponent.body.getLinearVelocity().x <= statsComponent.xSpeed){
+                b2BodyComponent.body.applyLinearImpulse(new Vector2(statsComponent.xSpeed, 0), b2BodyComponent.body.getWorldCenter(), true);
             }
         }
 
         if(controllerComponent.up || controllerComponent.space){
-            // todo will need to figure out how access the canJump so that the user can't jump all the time
+            if(!movementStateComponent.canJump) return;
+
             b2BodyComponent.body.applyLinearImpulse(new Vector2(0
-                    , statsComponent.yVelocity), b2BodyComponent.body.getWorldCenter(), true);
+                    , statsComponent.ySpeed), b2BodyComponent.body.getWorldCenter(), true);
         }
 
     }
