@@ -55,13 +55,29 @@ public class ControllerSystem extends IteratingSystem implements InputProcessor 
             }
         }
 
-        if(controllerComponent.up || controllerComponent.space){
-            if(!movementStateComponent.canJump) return;
-
-            b2BodyComponent.body.applyLinearImpulse(new Vector2(0
-                    , statsComponent.ySpeed), b2BodyComponent.body.getWorldCenter(), true);
+        if(movementStateComponent.isGrounded){
+            movementStateComponent.coyoteTimer = movementStateComponent.coyoteTime;
+        }else{
+            movementStateComponent.coyoteTimer -= v;
         }
 
+        if(controllerComponent.up || controllerComponent.space){
+            movementStateComponent.jumpBufferCounter = movementStateComponent.jumpBufferTime;
+        }else{
+            movementStateComponent.jumpBufferCounter -= v;
+        }
+
+        if(movementStateComponent.coyoteTimer > 0f && (controllerComponent.up || controllerComponent.space)){
+//            if(!movementStateComponent.canJump) return;
+            b2BodyComponent.body.applyLinearImpulse(new Vector2(0,
+                     statsComponent.yJumpSpeed), b2BodyComponent.body.getWorldCenter(), true);
+        }
+
+        if((controllerComponent.up || controllerComponent.space) && b2BodyComponent.body.getLinearVelocity().y > 0f){
+            b2BodyComponent.body.setLinearVelocity(b2BodyComponent.body.getLinearVelocity().x,
+                    b2BodyComponent.body.getLinearVelocity().y * 0.5f);
+            movementStateComponent.coyoteTimer = 0f;
+        }
     }
 
     @Override

@@ -5,10 +5,14 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Logger;
 import com.mygdx.game.ecs.components.B2BodyComponent;
 import com.mygdx.game.ecs.components.states.MovementStateComponent;
+import com.mygdx.game.ecs.systems.ControllerSystem;
 
 public class MovementStateSystem extends IteratingSystem {
+    private static final Logger logger = new Logger(MovementStateSystem.class.toString(), Logger.DEBUG);
+
     private final ComponentMapper<MovementStateComponent> movementStateComponentMapper = ComponentMapper.getFor(MovementStateComponent.class);
     private final ComponentMapper<B2BodyComponent> b2BodyComponentMapper = ComponentMapper.getFor(B2BodyComponent.class);
 
@@ -20,7 +24,6 @@ public class MovementStateSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float v) {
         MovementStateComponent movementStateComponent = movementStateComponentMapper.get(entity);
         B2BodyComponent b2BodyComponent = b2BodyComponentMapper.get(entity);
-
         Body entityB2Body = b2BodyComponent.body;
 
         if(entityB2Body.getLinearVelocity().x != 0){
@@ -31,15 +34,18 @@ public class MovementStateSystem extends IteratingSystem {
 
         if(entityB2Body.getLinearVelocity().y > 0){
             movementStateComponent.currentState = MovementStateComponent.MovementState.JUMPING;
+            movementStateComponent.isGrounded = false;
             movementStateComponent.canJump = false;
         }else if(entityB2Body.getLinearVelocity().y < 0) {
             movementStateComponent.currentState = MovementStateComponent.MovementState.FALLING;
-            movementStateComponent.canJump = false;
+            movementStateComponent.isGrounded = false;
         }else{
             // they are not currently jumping or falling
             movementStateComponent.canJump = true;
+            movementStateComponent.isGrounded = true;
         }
 
+        logger.info("IsGrounded: " + movementStateComponent.isGrounded);
         System.out.println(movementStateComponent.currentState);
     }
 }

@@ -32,6 +32,8 @@ public class MapManager {
     // method to start at the first level
     public void start(){
         logger.info("Start");
+
+        // todo name your levels numerically
         mapRenderer.setCurrentMap(maps.get(0));
     }
 
