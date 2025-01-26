@@ -67,17 +67,17 @@ public class ControllerSystem extends IteratingSystem implements InputProcessor 
             movementStateComponent.jumpBufferCounter -= v;
         }
 
-        if(movementStateComponent.coyoteTimer > 0f && (controllerComponent.up || controllerComponent.space)){
-//            if(!movementStateComponent.canJump) return;
-            b2BodyComponent.body.applyLinearImpulse(new Vector2(0,
-                     statsComponent.yJumpSpeed), b2BodyComponent.body.getWorldCenter(), true);
+        if(movementStateComponent.coyoteTimer > 0f && movementStateComponent.jumpBufferCounter > 0f){
+            b2BodyComponent.body.setLinearVelocity(b2BodyComponent.body.getLinearVelocity().x,
+                    statsComponent.yJumpSpeed);
+            movementStateComponent.jumpBufferCounter = 0;
         }
 
-        if((controllerComponent.up || controllerComponent.space) && b2BodyComponent.body.getLinearVelocity().y > 0f){
-            b2BodyComponent.body.setLinearVelocity(b2BodyComponent.body.getLinearVelocity().x,
-                    b2BodyComponent.body.getLinearVelocity().y * 0.5f);
-            movementStateComponent.coyoteTimer = 0f;
-        }
+//        if(b2BodyComponent.body.getLinearVelocity().y > 0f && (controllerComponent.up || controllerComponent.space)){
+//            b2BodyComponent.body.setLinearVelocity(b2BodyComponent.body.getLinearVelocity().x,
+//                    b2BodyComponent.body.getLinearVelocity().y * 0.5f);
+//            movementStateComponent.coyoteTimer = 0f;
+//        }
     }
 
     @Override

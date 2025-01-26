@@ -14,10 +14,9 @@ public class MovementStateComponent implements Component, Pool.Poolable {
     }
 
     public MovementState currentState = MovementState.IDLE;
-    public boolean canJump = true;
     public boolean isGrounded = true;
 
-    public final float coyoteTime = 0.1f; // 200 milliseconds grace period
+    public final float coyoteTime = 0.1f; // 100 milliseconds grace period
     public float coyoteTimer = 0;
 
     public final float jumpBufferTime = 0.1f;
@@ -29,6 +28,5 @@ public class MovementStateComponent implements Component, Pool.Poolable {
         coyoteTimer = 0;
         isGrounded = true;
         jumpBufferCounter = 0;
-        canJump = true;
     }
 }
