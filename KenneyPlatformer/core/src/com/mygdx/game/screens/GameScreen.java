@@ -38,6 +38,10 @@ public class GameScreen implements Screen {
         camera.position.set(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2, 0);
 
         world = new World(new Vector2(0, -20), true);
+
+        // lessens sliding on box2d bodies
+        World.setVelocityThreshold(0);
+
         engine = new PooledEngine();
 
         mapManager = new MapManager(this, game);
@@ -50,7 +54,7 @@ public class GameScreen implements Screen {
         controllerSystem = new ControllerSystem(mapManager);
 
         engine.addSystem(new PhysicsSystem(world, engine));
-        engine.addSystem(new PhysicsDebugSystem(this));
+//        engine.addSystem(new PhysicsDebugSystem(this));
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new RenderingSystem(game));
 

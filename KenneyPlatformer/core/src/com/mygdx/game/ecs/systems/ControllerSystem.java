@@ -40,21 +40,25 @@ public class ControllerSystem extends IteratingSystem implements InputProcessor 
         MovementStateComponent movementStateComponent = movementStateComponentMapper.get(entity);
 
         // todo refactor (this is used to prevent sliding)
-        b2BodyComponent.body.setLinearDamping(10f);
+//        b2BodyComponent.body.setLinearDamping(10f);
 
         // Note: using separate if statements (not else-if) to handle multiple simultaneous inputs
         if(controllerComponent.left){
-            if(b2BodyComponent.body.getLinearVelocity().x >= -statsComponent.xSpeed){
-                b2BodyComponent.body.applyLinearImpulse(new Vector2(-statsComponent.xSpeed, 0), b2BodyComponent.body.getWorldCenter(), true);
-            }
+//            if(b2BodyComponent.body.getLinearVelocity().x >= -statsComponent.xSpeed){
+//                b2BodyComponent.body.applyLinearImpulse(new Vector2(-statsComponent.xSpeed, 0), b2BodyComponent.body.getWorldCenter(), true);
+//            }
+            b2BodyComponent.body.setLinearVelocity(new Vector2(-statsComponent.xSpeed, b2BodyComponent.body.getLinearVelocity().y));
         }
 
         if(controllerComponent.right){
-            if(b2BodyComponent.body.getLinearVelocity().x <= statsComponent.xSpeed){
-                b2BodyComponent.body.applyLinearImpulse(new Vector2(statsComponent.xSpeed, 0), b2BodyComponent.body.getWorldCenter(), true);
-            }
+//            if(b2BodyComponent.body.getLinearVelocity().x <= statsComponent.xSpeed){
+//                b2BodyComponent.body.applyLinearImpulse(new Vector2(statsComponent.xSpeed, 0), b2BodyComponent.body.getWorldCenter(), true);
+//            }
+            b2BodyComponent.body.setLinearVelocity(new Vector2(statsComponent.xSpeed, b2BodyComponent.body.getLinearVelocity().y));
+
         }
 
+        // todo refactor (I'm thinking of putting this in a separate method)
         if(movementStateComponent.isGrounded){
             movementStateComponent.coyoteTimer = movementStateComponent.coyoteTime;
         }else{
