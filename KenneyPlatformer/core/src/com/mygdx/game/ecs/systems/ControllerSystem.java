@@ -74,6 +74,7 @@ public class ControllerSystem extends IteratingSystem implements InputProcessor 
         if(movementStateComponent.coyoteTimer > 0f && movementStateComponent.jumpBufferCounter > 0f){
             b2BodyComponent.body.setLinearVelocity(b2BodyComponent.body.getLinearVelocity().x,
                     statsComponent.yJumpSpeed);
+
             movementStateComponent.jumpBufferCounter = 0;
         }
 

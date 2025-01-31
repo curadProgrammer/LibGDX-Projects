@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.ecs.systems.*;
 import com.mygdx.game.ecs.systems.states.MovementStateSystem;
+import com.mygdx.game.listeners.B2dContactListener;
 import com.mygdx.game.maps.MapManager;
 import com.mygdx.game.utils.GameUtil;
 
@@ -37,10 +38,10 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, viewport.getWorldWidth(), viewport.getWorldHeight());
         camera.position.set(viewport.getWorldWidth()/2, viewport.getWorldHeight()/2, 0);
 
-        world = new World(new Vector2(0, -20), true);
-
         // lessens sliding on box2d bodies
         World.setVelocityThreshold(0);
+        world = new World(new Vector2(0, -20), true);
+        world.setContactListener(new B2dContactListener());
 
         engine = new PooledEngine();
 
@@ -54,7 +55,7 @@ public class GameScreen implements Screen {
         controllerSystem = new ControllerSystem(mapManager);
 
         engine.addSystem(new PhysicsSystem(world, engine));
-//        engine.addSystem(new PhysicsDebugSystem(this));
+        engine.addSystem(new PhysicsDebugSystem(this));
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new RenderingSystem(game));
 

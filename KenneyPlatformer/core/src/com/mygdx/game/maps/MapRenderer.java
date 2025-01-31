@@ -105,7 +105,9 @@ public class MapRenderer {
                     GameUtil.convertToPPM(rect.height),
                     BodyDef.BodyType.StaticBody,
                     true,
-                    false);
+                    false,
+                    0
+            );
 
             platformBlockEntity.add(b2BodyComponent);
             engine.addEntity(platformBlockEntity);
@@ -176,8 +178,10 @@ public class MapRenderer {
                 GameUtil.convertToPPM(animationComponent.currentFrame.getRegionHeight()/1.5f),
                 BodyDef.BodyType.DynamicBody,
                 true,
-                false
+                false,
+                0
         );
+
 
         // add top edge (play with values)
         bodyFactory.addEdgeShape(
@@ -200,7 +204,7 @@ public class MapRenderer {
 
         playerEntity.add(statsComponent);
         playerEntity.add(controllerComponent);
-        playerEntity.add(animationComponent);
+//        playerEntity.add(animationComponent);
         playerEntity.add(b2BodyComponent);
         engine.addEntity(playerEntity);
     }

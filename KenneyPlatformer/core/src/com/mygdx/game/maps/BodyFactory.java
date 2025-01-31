@@ -19,14 +19,16 @@ public class BodyFactory {
     }
 
     // this method will be used by other methods to actually create the fixture for the Box2D world
-    private FixtureDef makeFixture(Shape shape, boolean isSensor){
+    private FixtureDef makeFixture(Shape shape, boolean isSensor, float restitution){
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.isSensor = isSensor;
+        fixtureDef.restitution = restitution;
 
         return fixtureDef;
     }
 
+    // used by edges
     private FixtureDef makeFixture(Shape shape, boolean isSensor, short filterBit){
         FixtureDef fdef = new FixtureDef();
         fdef.shape = shape;
@@ -38,7 +40,7 @@ public class BodyFactory {
 
     // make a box shape box2d body
     public Body makeBoxPolyBody(float posx, float posy, float width, float height,
-                                BodyDef.BodyType bodyType, boolean fixedRotation, boolean isSensor){
+                                BodyDef.BodyType bodyType, boolean fixedRotation, boolean isSensor, float restitution){
         // create a definition
         BodyDef boxBodyDef = new BodyDef();
         boxBodyDef.type = bodyType;
@@ -50,7 +52,7 @@ public class BodyFactory {
         Body boxBody = world.createBody(boxBodyDef);
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width / 2, height / 2);
-        boxBody.createFixture(makeFixture(poly, isSensor));
+        boxBody.createFixture(makeFixture(poly, isSensor, restitution));
         poly.dispose();
 
         return boxBody;
@@ -67,7 +69,7 @@ public class BodyFactory {
         Body boxBody = world.createBody(boxBodyDef);
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(diameter /2);
-        boxBody.createFixture(makeFixture(circleShape, isSensor));
+        boxBody.createFixture(makeFixture(circleShape, isSensor, 0));
         circleShape.dispose();
         return boxBody;
     }
