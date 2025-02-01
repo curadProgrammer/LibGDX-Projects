@@ -46,6 +46,6 @@ public class MovementStateSystem extends IteratingSystem {
 //        }
 
         logger.info("IsGrounded: " + movementStateComponent.isGrounded);
-        logger.info(String.valueOf(movementStateComponent.currentState));
+//        logger.info(String.valueOf(movementStateComponent.currentState));
     }
 }

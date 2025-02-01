@@ -19,7 +19,7 @@ public class BodyFactory {
     }
 
     // this method will be used by other methods to actually create the fixture for the Box2D world
-    private FixtureDef makeFixture(Shape shape, boolean isSensor, float restitution){
+    private FixtureDef makeFixture(Shape shape, boolean isSensor, float restitution, short filterBit){
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.isSensor = isSensor;
@@ -29,10 +29,18 @@ public class BodyFactory {
     }
 
     // used by edges
-    private FixtureDef makeFixture(Shape shape, boolean isSensor, short filterBit){
+    private FixtureDef makeFixture(Shape shape, boolean isSensor, short filterBit, short ...maskFilters){
         FixtureDef fdef = new FixtureDef();
         fdef.shape = shape;
         fdef.filter.categoryBits = filterBit;
+
+        // Combine all mask bits using bitwise OR
+        short combinedMask = 0;
+        for (short mask : maskFilters) {
+            combinedMask |= mask;
+        }
+        fdef.filter.maskBits = combinedMask;
+
         fdef.isSensor = isSensor;
 
         return fdef;
@@ -40,7 +48,8 @@ public class BodyFactory {
 
     // make a box shape box2d body
     public Body makeBoxPolyBody(float posx, float posy, float width, float height,
-                                BodyDef.BodyType bodyType, boolean fixedRotation, boolean isSensor, float restitution){
+                                BodyDef.BodyType bodyType, boolean fixedRotation, boolean isSensor, float restitution,
+                                short filterBit){
         // create a definition
         BodyDef boxBodyDef = new BodyDef();
         boxBodyDef.type = bodyType;
@@ -52,30 +61,30 @@ public class BodyFactory {
         Body boxBody = world.createBody(boxBodyDef);
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width / 2, height / 2);
-        boxBody.createFixture(makeFixture(poly, isSensor, restitution));
+        boxBody.createFixture(makeFixture(poly, isSensor, restitution, filterBit));
         poly.dispose();
 
         return boxBody;
     }
 
-    public Body makeCirclePolyBody(float posx, float posy, float diameter,
-                                   BodyDef.BodyType bodyType, boolean fixedRotation, boolean isSensor){
-        BodyDef boxBodyDef = new BodyDef();
-        boxBodyDef.type = bodyType;
-        boxBodyDef.position.x = posx;
-        boxBodyDef.position.y = posy;
-        boxBodyDef.fixedRotation = fixedRotation;
-
-        Body boxBody = world.createBody(boxBodyDef);
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(diameter /2);
-        boxBody.createFixture(makeFixture(circleShape, isSensor, 0));
-        circleShape.dispose();
-        return boxBody;
-    }
+//    public Body makeCirclePolyBody(float posx, float posy, float diameter,
+//                                   BodyDef.BodyType bodyType, boolean fixedRotation, boolean isSensor){
+//        BodyDef boxBodyDef = new BodyDef();
+//        boxBodyDef.type = bodyType;
+//        boxBodyDef.position.x = posx;
+//        boxBodyDef.position.y = posy;
+//        boxBodyDef.fixedRotation = fixedRotation;
+//
+//        Body boxBody = world.createBody(boxBodyDef);
+//        CircleShape circleShape = new CircleShape();
+//        circleShape.setRadius(diameter /2);
+//        boxBody.createFixture(makeFixture(circleShape, isSensor, 0));
+//        circleShape.dispose();
+//        return boxBody;
+//    }
 
     // method used to add edge shapes to body (default to sensor)
-    public void addEdgeShape(Body body, Vector2 start, Vector2 end, short bitFilter){
+    public void addEdgeShape(Body body, Vector2 start, Vector2 end, short bitFilter, short ...maskFilters){
         EdgeShape edgeShape = new EdgeShape();
         edgeShape.set(start, end);
 

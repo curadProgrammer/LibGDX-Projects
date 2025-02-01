@@ -106,7 +106,8 @@ public class MapRenderer {
                     BodyDef.BodyType.StaticBody,
                     true,
                     false,
-                    0
+                    0,
+                    GameUtil.PLATFORM
             );
 
             platformBlockEntity.add(b2BodyComponent);
@@ -179,7 +180,8 @@ public class MapRenderer {
                 BodyDef.BodyType.DynamicBody,
                 true,
                 false,
-                0
+                0,
+                GameUtil.PLAYER
         );
 
 
