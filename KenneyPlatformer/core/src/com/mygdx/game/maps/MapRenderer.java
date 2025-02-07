@@ -33,6 +33,7 @@ import com.mygdx.game.ecs.components.StatsComponent;
 import com.mygdx.game.ecs.components.states.MovementStateComponent;
 import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.utils.GameUtil;
+import org.w3c.dom.css.Rect;
 
 import java.util.HashMap;
 
@@ -110,6 +111,8 @@ public class MapRenderer {
                     GameUtil.PLATFORM
             );
 
+            b2BodyComponent.body.setUserData(platformBlockEntity);
+
             platformBlockEntity.add(b2BodyComponent);
             engine.addEntity(platformBlockEntity);
         }
@@ -124,24 +127,26 @@ public class MapRenderer {
         // don't render platform if the map file doesn't have a platform layer
         if(entitiesLayer == null) return;
 
-        for(EllipseMapObject object : entitiesLayer.getObjects().getByType(EllipseMapObject.class)) {
+
+        System.out.println(entitiesLayer.getObjects().getByType(RectangleMapObject.class).size);
+        for(RectangleMapObject object : entitiesLayer.getObjects().getByType(RectangleMapObject.class)) {
             MapProperties properties = object.getProperties();
             Entity entity = engine.createEntity();
-            Ellipse ellipse = object.getEllipse();
+            Rectangle rectangle = object.getRectangle();
 
             // check to see if the entity is the player entity
             String isPlayerProperty = (String) properties.get("isPlayer");
             if(isPlayerProperty != null){
-                renderPlayer(entity, ellipse);
+                renderPlayer(entity, rectangle);
             }else{
                 // render others
-                renderOthers(entity);
+                renderOthers(entity, rectangle);
             }
         }
 
     }
 
-    private void renderPlayer(Entity playerEntity, Ellipse mapObject){
+    private void renderPlayer(Entity playerEntity, Rectangle mapObject){
         B2BodyComponent b2BodyComponent = engine.createComponent(B2BodyComponent.class);
         AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
         ControllerComponent controllerComponent = engine.createComponent(ControllerComponent.class);
@@ -181,25 +186,30 @@ public class MapRenderer {
                 true,
                 false,
                 0,
-                GameUtil.PLAYER
+                GameUtil.PLAYER, // filter bit
+                GameUtil.PLATFORM // mask bits (below)
         );
-
 
         // add top edge (play with values)
         bodyFactory.addEdgeShape(
+                playerEntity,
                 b2BodyComponent.body,
-                new Vector2(-8/GameUtil.PPM, 12/GameUtil.PPM),
-                new Vector2(8/GameUtil.PPM, 12/GameUtil.PPM),
-                GameUtil.PLAYER_TOP
+                new Vector2(-6/GameUtil.PPM, 10/GameUtil.PPM),
+                new Vector2(6/GameUtil.PPM, 10/GameUtil.PPM),
+                GameUtil.PLAYER_TOP // filter bit
         );
 
         // add bottom edge
         bodyFactory.addEdgeShape(
+                playerEntity,
                 b2BodyComponent.body,
-                new Vector2(-8/GameUtil.PPM, -12/GameUtil.PPM),
-                new Vector2(8/GameUtil.PPM, -12/GameUtil.PPM),
-                GameUtil.PLAYER_BOTTOM
+                new Vector2(-6/GameUtil.PPM, -10/GameUtil.PPM),
+                new Vector2(6/GameUtil.PPM, -10/GameUtil.PPM),
+                GameUtil.PLAYER_BOTTOM, // filter bit
+                GameUtil.PLATFORM // mask bit (below)
         );
+
+        b2BodyComponent.body.setUserData(playerEntity);
 
         // states
         playerEntity.add(movementStateComponent);
@@ -211,8 +221,27 @@ public class MapRenderer {
         engine.addEntity(playerEntity);
     }
 
-    private void renderOthers(Entity otherEntities){
+    private void renderOthers(Entity otherEntity, Rectangle mapObject){
+        B2BodyComponent b2BodyComponent = engine.createComponent(B2BodyComponent.class);
 
+        // create body with bodyfactory
+        b2BodyComponent.body = bodyFactory.makeBoxPolyBody(
+                GameUtil.convertToPPM(mapObject.x),
+                GameUtil.convertToPPM(mapObject.y),
+                GameUtil.convertToPPM(30/1.5f),
+                GameUtil.convertToPPM(30/1.5f),
+                BodyDef.BodyType.DynamicBody,
+                true,
+                false,
+                0,
+                GameUtil.ENEMY
+        );
+
+        b2BodyComponent.body.setUserData(otherEntity);
+
+
+        otherEntity.add(b2BodyComponent);
+        engine.addEntity(otherEntity);
     }
 
     public TiledMap getMap() {

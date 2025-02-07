@@ -34,10 +34,10 @@ public class MovementStateSystem extends IteratingSystem {
 
         if(entityB2Body.getLinearVelocity().y > 0){
             movementStateComponent.currentState = MovementStateComponent.MovementState.JUMPING;
-            movementStateComponent.isGrounded = false;
+//            movementStateComponent.isGrounded = false;
         }else if(entityB2Body.getLinearVelocity().y < 0) {
             movementStateComponent.currentState = MovementStateComponent.MovementState.FALLING;
-            movementStateComponent.isGrounded = false;
+//            movementStateComponent.isGrounded = false;
         }
 
 //        else{
