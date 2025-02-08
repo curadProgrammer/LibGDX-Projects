@@ -28,6 +28,13 @@ public class MovementStateSystem extends IteratingSystem {
 
         if(entityB2Body.getLinearVelocity().x != 0){
             movementStateComponent.currentState = MovementStateComponent.MovementState.WALKING;
+
+            if(entityB2Body.getLinearVelocity().x < 0){
+                movementStateComponent.isFacingLeft = true;
+            }else{
+                movementStateComponent.isFacingLeft = false;
+            }
+
         }else{
             movementStateComponent.currentState = MovementStateComponent.MovementState.IDLE;
         }
