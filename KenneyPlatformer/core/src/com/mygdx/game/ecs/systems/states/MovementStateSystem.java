@@ -26,26 +26,22 @@ public class MovementStateSystem extends IteratingSystem {
         B2BodyComponent b2BodyComponent = b2BodyComponentMapper.get(entity);
         Body entityB2Body = b2BodyComponent.body;
 
-        if(entityB2Body.getLinearVelocity().x != 0){
-            movementStateComponent.currentState = MovementStateComponent.MovementState.WALKING;
-
-            if(entityB2Body.getLinearVelocity().x < 0){
-                movementStateComponent.isFacingLeft = true;
-            }else{
-                movementStateComponent.isFacingLeft = false;
-            }
-
-        }else{
-            movementStateComponent.currentState = MovementStateComponent.MovementState.IDLE;
+        if (Math.abs(entityB2Body.getLinearVelocity().x) > 0.1f) {
+            movementStateComponent.isFacingLeft = entityB2Body.getLinearVelocity().x < 0;
         }
 
-        if(entityB2Body.getLinearVelocity().y > 0){
+        if (entityB2Body.getLinearVelocity().y > 0) {
             movementStateComponent.currentState = MovementStateComponent.MovementState.JUMPING;
-        }else if(entityB2Body.getLinearVelocity().y < 0) {
+        } else if (entityB2Body.getLinearVelocity().y < 0) {
             movementStateComponent.currentState = MovementStateComponent.MovementState.FALLING;
+        } else if (Math.abs(entityB2Body.getLinearVelocity().x) > 0.1f) {
+            movementStateComponent.currentState = MovementStateComponent.MovementState.WALKING;
+        } else {
+            movementStateComponent.currentState = MovementStateComponent.MovementState.IDLE;
         }
 
 //        logger.info("IsGrounded: " + movementStateComponent.isGrounded);
 //        logger.info(String.valueOf(movementStateComponent.currentState));
+//        logger.info(String.valueOf(movementStateComponent.isFacingLeft));
     }
 }
