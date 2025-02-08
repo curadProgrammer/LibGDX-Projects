@@ -12,6 +12,7 @@ import com.mygdx.game.ecs.components.AnimationComponent;
 public class AnimationSystem extends IteratingSystem {
     private ComponentMapper<AnimationComponent> animationComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
 
+
     public AnimationSystem(){
         super(Family.all(AnimationComponent.class).get());
     }

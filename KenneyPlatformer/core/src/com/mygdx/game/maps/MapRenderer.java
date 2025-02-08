@@ -216,7 +216,7 @@ public class MapRenderer {
 
         playerEntity.add(statsComponent);
         playerEntity.add(controllerComponent);
-//        playerEntity.add(animationComponent);
+        playerEntity.add(animationComponent);
         playerEntity.add(b2BodyComponent);
         engine.addEntity(playerEntity);
     }
