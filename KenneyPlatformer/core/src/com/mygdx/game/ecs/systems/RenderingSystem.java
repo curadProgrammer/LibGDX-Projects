@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Logger;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.ecs.components.AnimationComponent;
 import com.mygdx.game.ecs.components.B2BodyComponent;
+import com.mygdx.game.ecs.components.states.MovementStateComponent;
 import com.mygdx.game.utils.GameUtil;
 
 /**
@@ -38,19 +39,22 @@ public class RenderingSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float v) {
         B2BodyComponent b2BodyComponent = b2BodyComponentMapper.get(entity);
         AnimationComponent animationComponent = animationComponentMapper.get(entity);
+        MovementStateComponent movementStateComponent = entity.getComponent(MovementStateComponent.class);
 
-        render(b2BodyComponent, animationComponent, v);
+        render(b2BodyComponent, animationComponent, movementStateComponent,v);
     }
 
-    private void render(B2BodyComponent b2BodyComponent, AnimationComponent animationComponent, float delta){
+    private void render(B2BodyComponent b2BodyComponent, AnimationComponent animationComponent,
+                        MovementStateComponent movementStateComponent, float delta){
         // have to use texture region instead of texture (Not fully sure why though)
         // todo might put this in a separate method
         TextureRegion currentFrame = animationComponent.currentFrame;
 
-        // todo make this better
-        if(animationComponent.isFlip){
-            currentFrame.flip(true, false);
-            animationComponent.isFlip = false;
+        if(movementStateComponent != null){
+            // makes sure we don't keep flipping while the player is facing left
+            if(currentFrame.isFlipX() == movementStateComponent.isFacingLeft) {
+                currentFrame.flip(true, false);
+            }
         }
 
         float width = GameUtil.convertToPPM(currentFrame.getRegionWidth());
