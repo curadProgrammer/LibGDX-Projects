@@ -27,7 +27,6 @@ public class ControllerSystem extends IteratingSystem implements InputProcessor 
     private ComponentMapper<StatsComponent> statsComponentMapper = ComponentMapper.getFor(StatsComponent.class);
     private ComponentMapper<MovementStateComponent> movementStateComponentMapper = ComponentMapper.getFor(MovementStateComponent.class);
 
-    // todo will also need to get animation component so that we can face the texture the right way
     public ControllerSystem(MapManager mapManager){
         super(Family.all(ControllerComponent.class, B2BodyComponent.class, StatsComponent.class).get());
     }
@@ -92,16 +91,16 @@ public class ControllerSystem extends IteratingSystem implements InputProcessor 
         for (Entity entity : entities) {
             ControllerComponent controller = controllerComponentMapper.get(entity);
             if(keycode == ControlConfig.getInstance().getPrefLeftKey()){ // pressed left
-                logger.info("Pressed Left");
+//                logger.info("Pressed Left");
                 controller.left = true;
             }else if(keycode == ControlConfig.getInstance().getPrefRightKey()){
-                logger.info("Pressed Right");
+//                logger.info("Pressed Right");
                 controller.right = true;
             }else if(keycode == ControlConfig.getInstance().getPrefUpKey()){
-                logger.info("Pressed Up");
+//                logger.info("Pressed Up");
                 controller.up = true;
             }else if(keycode == ControlConfig.getInstance().getPrefJumpKey()){
-                logger.info("Pressed Jump");
+//                logger.info("Pressed Jump");
                 controller.space = true;
             }
         }
@@ -116,16 +115,16 @@ public class ControllerSystem extends IteratingSystem implements InputProcessor 
         for (Entity entity : entities) {
             ControllerComponent controller = controllerComponentMapper.get(entity);
             if(keycode == ControlConfig.getInstance().getPrefLeftKey()){ // pressed left
-                logger.info("Released Left");
+//                logger.info("Released Left");
                 controller.left = false;
             }else if(keycode == ControlConfig.getInstance().getPrefRightKey()){
-                logger.info("Released Right");
+//                logger.info("Released Right");
                 controller.right = false;
             }else if(keycode == ControlConfig.getInstance().getPrefUpKey()){
-                logger.info("Released Up");
+//                logger.info("Released Up");
                 controller.up = false;
             }else if(keycode == ControlConfig.getInstance().getPrefJumpKey()){
-                logger.info("Released Jump");
+//                logger.info("Released Jump");
                 controller.space = false;
             }
         }

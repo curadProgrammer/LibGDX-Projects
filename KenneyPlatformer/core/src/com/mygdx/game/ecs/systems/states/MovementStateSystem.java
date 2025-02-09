@@ -26,6 +26,7 @@ public class MovementStateSystem extends IteratingSystem {
         B2BodyComponent b2BodyComponent = b2BodyComponentMapper.get(entity);
         Body entityB2Body = b2BodyComponent.body;
 
+        // update isFacingLeft flag depending on the entities velocity direction
         if (Math.abs(entityB2Body.getLinearVelocity().x) > 0.1f) {
             movementStateComponent.isFacingLeft = entityB2Body.getLinearVelocity().x < 0;
         }
