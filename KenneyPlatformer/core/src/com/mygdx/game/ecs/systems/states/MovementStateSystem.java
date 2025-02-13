@@ -8,9 +8,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Logger;
 import com.mygdx.game.ecs.components.B2BodyComponent;
 import com.mygdx.game.ecs.components.states.MovementStateComponent;
-import com.mygdx.game.ecs.systems.ControllerSystem;
 
 public class MovementStateSystem extends IteratingSystem {
+    private static final boolean DEBUG_MODE = false;
     private static final Logger logger = new Logger(MovementStateSystem.class.toString(), Logger.DEBUG);
 
     private final ComponentMapper<MovementStateComponent> movementStateComponentMapper = ComponentMapper.getFor(MovementStateComponent.class);
@@ -25,6 +25,14 @@ public class MovementStateSystem extends IteratingSystem {
         MovementStateComponent movementStateComponent = movementStateComponentMapper.get(entity);
         B2BodyComponent b2BodyComponent = b2BodyComponentMapper.get(entity);
         Body entityB2Body = b2BodyComponent.body;
+
+        if(DEBUG_MODE){
+            logger.info("Movement Previous State: " + movementStateComponent.previousState);
+            logger.info("Movement Current State: " + movementStateComponent.currentState);
+        }
+
+        // update previous state
+        movementStateComponent.previousState = movementStateComponent.currentState;
 
         // update isFacingLeft flag depending on the entities velocity direction
         if (Math.abs(entityB2Body.getLinearVelocity().x) > 0.1f) {

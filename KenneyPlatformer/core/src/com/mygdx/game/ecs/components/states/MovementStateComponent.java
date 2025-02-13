@@ -15,6 +15,7 @@ public class MovementStateComponent implements Component, Pool.Poolable {
 
     public boolean isFacingLeft = false;
 
+    public MovementState previousState = MovementState.IDLE;
     public MovementState currentState = MovementState.IDLE;
     public boolean isGrounded = true;
 
@@ -27,6 +28,7 @@ public class MovementStateComponent implements Component, Pool.Poolable {
     @Override
     public void reset() {
         currentState = MovementState.IDLE;
+        previousState = MovementState.IDLE;
         coyoteTimer = 0;
         isGrounded = true;
         jumpBufferCounter = 0;

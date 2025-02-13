@@ -19,6 +19,7 @@ import com.mygdx.game.utils.GameUtil;
  *
  */
 public class RenderingSystem extends IteratingSystem {
+    private static final boolean DEBUG_MODE = false;
     private static final Logger logger = new Logger(RenderingSystem.class.toString(), Logger.DEBUG);
 
     private final ComponentMapper<B2BodyComponent> b2BodyComponentMapper = ComponentMapper.getFor(B2BodyComponent.class);
@@ -55,6 +56,22 @@ public class RenderingSystem extends IteratingSystem {
             if(currentFrame.isFlipX() == movementStateComponent.isFacingLeft) {
                 currentFrame.flip(true, false);
             }
+
+            // update animation based on state
+            if(movementStateComponent.currentState == MovementStateComponent.MovementState.WALKING){
+                animationComponent.currentFrame = animationComponent.animationMap.get("WALK")
+                        .getKeyFrame(animationComponent.stateTime, true);
+            }else if (movementStateComponent.currentState == MovementStateComponent.MovementState.IDLE){
+                animationComponent.currentFrame = animationComponent.animationMap.get("STAND").getKeyFrame(delta);
+            }else if(movementStateComponent.currentState == MovementStateComponent.MovementState.JUMPING){
+                animationComponent.currentFrame = animationComponent.animationMap.get("JUMP").getKeyFrame(delta);
+            }else if(movementStateComponent.currentState == MovementStateComponent.MovementState.FALLING){
+                animationComponent.currentFrame = animationComponent.animationMap.get("FALL").getKeyFrame(delta);
+            }
+
+            // update timer
+            if(movementStateComponent.previousState != movementStateComponent.currentState) animationComponent.stateTime = 0;
+            else animationComponent.stateTime += delta;
         }
 
         float width = GameUtil.convertToPPM(currentFrame.getRegionWidth());

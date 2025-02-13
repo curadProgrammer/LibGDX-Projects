@@ -34,7 +34,7 @@ public class MapManager {
         logger.info("Start");
 
         // todo name your levels numerically
-        mapRenderer.setCurrentMap(maps.get(0));
+        mapRenderer.setCurrentMap(maps.get(1));
     }
 
     public void render(){

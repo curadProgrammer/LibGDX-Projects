@@ -172,9 +172,59 @@ public class MapRenderer {
         standingAnimation.setPlayMode(Animation.PlayMode.NORMAL);
         frames.clear();
 
+        // walking animation
+        frames.add(
+                new TextureRegion(
+                        ((TextureAtlas) B2DAssetmanager.getInstance()
+                                .assetManager.get(B2DAssetmanager.getInstance().charactersAtlasPath))
+                                .findRegion("tile", 1)
+                )
+        );
+
+        frames.add(
+                new TextureRegion(
+                        ((TextureAtlas) B2DAssetmanager.getInstance()
+                                .assetManager.get(B2DAssetmanager.getInstance().charactersAtlasPath))
+                                .findRegion("tile", 0)
+                )
+        );
+
+        Animation<TextureRegion> walkingAnimation = new Animation<>(0.1f, frames);
+        walkingAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        frames.clear();
+
+        // jumping
+        frames.add(
+                new TextureRegion(
+                        ((TextureAtlas) B2DAssetmanager.getInstance()
+                                .assetManager.get(B2DAssetmanager.getInstance().charactersAtlasPath))
+                                .findRegion("tile", 0)
+                )
+        );
+
+        Animation<TextureRegion> jumpingAnimation = new Animation<>(0, frames);
+        walkingAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+        frames.clear();
+
+        // falling
+        frames.add(
+                new TextureRegion(
+                        ((TextureAtlas) B2DAssetmanager.getInstance()
+                                .assetManager.get(B2DAssetmanager.getInstance().charactersAtlasPath))
+                                .findRegion("tile", 1)
+                )
+        );
+
+        Animation<TextureRegion> fallingAnimation = new Animation<>(0, frames);
+        walkingAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+        frames.clear();
+
         // starting texture is standing for the player
         animationComponent.currentFrame = standingAnimation.getKeyFrame(0);
         animationComponent.animationMap.put("STAND", standingAnimation);
+        animationComponent.animationMap.put("WALK", walkingAnimation);
+        animationComponent.animationMap.put("JUMP", jumpingAnimation);
+        animationComponent.animationMap.put("FALL", fallingAnimation);
 
         // create body with bodyfactory
         b2BodyComponent.body = bodyFactory.makeBoxPolyBody(
@@ -228,9 +278,9 @@ public class MapRenderer {
         b2BodyComponent.body = bodyFactory.makeBoxPolyBody(
                 GameUtil.convertToPPM(mapObject.x),
                 GameUtil.convertToPPM(mapObject.y),
-                GameUtil.convertToPPM(30/1.5f),
-                GameUtil.convertToPPM(30/1.5f),
-                BodyDef.BodyType.DynamicBody,
+                GameUtil.convertToPPM(25/1.5f),
+                GameUtil.convertToPPM(25/1.5f),
+                BodyDef.BodyType.StaticBody,
                 true,
                 false,
                 0,

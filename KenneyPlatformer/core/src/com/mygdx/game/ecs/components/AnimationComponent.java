@@ -12,11 +12,13 @@ public class AnimationComponent implements Component, Pool.Poolable {
     public Map<String, Animation<TextureRegion>> animationMap;
     public TextureRegion currentFrame;
     public boolean isFlip = true;
+    public float stateTime = 0;  // Add this field
 
     @Override
     public void reset() {
         animationMap = null;
         currentFrame = null;
         isFlip = false;
+        stateTime = 0;
     }
 }
