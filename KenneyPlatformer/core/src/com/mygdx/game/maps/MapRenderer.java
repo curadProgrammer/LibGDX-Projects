@@ -26,10 +26,7 @@ import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.Pool;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.assets.B2DAssetmanager;
-import com.mygdx.game.ecs.components.AnimationComponent;
-import com.mygdx.game.ecs.components.B2BodyComponent;
-import com.mygdx.game.ecs.components.ControllerComponent;
-import com.mygdx.game.ecs.components.StatsComponent;
+import com.mygdx.game.ecs.components.*;
 import com.mygdx.game.ecs.components.states.MovementStateComponent;
 import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.utils.GameUtil;
@@ -95,6 +92,7 @@ public class MapRenderer {
         for(RectangleMapObject object : platformLayer.getObjects().getByType(RectangleMapObject.class)) {
             Entity platformBlockEntity = engine.createEntity();
             B2BodyComponent b2BodyComponent = engine.createComponent(B2BodyComponent.class);
+            CollisionComponent collisionComponent = engine.createComponent(CollisionComponent.class);
 
             Rectangle rect = object.getRectangle();
 
@@ -113,6 +111,7 @@ public class MapRenderer {
 
             b2BodyComponent.body.setUserData(platformBlockEntity);
 
+            platformBlockEntity.add(collisionComponent);
             platformBlockEntity.add(b2BodyComponent);
             engine.addEntity(platformBlockEntity);
         }
@@ -151,6 +150,7 @@ public class MapRenderer {
         AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
         ControllerComponent controllerComponent = engine.createComponent(ControllerComponent.class);
         StatsComponent statsComponent = engine.createComponent(StatsComponent.class);
+        CollisionComponent collisionComponent = engine.createComponent(CollisionComponent.class);
 
         // states
         MovementStateComponent movementStateComponent = new MovementStateComponent();
@@ -265,6 +265,7 @@ public class MapRenderer {
         playerEntity.add(movementStateComponent);
 
         playerEntity.add(statsComponent);
+        playerEntity.add(collisionComponent);
         playerEntity.add(controllerComponent);
         playerEntity.add(animationComponent);
         playerEntity.add(b2BodyComponent);
