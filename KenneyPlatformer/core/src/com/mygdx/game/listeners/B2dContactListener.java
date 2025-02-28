@@ -10,7 +10,7 @@ import com.mygdx.game.utils.GameUtil;
 
 public class B2dContactListener implements ContactListener {
     // change this to true to debug this class
-    private static final boolean DEBUG_MODE = false;
+    private static final boolean DEBUG_MODE = true;
     private static final Logger logger = new Logger(ContactListener.class.toString(), Logger.DEBUG);
 
     @Override
@@ -20,41 +20,18 @@ public class B2dContactListener implements ContactListener {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 
-//        if(fa.getFilterData().categoryBits == GameUtil.PLAYER_BOTTOM && fb.getFilterData().categoryBits == GameUtil.PLATFORM){
-//            if(DEBUG_MODE) logger.info("Player Bottom -> Platform");
-//
-//            if(fa.getBody().getUserData() instanceof Entity){
-//                Entity entity = (Entity) fa.getBody().getUserData();
-//                MovementStateComponent movementStateComponent = entity.getComponent(MovementStateComponent.class);
-//                movementStateComponent.isGrounded = true;
-//            }
-//        }else if(fb.getFilterData().categoryBits == GameUtil.PLAYER_BOTTOM && fa.getFilterData().categoryBits == GameUtil.PLATFORM){
-//            if(DEBUG_MODE) logger.info("Platform -> Player Bottom");
-//            if(fb.getBody().getUserData() instanceof Entity){
-//                Entity entity = (Entity) fa.getBody().getUserData();
-//                MovementStateComponent movementStateComponent = entity.getComponent(MovementStateComponent.class);
-//                movementStateComponent.isGrounded = true;
-//            }
-//        }
-
         if(fa.getFilterData().categoryBits == GameUtil.PLAYER_BOTTOM && fb.getFilterData().categoryBits == GameUtil.PLATFORM){
             if(DEBUG_MODE) logger.info("Player Bottom -> Platform");
 
             if(fa.getBody().getUserData() instanceof Entity){
                 Entity entity = (Entity) fa.getBody().getUserData();
                 entityCollision(entity, fb);
-
-//                MovementStateComponent movementStateComponent = entity.getComponent(MovementStateComponent.class);
-//                movementStateComponent.isGrounded = true;
             }
         }else if(fb.getFilterData().categoryBits == GameUtil.PLAYER_BOTTOM && fa.getFilterData().categoryBits == GameUtil.PLATFORM){
             if(DEBUG_MODE) logger.info("Platform -> Player Bottom");
             if(fb.getBody().getUserData() instanceof Entity){
                 Entity entity = (Entity) fa.getBody().getUserData();
                 entityCollision(entity, fa);
-
-//                MovementStateComponent movementStateComponent = entity.getComponent(MovementStateComponent.class);
-//                movementStateComponent.isGrounded = true;
             }
         }
     }
@@ -88,15 +65,11 @@ public class B2dContactListener implements ContactListener {
             if(fa.getBody().getUserData() instanceof Entity){
                 Entity entity = (Entity) fa.getBody().getUserData();
                 removeCollision(entity, fb);
-//                MovementStateComponent movementStateComponent = entity.getComponent(MovementStateComponent.class);
-//                movementStateComponent.isGrounded = false;
             }
         }else if(fb.getFilterData().categoryBits == GameUtil.PLAYER_BOTTOM && fa.getFilterData().categoryBits == GameUtil.PLATFORM){
             if(fb.getBody().getUserData() instanceof Entity){
                 Entity entity = (Entity) fa.getBody().getUserData();
                 removeCollision(entity, fa);
-//                MovementStateComponent movementStateComponent = entity.getComponent(MovementStateComponent.class);
-//                movementStateComponent.isGrounded = false;
             }
         }
     }
@@ -120,7 +93,7 @@ public class B2dContactListener implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold manifold) {
-        if(DEBUG_MODE) logger.info("PreSolve Contact");
+//        if(DEBUG_MODE) logger.info("PreSolve Contact");
 
         // todo refactor due to repeating code
 //        Fixture fa = contact.getFixtureA();
@@ -143,6 +116,6 @@ public class B2dContactListener implements ContactListener {
 
     @Override
     public void postSolve(Contact contact, ContactImpulse contactImpulse) {
-        if(DEBUG_MODE) logger.info("PostSolve Contact");
+//        if(DEBUG_MODE) logger.info("PostSolve Contact");
     }
 }

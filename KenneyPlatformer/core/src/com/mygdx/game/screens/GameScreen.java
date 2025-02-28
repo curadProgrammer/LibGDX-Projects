@@ -56,6 +56,7 @@ public class GameScreen implements Screen {
 
         engine.addSystem(new PhysicsSystem(world, engine));
         engine.addSystem(new PhysicsDebugSystem(this));
+        engine.addSystem(new CollisionSystem());
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new RenderingSystem(game));
 
