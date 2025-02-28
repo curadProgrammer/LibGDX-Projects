@@ -27,14 +27,9 @@ public class CollisionSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float v) {
         CollisionComponent collisionComponent = collisionComponentMapper.get(entity);
-
-        // only process collisions that have a collision entity
-        // N: don't want this as we also want to process when the collision has ended or when it becomes null
-//        if(collisionComponent.collisionEntity == null) return;
-
-        // check to see if player is colliding with platform
         B2BodyComponent b2BodyComponent = b2BodyComponentMapper.get(entity);
 
+        // check to see if player is colliding with platform
         for(int i = 0; i < b2BodyComponent.body.getFixtureList().size; i++){
             short entityBit = b2BodyComponent.body.getFixtureList().get(i).getFilterData().categoryBits;
 
@@ -57,22 +52,6 @@ public class CollisionSystem extends IteratingSystem {
                     playerMovementStateComponent.isGrounded = false;
                 }
             }
-
-//            if(playerBit == GameUtil.PLAYER_BOTTOM){
-//                // time to check fo the category bits of the other entity
-//                B2BodyComponent otherB2BodyComponent = b2BodyComponentMapper.get(collisionComponent.collisionEntity);
-//
-//                // check for platform
-//                for(int j = 0; j < otherB2BodyComponent.body.getFixtureList().size; j++){
-//                    short platformBit =  otherB2BodyComponent.body.getFixtureList().get(j).getFilterData().categoryBits;
-//                    MovementStateComponent playerMovementStateComponent = entity.getComponent(MovementStateComponent.class);
-//                    if(platformBit == GameUtil.PLATFORM){
-//                        playerMovementStateComponent.isGrounded = true;
-//                    }else{
-//                        playerMovementStateComponent.isGrounded = false;
-//                    }
-//                }
-//            }
         }
     }
 }
