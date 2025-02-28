@@ -4,15 +4,11 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.utils.Logger;
 import com.mygdx.game.ecs.components.B2BodyComponent;
 import com.mygdx.game.ecs.components.CollisionComponent;
 import com.mygdx.game.ecs.components.states.MovementStateComponent;
 import com.mygdx.game.utils.GameUtil;
-
-import java.util.Arrays;
 
 public class CollisionSystem extends IteratingSystem {
     private static final Logger logger = new Logger(CollisionSystem.class.toString(), Logger.DEBUG);
@@ -48,7 +44,7 @@ public class CollisionSystem extends IteratingSystem {
                     }
                 }else{
                     // N: if collision entity is null that means the player is not colliding
-                    // with anything so it should not be grounded
+                    // with anything, so it should not be grounded
                     playerMovementStateComponent.isGrounded = false;
                 }
             }
