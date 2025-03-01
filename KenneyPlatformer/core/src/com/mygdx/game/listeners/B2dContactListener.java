@@ -4,13 +4,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Logger;
 import com.mygdx.game.ecs.components.CollisionComponent;
-import com.mygdx.game.ecs.components.states.MovementStateComponent;
 import com.mygdx.game.utils.GameUtil;
 
 
 public class B2dContactListener implements ContactListener {
     // change this to true to debug this class
-    private static final boolean DEBUG_MODE = true;
+    private static final boolean DEBUG_MODE = false;
     private static final Logger logger = new Logger(ContactListener.class.toString(), Logger.DEBUG);
 
     @Override
