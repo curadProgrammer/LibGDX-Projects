@@ -28,17 +28,18 @@ public class CollisionSystem extends IteratingSystem {
         CollisionComponent collisionComponent = collisionComponentMapper.get(entity);
         B2BodyComponent b2BodyComponent = b2BodyComponentMapper.get(entity);
 
-        // check to see if player is colliding with platform
+        // process player-bottom edge shape collision
         if(b2BodyComponent.hasCategoryBit(GameUtil.PLAYER_BOTTOM)){
             MovementStateComponent playerMovementStateComponent = movementMapper.get(entity);
+
             // player bottom edge shape currently colliding with another entity
             if(collisionComponent.collisionEntity != null){
-                // check the category bits of the other entity
+                // player-bottom edge shape is colliding with the platform so it must be grounded
                 B2BodyComponent otherB2BodyComponent = b2BodyComponentMapper.get(collisionComponent.collisionEntity);
                 if(otherB2BodyComponent.hasCategoryBit(GameUtil.PLATFORM))
                     playerMovementStateComponent.isGrounded = true;
             }else{
-                // player bottom edge shape not colliding with anything so it isn't grounded
+                // player bottom edge shape not colliding with anything, so it isn't grounded
                 playerMovementStateComponent.isGrounded = false;
             }
         }
