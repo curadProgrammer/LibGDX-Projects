@@ -118,8 +118,6 @@ public class MapRenderer {
         // don't render platform if the map file doesn't have a platform layer
         if(entitiesLayer == null) return;
 
-
-        System.out.println(entitiesLayer.getObjects().getByType(RectangleMapObject.class).size);
         for(RectangleMapObject object : entitiesLayer.getObjects().getByType(RectangleMapObject.class)) {
             MapProperties properties = object.getProperties();
             Entity entity = engine.createEntity();
@@ -285,17 +283,5 @@ public class MapRenderer {
 
         otherEntity.add(b2BodyComponent);
         engine.addEntity(otherEntity);
-    }
-
-    public TiledMap getMap() {
-        return map;
-    }
-
-    public TmxMapLoader getMapLoader() {
-        return mapLoader;
-    }
-
-    public OrthogonalTiledMapRenderer getMapRenderer() {
-        return mapRenderer;
     }
 }

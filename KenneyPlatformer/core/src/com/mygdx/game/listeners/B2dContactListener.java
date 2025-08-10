@@ -19,6 +19,15 @@ public class B2dContactListener implements ContactListener {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 
+        // todo uncomment once you solve null issue when colliding with other entities
+//        if(fa.getBody().getUserData() instanceof Entity){
+//            Entity entity = (Entity) fa.getBody().getUserData();
+//            entityCollision(entity, fb);
+//        }else if(fb.getBody().getUserData() instanceof Entity){
+//            Entity entity = (Entity) fa.getBody().getUserData();
+//            entityCollision(entity, fa);
+//        }
+
         if(fa.getFilterData().categoryBits == GameUtil.PLAYER_BOTTOM && fb.getFilterData().categoryBits == GameUtil.PLATFORM){
             if(DEBUG_MODE) logger.info("Player Bottom -> Platform");
 
@@ -60,6 +69,15 @@ public class B2dContactListener implements ContactListener {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 
+        // todo uncomment when you solve null issue
+//        if(fa.getBody().getUserData() instanceof Entity){
+//            Entity entity = (Entity) fa.getBody().getUserData();
+//            removeCollision(entity, fb);
+//        }else if(fb.getBody().getUserData() instanceof Entity){
+//            Entity entity = (Entity) fa.getBody().getUserData();
+//            removeCollision(entity, fa);
+//        }
+
         if(fa.getFilterData().categoryBits == GameUtil.PLAYER_BOTTOM && fb.getFilterData().categoryBits == GameUtil.PLATFORM){
             if(fa.getBody().getUserData() instanceof Entity){
                 Entity entity = (Entity) fa.getBody().getUserData();
@@ -92,29 +110,11 @@ public class B2dContactListener implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold manifold) {
-//        if(DEBUG_MODE) logger.info("PreSolve Contact");
-
-        // todo refactor due to repeating code
-//        Fixture fa = contact.getFixtureA();
-//        Fixture fb = contact.getFixtureB();
-//
-//        if(fa.getFilterData().categoryBits == GameUtil.PLAYER_BOTTOM && fb.getFilterData().categoryBits == GameUtil.PLATFORM){
-//            if(fa.getBody().getUserData() instanceof Entity){
-//                Entity entity = (Entity) fa.getBody().getUserData();
-//                MovementStateComponent movementStateComponent = entity.getComponent(MovementStateComponent.class);
-//                movementStateComponent.isGrounded = true;
-//            }
-//        }else if(fb.getFilterData().categoryBits == GameUtil.PLAYER_BOTTOM && fa.getFilterData().categoryBits == GameUtil.PLATFORM){
-//            if(fb.getBody().getUserData() instanceof Entity){
-//                Entity entity = (Entity) fa.getBody().getUserData();
-//                MovementStateComponent movementStateComponent = entity.getComponent(MovementStateComponent.class);
-//                movementStateComponent.isGrounded = true;
-//            }
-//        }
+        if(DEBUG_MODE) logger.info("PreSolve Contact");
     }
 
     @Override
     public void postSolve(Contact contact, ContactImpulse contactImpulse) {
-//        if(DEBUG_MODE) logger.info("PostSolve Contact");
+        if(DEBUG_MODE) logger.info("PostSolve Contact");
     }
 }

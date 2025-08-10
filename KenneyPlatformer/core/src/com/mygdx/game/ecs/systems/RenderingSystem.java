@@ -24,6 +24,7 @@ public class RenderingSystem extends IteratingSystem {
 
     private final ComponentMapper<B2BodyComponent> b2BodyComponentMapper = ComponentMapper.getFor(B2BodyComponent.class);
     private final ComponentMapper<AnimationComponent> animationComponentMapper = ComponentMapper.getFor(AnimationComponent.class);
+    private final ComponentMapper<MovementStateComponent> movementStateComponentMapper = ComponentMapper.getFor(MovementStateComponent.class);
 
     private MyGdxGame game;
     public RenderingSystem(MyGdxGame game){
@@ -40,7 +41,7 @@ public class RenderingSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float v) {
         B2BodyComponent b2BodyComponent = b2BodyComponentMapper.get(entity);
         AnimationComponent animationComponent = animationComponentMapper.get(entity);
-        MovementStateComponent movementStateComponent = entity.getComponent(MovementStateComponent.class);
+        MovementStateComponent movementStateComponent = movementStateComponentMapper.get(entity);
 
         render(b2BodyComponent, animationComponent, movementStateComponent,v);
     }
